@@ -1,0 +1,12 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20.2)
+SET(SUBFOLDERS 
+	"core"
+	"open_gl"
+)
+
+FOREACH(subfolder ${SUBFOLDERS})
+	ADD_SUBDIRECTORY(${subfolder})
+ENDFOREACH()
+
+
+
