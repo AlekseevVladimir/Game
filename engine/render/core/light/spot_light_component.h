@@ -2,7 +2,7 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
-#include <core/component.h>
+#include <engine/core/component.h>
 
 class SpotLightComponent : public Component {
 public:

@@ -2,7 +2,7 @@
 #pragma once
 
 #include <memory>
-#include <core/component.h>
+#include <engine/core/component.h>
 #include <unordered_set>
 #include <string>
 

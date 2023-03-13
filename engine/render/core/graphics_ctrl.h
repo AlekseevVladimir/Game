@@ -2,9 +2,9 @@
 #define GLFW_INCLUDE_NONE
 #include <iostream>
 #include <glad/glad.h>
-#include <WindowCtrl.h>
-#include "ShadersCtrl.h"
-#include <GameObject.h>
+#include <engine/core/window_ctrl.h>
+#include "shaders_ctrl.h"
+#include <engine/core/game_object.h>
 #include <memory>
 #include <glfw3.h>
 //#include <Model.h>

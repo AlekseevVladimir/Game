@@ -1,6 +1,6 @@
 #pragma once
-#include <core/component.h>
-#include <Math/Vector3.h>
+#include <engine/core/component.h>
+#include <engine/engine_math/vector3.h>
 
 class LightDirectionComponent : public Component {
 public:

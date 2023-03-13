@@ -1,5 +1,5 @@
 #pragma once
-#include <GameObject.h>
+#include <engine/core/game_object.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

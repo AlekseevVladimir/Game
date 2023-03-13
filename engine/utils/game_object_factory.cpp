@@ -1,16 +1,13 @@
-#include <utils/game_object_factory.h>
+#include "game_object_factory.h"
 
-#include "Render/Components/LightComponents.h"
-#include "Render/Components/Generated3DVisualsComponent.h"
-#include "Render/Components/Generated2DVisualsComponent.h"
-#include "Render/Components/ModelComponent.h"
-#include "Components/ColliderComponent.h"
-#include "Components/PlayerControlsComponent.h"
+#include <engine/render/core/light/light_direction_component.h>
+#include <engine/render/core/light/light_emitter_component.h>
+#include <engine/render/core/light/spot_light_component.h>
+
+#include "engine/player_controls/player_controls_component.h"
 //#include "Components/TransformComponent.h"
 //#include "Components/MoverComponent.h"
-#include "Components/BoundingSphereComponent.h"
-#include "relations/hierarchy_component.h"
-#include "Render/Components/ViewPointComponent.h"
+#include <engine/relations/hierarchy_component.h>
 
 //controls are inverted
 

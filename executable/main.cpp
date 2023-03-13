@@ -1,7 +1,6 @@
 #include <iostream>
 #include <engine/render/core/graphics_ctrl.h>
-#include <GameCtrl.h>
-#include "Render/stb_image.h"
+#include <game/GameCtrl.h>
 #include "glad/glad.h"
 #include <cstdio>
 int main() {
