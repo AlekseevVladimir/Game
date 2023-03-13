@@ -4,14 +4,16 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <engine/render/core/shaders_ctrl.h>
-#include <Render/VerticesArray.h>
 #include <memory>
 //#include <Render/TexturesCtrl.h>
 //#include <algorithm>
+#include <engine/utils/engine_constants.h>
 #include <engine/core/game_object.h>
 //#include <glm/gtc/type_ptr.hpp>
 #include <utility>
 #include <glfw3.h>
+#include <engine/core/systems_holder.h>
+#include <engine/player_controls/input_control_system.h>
 
 void WindowCtrl::init() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -52,11 +54,10 @@ void WindowCtrl::draw() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	processInput();
-	std::vector<GameObject*> cameras = GameObjectHolder::getInstance().getObjectsOfType("camera");
-	GameObject* camera = nullptr;
-	if (!cameras.empty()) {
-		camera = cameras[0];
-		camera->getComponent<PlayerControlsComponent>()->processInput(m_window);
+
+	System* inputCtrlSystemPtr = SystemsHolder::getInstance().getSystem<InputControlSystem>();
+	if (inputCtrlSystemPtr) {
+		inputCtrlSystemPtr->process(0.1f);
 	}
 
 	const auto& gameObjects = GameObjectHolder::getInstance().getObjectsByShader();
@@ -72,10 +73,6 @@ void WindowCtrl::draw() {
 		}
 
 		for (GameObject* ptr : item.second) {
-			PlayerControlsComponent* playerCtrl = ptr->getComponent<PlayerControlsComponent>();
-			if (playerCtrl) {
-				playerCtrl->processInput(m_window);
-			}
 			if (ptr->getRenderSettings().isHighlighted) {
 				glStencilFunc(GL_ALWAYS, 1, 0xFF);
 				glStencilMask(0xFF);
@@ -118,9 +115,9 @@ void WindowCtrl::processInput() {
 }
 
 void WindowCtrl::onMousePosChanged(double x, double y) {
-	for (auto item : GameObjectHolder::getInstance().getObjectsOfType("camera")) {
-		item->getComponent<PlayerControlsComponent>()->onMousePosChanged(x, y);
-	}
+	//for (auto item : GameObjectHolder::getInstance().getObjectsOfType("camera")) {
+	//	item->getComponent<PlayerControlsComponent>()->onMousePosChanged(x, y);
+	//}
 }
 
 void WindowCtrl::framebuffer_size_callback(GLFWwindow* window, int width, int height) {

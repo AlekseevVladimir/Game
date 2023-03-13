@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
-#include <core/system.h>
-#include <GameObject.h>
+#include <engine/core/system.h>
+#include <engine/core/game_object.h>
 
 class GLFWwindow;
 

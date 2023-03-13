@@ -2,6 +2,7 @@ project(utils)
 cmake_minimum_required(VERSION 3.10)
 SET(SOURCES
 	"events.h"
+	"engine_constants.h"
 	"game_object_factory.h"
 	"game_object_factory.cpp"
 )
