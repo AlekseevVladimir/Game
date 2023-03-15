@@ -1,13 +1,15 @@
 #include <glfw3.h>
 
-#include "player_controls/input_control_system.h"
-#include <transform/movement_request_component.h>
-#include <transform/rotation_request_component.h>
-#include <transform/transform_component.h>
-#include <player_controls/player_controls_component.h>
-#include <GameObject.h>
-#include <WIndowCtrl.h>
-#include <Render/Components/ViewPointComponent.h>
+#include "input_control_system.h"
+#include <engine/transform/movement_request_component.h>
+#include <engine/transform/rotation_request_component.h>
+#include <engine/transform/position_component.h>
+#include <engine/transform/rotation_component.h>
+#include <engine/player_controls/player_controls_component.h>
+#include <engine/core/game_object.h>
+#include <engine/core/window_ctrl.h>
+#include <engine/transform/movement_request_component.h>
+#include <engine/player_controls/player_controls_component.h>
 
 void InputControlSystem::processInput() {
 	const float cameraSpeed = 0.1f; 
@@ -25,7 +27,7 @@ void InputControlSystem::processInput() {
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
 		movementModifier.x++;
 	}
-	for (auto goPtr : GameObjectHolder::getInstance().getObjectsWithComponents<PlayerControlsComponent, TransformComponent>()) {
+	for (auto goPtr : GameObjectHolder::getInstance().getObjectsWithComponents<PlayerControlsComponent, PositionComponent>()) {
 		goPtr->createComponent<MovementRequestComponent>(movementModifier);
 	}
 }
@@ -47,8 +49,8 @@ void InputControlSystem::processMousePos() {
 	const float sensitivity = 0.05f;
 	xoffset *= sensitivity;
 	yoffset *= sensitivity;
-	for (auto goPtr : GameObjectHolder::getInstance().getObjectsWithComponents<PlayerControlsComponent, TransformComponent>()) {
-		auto transform = goPtr->getComponent<TransformComponent>();
+	for (auto goPtr : GameObjectHolder::getInstance().getObjectsWithComponents<PlayerControlsComponent, RotationComponent>()) {
+		auto transform = goPtr->getComponent<RotationComponent>();
 		float yaw = transform->getYaw();
 		float pitch = transform->getPitch();
 		yaw += xoffset;

@@ -10,6 +10,7 @@ SET(CORE_SOURCES
 	"stb_image.cpp"
 	"textures_ctrl.h"
 	"vertices_array.h"
+	"glad.c"
 )
 
 SET(LIGHT_SOURCES

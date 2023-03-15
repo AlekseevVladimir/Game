@@ -1,8 +1,8 @@
 #pragma once
 
 #include <string>
-#include <Math/Vector3.h>
-#include "core/component.h"
+#include <engine/engine_math/vector3.h>
+#include <engine/core/component.h>
 
 class PositionComponent : public Component {
 public:

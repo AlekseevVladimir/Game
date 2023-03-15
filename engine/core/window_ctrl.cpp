@@ -71,7 +71,7 @@ void WindowCtrl::draw() {
 		if (shader->getProps().usesLightData) {
 			setLightData(shader);
 		}
-
+		/*
 		for (GameObject* ptr : item.second) {
 			if (ptr->getRenderSettings().isHighlighted) {
 				glStencilFunc(GL_ALWAYS, 1, 0xFF);
@@ -98,6 +98,7 @@ void WindowCtrl::draw() {
 				shadersCtrl.useProgram(item.first);
 			}
 		}
+		*/
 	}
 	glfwSwapBuffers(m_window);
 }
