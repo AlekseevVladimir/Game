@@ -1,6 +1,5 @@
 #pragma once
-#include <core/component.h>
-#include <Math/Vector3.h>
+#include <engine/core/component.h>
 #include <string>
 
 class RotationRequestComponent : public Component {

@@ -12,9 +12,9 @@ glm::mat4 getView(GameObject* goPtr) {
 		glm::vec3(0.0f, 1.0f, 0.0f));
 		*/
 	const float radius = 10.0f;
-	PositionComponent* position = goPtr->getComponent<PositionComponent>()->getPos();
-	RotationComponent* direction = goPtr->getComponent<RotationComponent>()->getDirection();
-	glm::mat4 view = glm::lookAt(position, position + direction.getGlm(), glm::vec3(0.0f, 1.0f, 0.0f));
+	Vector3<float> position = goPtr->getComponent<PositionComponent>()->getPos();
+	Vector3<float> direction = goPtr->getComponent<RotationComponent>()->getDirection();
+	glm::mat4 view = glm::lookAt(position.getGlm(), position.getGlm() + direction.getGlm(), glm::vec3(0.0f, 1.0f, 0.0f));
 	return view;
 }
 

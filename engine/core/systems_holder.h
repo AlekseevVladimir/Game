@@ -9,7 +9,7 @@ public:
 	SystemsHolder();
 
 	static SystemsHolder& getInstance() {
-		SystemsHolder inst;
+		static SystemsHolder inst;
 		return inst;
 	}
 
@@ -17,7 +17,7 @@ public:
 
 	template<typename SystemT>
 	SystemT* getSystem() {
-		for (auto system : m_systems) {
+		for (auto& system : m_systems) {
 			SystemT* ptr = dynamic_cast<SystemT*>(system.get());
 			if (ptr) {
 				return ptr;

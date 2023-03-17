@@ -1,5 +1,5 @@
-#include <GameObject.h>
-#include <relations/hierarchy_component.h>
+#include <engine/core/game_object.h>
+#include <engine/relations/hierarchy_component.h>
 
 void HierarchyComponent::setParent(GameObject* go) {
 	m_parentID = go->getAlias();
