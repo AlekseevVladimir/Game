@@ -6,7 +6,6 @@
 
 class SystemsHolder {
 public:
-	SystemsHolder();
 
 	static SystemsHolder& getInstance() {
 		static SystemsHolder inst;
@@ -14,6 +13,11 @@ public:
 	}
 
 	void process(float delta);
+
+	template<typename SystemT>
+	void addSystem() {
+		m_systems.push_back(std::make_unique<SystemT>());
+	}
 
 	template<typename SystemT>
 	SystemT* getSystem() {

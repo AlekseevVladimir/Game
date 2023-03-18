@@ -4,8 +4,6 @@ SET(CORE_SOURCES
 	"constants.h"
 	"graphics_ctrl.h"
 	"primitives.h"
-	"shaders_ctrl.h"
-	"shaders_ctrl.cpp"
 	"stb_image.h"
 	"stb_image.cpp"
 	"textures_ctrl.h"

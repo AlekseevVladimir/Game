@@ -3,7 +3,7 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <engine/core/window_ctrl.h>
-#include "shaders_ctrl.h"
+//#include "shaders_ctrl.h"
 #include <engine/core/game_object.h>
 #include <memory>
 #include <glfw3.h>
@@ -22,8 +22,8 @@ public:
 		if (!res)
 			return;
 		//Model model("models/backpack/backpack.obj");
-		ShadersCtrl::getInstance().createProgram("solidObject", {true, true});
-		ShadersCtrl::getInstance().createProgram("light", {false, false});
+		//ShadersCtrl::getInstance().createProgram("solidObject", {true, true});
+		//ShadersCtrl::getInstance().createProgram("light", {false, false});
 		GameObject::RenderSettings invisibleSettings = { false, false };
 		GameObject::RenderSettings visibleSettings = { true, false };
 

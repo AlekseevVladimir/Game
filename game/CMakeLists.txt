@@ -5,6 +5,10 @@ SET(SOURCES
 	"GameCtrl.cpp"
 )
 add_library(${PROJECT_NAME} ${SOURCES})  
-target_link_libraries(game PUBLIC core)                  
+
+LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/engine)
+target_link_libraries(game PUBLIC core) 
+target_link_libraries(game PUBLIC utils) 
+target_link_libraries(game PUBLIC player_controls) 
 set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER "game")
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)

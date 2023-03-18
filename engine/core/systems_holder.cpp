@@ -1,11 +1,6 @@
 #include <memory>
 
 #include "systems_holder.h"
-#include <engine/player_controls/input_control_system.h>
-
-SystemsHolder::SystemsHolder() {
-	m_systems.push_back(std::make_unique<InputControlSystem>());
-}
 
 void SystemsHolder::process(float delta) {
 	for (auto& system : m_systems) {

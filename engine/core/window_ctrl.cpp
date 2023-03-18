@@ -69,7 +69,7 @@ void WindowCtrl::draw() {
 		std::shared_ptr<Shader> shader = shadersCtrl.useProgram(item.first);
 
 		if (shader->getProps().usesLightData) {
-			setLightData(shader);
+			//setLightData(shader);
 		}
 		/*
 		for (GameObject* ptr : item.second) {

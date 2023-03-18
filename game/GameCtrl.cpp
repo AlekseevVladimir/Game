@@ -1,5 +1,7 @@
 #include "GameCtrl.h"
 #include <engine/utils/game_object_factory.h>
+#include <engine/core/systems_holder.h>
+#include <engine/player_controls/input_control_system.h>
 
 GameCtrl::GameCtrl() {
 	createDirectionalLight({ false, false, "" });
@@ -8,6 +10,7 @@ GameCtrl::GameCtrl() {
 	createPointLight({ 3.0f, 3.0f, 3.0f }, { 1.0f, 1.0f , 1.0f }, { true, false, "light" });
 	createFloor({ 0.0f, -1.0f, 0.0f }, { true, false, "solidObject" });
 	createTroll({ 0.0f, 0.0f, 0.0f }, { true, false, "solidObject" });
+	SystemsHolder::getInstance().addSystem<InputControlSystem>();
 
 	//createSpotLight({ false, false, "" });
 	//createBackPack({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { true, false, "solidObject" });
