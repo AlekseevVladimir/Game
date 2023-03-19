@@ -9,7 +9,11 @@ SET(SHADER_SOURCES
 )
 SET(MODEL_SOURCES
 	"model/vao_component.h"
-)
+	"model/model_loader.h" 
+	"model/model_loader.cpp" 
+	"model/model_component.h" 
+	"model/model.h" 
+	"model/model.cpp")
 SOURCE_GROUP("shaders" FILES ${SHADER_SOURCES})
 SOURCE_GROUP("model" FILES ${MODEL_SOURCES})
 ADD_LIBRARY(open_gl ${SHADER_SOURCE} ${MODEL_SOURCES})

@@ -18,6 +18,7 @@ SET(LIGHT_SOURCES
 )
 SET(MODEL_SOURCES
 	"model/material_component.h"
+    "model/model_component.h"
 )
 SOURCE_GROUP("light" FILES ${LIGHT_SOURCES})
 SOURCE_GROUP("model" FILES ${MODEL_SOURCES})

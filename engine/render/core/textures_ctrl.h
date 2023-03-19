@@ -17,7 +17,7 @@ public:
 		return inst;
 	}
 
-	unsigned int loadImage(std::string imageName, std::string directory = "textures") {
+	unsigned int loadImage(std::string imageName, std::string directory = "F:/cmake_the_game/resources/textures") {
 		int width, height, nrChannels;
 		const auto found = m_loadedTextures.find(imageName);
 		if (found != m_loadedTextures.end()) {

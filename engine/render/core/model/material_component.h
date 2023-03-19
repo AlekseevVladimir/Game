@@ -1,5 +1,5 @@
 #pragma once
-#include <core/component.h>
+#include <engine/core/component.h>
 
 class MaterialComponent : public Component {
 public:

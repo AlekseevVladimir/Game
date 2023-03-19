@@ -77,7 +77,7 @@ private:
 		glBindVertexArray(0);
 	}
 };
-
+// cube as a model with one custom mesh
 class Model {
 public:
 	Model(std::string path) {

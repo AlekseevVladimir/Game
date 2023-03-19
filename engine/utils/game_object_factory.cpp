@@ -5,15 +5,30 @@
 #include <engine/render/core/light/spot_light_component.h>
 
 #include "engine/player_controls/player_controls_component.h"
-//#include "Components/TransformComponent.h"
-//#include "Components/MoverComponent.h"
 #include <engine/relations/hierarchy_component.h>
+#include <engine/transform/movement_request_component.h>
+#include <engine/transform/position_component.h>
+#include <engine/transform/rotation_component.h>
+#include <engine/render/core/model/material_component.h>
+#include <engine/render/core/textures_ctrl.h>
 
 //controls are inverted
 
 GameObject* createCube(
 		glm::vec3 pos, glm::vec3 scale, GameObject::RenderSettings renderSettings) {
 	GameObject* goPtr = GameObjectHolder::getInstance().createGO("cube", renderSettings);
+	PositionComponent* position = goPtr->createComponent<PositionComponent>(pos);
+
+	RotationComponent* rotation = goPtr->createComponent<RotationComponent>();
+
+
+	TexturesCtrl& texturesCtrl = TexturesCtrl::getInstance();
+	texturesCtrl.setWrapParams(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+	unsigned int texture = texturesCtrl.loadImage("box.png");
+	texturesCtrl.setWrapParams(GL_REPEAT, GL_REPEAT);
+	unsigned int specularMap = texturesCtrl.loadImage("box_specular_map.png");
+
+	MaterialComponent* material = goPtr->createComponent<MaterialComponent>(MaterialComponent::Material{ texture, specularMap, 32.0f });
 	//goPtr->createComponent<TransformComponent>(pos, scale);
 	//goPtr->createComponent<Generated3DVisualsComponent>("cube", "cube", "box.png", "box_specular_map.png");
 	return goPtr;

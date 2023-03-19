@@ -7,6 +7,7 @@ SET(SOURCES
 	"rotation_component.h"
 	"rotation_request_component.h"
 	"scale_component.h"
+	"view_point_component.h"
 )
 add_library(${PROJECT_NAME} ${SOURCES})                      
 set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER "engine")

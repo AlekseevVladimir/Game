@@ -7,9 +7,9 @@ GameCtrl::GameCtrl() {
 	createDirectionalLight({ false, false, "" });
 	createCube({ -3.0f, 0.0f, -3.0f }, { 1.0f, 1.0f, 1.0f }, { true, false, "solidObject" });
 	createCamera({ 0.0f, 0.0f, 0.0f }, 0.0f, 0.0f, 0.0f, { false, false, "" });
-	createPointLight({ 3.0f, 3.0f, 3.0f }, { 1.0f, 1.0f , 1.0f }, { true, false, "light" });
-	createFloor({ 0.0f, -1.0f, 0.0f }, { true, false, "solidObject" });
-	createTroll({ 0.0f, 0.0f, 0.0f }, { true, false, "solidObject" });
+	//createPointLight({ 3.0f, 3.0f, 3.0f }, { 1.0f, 1.0f , 1.0f }, { true, false, "light" });
+	//createFloor({ 0.0f, -1.0f, 0.0f }, { true, false, "solidObject" });
+	//createTroll({ 0.0f, 0.0f, 0.0f }, { true, false, "solidObject" });
 	SystemsHolder::getInstance().addSystem<InputControlSystem>();
 
 	//createSpotLight({ false, false, "" });
