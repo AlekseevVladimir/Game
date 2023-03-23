@@ -1,0 +1,25 @@
+# Blender 3.4.1 MTL File: 'untitled.blend'
+# www.blender.org
+
+newmtl TEX_Troll
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd Troll_Albedo2.jpg
+map_Ns Troll_Roughness2.jpg
+map_Ke Troll_Emissive.jpg
+map_Bump -bm 1.000000 Troll_Normals.jpg
+
+newmtl TEX_pants
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+map_Kd 1001_Base_Color.png
+map_Ns 1001_Roughness.png
+map_refl 1001_Metallic.png
+map_d 1001_Opacity.png
+map_Bump -bm 1.000000 1001_Normal_DirectX.png

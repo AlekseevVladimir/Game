@@ -22,7 +22,7 @@ public:
 		if (!res)
 			return;
 		//Model model("models/backpack/backpack.obj");
-		//ShadersCtrl::getInstance().createProgram("solidObject", {true, true});
+		ShadersCtrl::getInstance().createProgram("solidObject", {true, true});
 		//ShadersCtrl::getInstance().createProgram("light", {false, false});
 		GameObject::RenderSettings invisibleSettings = { false, false };
 		GameObject::RenderSettings visibleSettings = { true, false };

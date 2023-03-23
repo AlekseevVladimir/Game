@@ -11,8 +11,14 @@
 #include <engine/transform/rotation_component.h>
 #include <engine/render/core/model/material_component.h>
 #include <engine/render/core/textures_ctrl.h>
+#include <engine/render/open_gl/model/model_loader.h>
+#include <engine/render/open_gl/model/model.h>
+#include <engine/render/core/constants.h>
+#include <engine/render/open_gl/model/model_component.h>
 
 //controls are inverted
+
+
 
 GameObject* createCube(
 		glm::vec3 pos, glm::vec3 scale, GameObject::RenderSettings renderSettings) {
@@ -20,15 +26,19 @@ GameObject* createCube(
 	PositionComponent* position = goPtr->createComponent<PositionComponent>(pos);
 
 	RotationComponent* rotation = goPtr->createComponent<RotationComponent>();
-
+	
 
 	TexturesCtrl& texturesCtrl = TexturesCtrl::getInstance();
 	texturesCtrl.setWrapParams(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
 	unsigned int texture = texturesCtrl.loadImage("box.png");
 	texturesCtrl.setWrapParams(GL_REPEAT, GL_REPEAT);
 	unsigned int specularMap = texturesCtrl.loadImage("box_specular_map.png");
-
-	MaterialComponent* material = goPtr->createComponent<MaterialComponent>(MaterialComponent::Material{ texture, specularMap, 32.0f });
+	std::vector<Mesh::Vertex> vertices = cubeVertices;
+	std::vector<Mesh::Texture> textures{ {texture, "texture_diffuse", ""}, {specularMap, "texture_specular", ""} };
+	Mesh mesh{ vertices, textures };
+	ModelComponent* modelComponent = goPtr->createComponent<ModelComponent>();
+	modelComponent->model = std::make_shared<Model>();
+	modelComponent->model->m_meshes = {mesh};
 	//goPtr->createComponent<TransformComponent>(pos, scale);
 	//goPtr->createComponent<Generated3DVisualsComponent>("cube", "cube", "box.png", "box_specular_map.png");
 	return goPtr;

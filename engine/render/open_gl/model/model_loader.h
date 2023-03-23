@@ -18,7 +18,21 @@ public:
 		if (found != m_models.end() && !found->second.expired()) {
 			return found->second.lock();
 		}
+		std::shared_ptr<Model> modelPtr = std::make_shared<Model>(loadModel(name));
+		m_models[name] = modelPtr;
+		return modelPtr;
+	}
 
+	std::shared_ptr<Model> generateModel(std::string name, std::vector<Mesh> meshes) {
+		auto found = m_models.find(name);
+		if (found != m_models.end() && !found->second.expired()) {
+			return found->second.lock();
+		}
+		Model model = Model();
+		model.m_meshes = meshes;
+		std::shared_ptr<Model> modelPtr = std::make_shared<Model>(model);
+		m_models[name] = modelPtr;
+		return modelPtr;
 	}
 
 private:

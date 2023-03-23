@@ -1,7 +1,7 @@
 #include "model_loader.h"
 #include <engine/render/core/textures_ctrl.h>
 
-std::vector<Mesh::Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName) {
+std::vector<Mesh::Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName) {
 	std::vector<Mesh::Texture> textures;
 	TexturesCtrl& texCtrl = TexturesCtrl::getInstance();
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
@@ -9,7 +9,7 @@ std::vector<Mesh::Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextur
 		aiString str;
 		mat->GetTexture(type, i, &str);
 		Mesh::Texture texture;
-		texture.id = texCtrl.loadImage(str.C_Str(), directory);
+		texture.id = texCtrl.loadImage(str.C_Str(), "F:/cmake_the_game/resources/models/troll/");
 		texture.type = typeName;
 		texture.path = str.C_Str();
 		textures.push_back(texture);
@@ -18,29 +18,6 @@ std::vector<Mesh::Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextur
 	return textures;
 }
 
-
-Model ModelLoader::loadModel(std::string name) {
-	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
-
-	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-		throw(std::exception("ASSIMP ERROR"));
-		return;
-	}
-	Model model;
-	processNode(scene->mRootNode, scene, model);
-	return model;
-}
-
-void processNode(aiNode* node, const aiScene* scene, Model& model) {
-	for (unsigned int i = 0; i < node->mNumMeshes; i++) {
-		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		model.m_meshes.push_back(processMesh(mesh, scene));
-	}
-	for (unsigned int i = 0; i < node->mNumChildren; i++) {
-		processNode(node->mChildren[i], scene, model);
-	}
-}
 
 Mesh processMesh(aiMesh* mesh, const aiScene* scene) {
 
@@ -95,6 +72,29 @@ Mesh processMesh(aiMesh* mesh, const aiScene* scene) {
 		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 	}
 
-	return Mesh(vertices, indices, textures);
+	return ElementsMesh(vertices, textures, indices);
+}
+
+
+void processNode(aiNode* node, const aiScene* scene, Model& model) {
+	for (unsigned int i = 0; i < node->mNumMeshes; i++) {
+		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+		model.m_meshes.push_back(processMesh(mesh, scene));
+	}
+	for (unsigned int i = 0; i < node->mNumChildren; i++) {
+		processNode(node->mChildren[i], scene, model);
+	}
+}
+
+Model ModelLoader::loadModel(std::string name) {
+	Assimp::Importer importer;
+	const aiScene* scene = importer.ReadFile("F:/cmake_the_game/resources/models/troll/troll.obj", aiProcess_Triangulate | aiProcess_FlipUVs);
+
+	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+		throw(std::exception("ASSIMP ERROR"));
+	}
+	Model model;
+	processNode(scene->mRootNode, scene, model);
+	return model;
 }
 

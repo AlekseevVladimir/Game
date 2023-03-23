@@ -10,6 +10,7 @@
 #include <glfw3.h>
 #include <engine/render/core/stb_image.h>
 
+
 class Mesh {
 public:
 	struct Vertex {
@@ -23,30 +24,60 @@ public:
 		std::string type;
 		std::string path;
 	};
+	
+	Mesh(std::vector<Vertex> vertices, std::vector<Texture> textures) :
+		m_vertices(vertices)
+		, m_textures(textures) {
+		setupMesh();
+	}
+	void setupMesh() {
+		glGenVertexArrays(1, &VAO);
+		glGenBuffers(1, &VBO);
 
-	const std::vector<Texture>& getTextures() {
-		return m_textures;
+		glBindVertexArray(VAO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+		glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), &m_vertices[0], GL_STATIC_DRAW);
+
+
+		// Координаты вершин
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+
+		// Нормали вершин
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+
+		// Текстурные координаты вершин
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+
+		glBindVertexArray(0);
 	}
 
+	unsigned int VAO, VBO;
+protected:
+	std::vector<Vertex> m_vertices;
+	std::vector<Texture> m_textures;
+};
+
+class ElementsMesh : public Mesh {
+public:
 	const std::vector<unsigned int>& getIndices() {
 		return m_indices;
 	}
 
 	// Mesh-данные
 
-	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures) :
-		m_vertices(vertices)
-		, m_indices(indices)
-		, m_textures(textures) {
+	ElementsMesh(std::vector<Vertex> vertices, std::vector<Texture> textures, std::vector<unsigned int> indices) :
+		Mesh(vertices, textures), m_indices(indices) {
 		setupMesh();
 	}
-	unsigned int VAO, VBO, EBO;
+	unsigned int EBO;
+	std::vector<unsigned int> m_indices;
 private:
 	// Данные для рендеринга
-	std::vector<Texture> m_textures;
-	std::vector<Vertex> m_vertices;
-	std::vector<unsigned int> m_indices;
-
+	
 	void setupMesh() {
 		glGenVertexArrays(1, &VAO);
 		glGenBuffers(1, &VBO);
@@ -82,8 +113,11 @@ public:
 
 	std::vector<Mesh> m_meshes;
 private:
+};
 
-	
-	
-	std::vector<Mesh::Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
+class ElementsModel {
+public:
+
+	std::vector<ElementsMesh> m_meshes;
+private:
 };
