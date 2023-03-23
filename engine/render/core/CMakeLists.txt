@@ -9,6 +9,8 @@ SET(CORE_SOURCES
 	"textures_ctrl.h"
 	"vertices_array.h"
 	"glad.c"
+	"render_system.h"
+	"shaders_manager.h"
 )
 
 SET(LIGHT_SOURCES
@@ -23,6 +25,10 @@ SET(MODEL_SOURCES
 SOURCE_GROUP("light" FILES ${LIGHT_SOURCES})
 SOURCE_GROUP("model" FILES ${MODEL_SOURCES})
 SOURCE_GROUP("" FILES ${CORE_SOURCES})
+LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/engine/render/open_gl)
+LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/engine/core)
 ADD_LIBRARY(render_core ${CORE_SOURCES} ${LIGHT_SOURCES} ${MODEL_SOURCES})
+target_link_libraries(render_core PUBLIC open_gl) 
+target_link_libraries(render_core PUBLIC core) 
 SOURCE_GROUP("simple" FILES "subfolder_item.cpp" "subfolder_item.h")                      
 SET_PROPERTY(TARGET ${PROJECT_NAME} PROPERTY FOLDER "engine/render")

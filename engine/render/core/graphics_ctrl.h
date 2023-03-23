@@ -3,10 +3,11 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <engine/core/window_ctrl.h>
-//#include "shaders_ctrl.h"
+#include <engine/render/open_gl/shaders/solid_object_shader.h>
 #include <engine/core/game_object.h>
 #include <memory>
 #include <glfw3.h>
+#include <engine/render/core/shaders_ctrl.h>
 //#include <Model.h>
 
 

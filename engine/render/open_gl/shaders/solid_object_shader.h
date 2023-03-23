@@ -3,9 +3,9 @@
 #include <glad/glad.h>
 #include <glfw3.h>
 
-#include <Render/primitives.h>
-#include "shader_base.h"
-
+//#include <Render/primitives.h>
+//#include "shader_base.h"
+/*
 class SolidObjectVertexShader : public ShaderBase {
 	SolidObjectVertexShader(std::string alias, unsigned int VAO, unsigned int VBO, std::vector<Vertex> vertices) : ShaderBase(alias) {
 		glBindVertexArray(VAO);
@@ -58,3 +58,4 @@ class SolidObjectElementShader : public ShaderBase {
 		glBindVertexArray(0);
 	}
 };
+*/

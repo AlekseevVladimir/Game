@@ -1,4 +1,4 @@
-project(game)
+		project(game)
 cmake_minimum_required(VERSION 3.10)
 SET(SOURCES
 	"GameCtrl.h"

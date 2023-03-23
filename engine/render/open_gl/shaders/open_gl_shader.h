@@ -65,5 +65,5 @@ public:
 	}
 
 private:
-	unsigned int m_programID;
+	unsigned int m_programID = 0;
 };

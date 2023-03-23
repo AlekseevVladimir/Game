@@ -2,9 +2,8 @@ cmake_minimum_required(VERSION 3.10)
 project(open_gl)
 
 SET(SHADER_SOURCES
-	"shaders/shader_base.h"
+	"shaders/open_gl_shader.h"
 	"shaders/shader_component.h"
-	"shaders/solid_object_shader.h"
 	"shaders/utils.h"
 )
 SET(MODEL_SOURCES

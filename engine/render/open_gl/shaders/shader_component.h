@@ -1,8 +1,8 @@
 #pragma once
 
 #include <memory>
-
-#include <core/component.h>
+#define GLFW_INCLUDE_NONE
+#include <engine/core/component.h>
 #include "shader_base.h"
 
 class ShaderComponent : public Component {

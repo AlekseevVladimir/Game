@@ -1,9 +1,9 @@
 #include "window_ctrl.h"
 #include <engine/player_controls/player_controls_component.h>
-
+#include <algorithm>
 #include <iostream>
 #include <glad/glad.h>
-#include <engine/render/core/shaders_ctrl.h>
+//#include <engine/render/core/shaders_ctrl.h>
 #include <memory>
 //#include <Render/TexturesCtrl.h>
 //#include <algorithm>
@@ -61,16 +61,16 @@ void WindowCtrl::draw() {
 	}
 
 	const auto& gameObjects = GameObjectHolder::getInstance().getObjectsByShader();
-	ShadersCtrl& shadersCtrl = ShadersCtrl::getInstance();
+	//ShadersCtrl& shadersCtrl = ShadersCtrl::getInstance();
 
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 	for (const auto& item : gameObjects) {
 		glStencilMask(0x00);
-		std::shared_ptr<Shader> shader = shadersCtrl.useProgram(item.first);
+		//std::shared_ptr<Shader> shader = shadersCtrl.useProgram(item.first);
 
-		if (shader->getProps().usesLightData) {
+		//if (shader->getProps().usesLightData) {
 			//setLightData(shader);
-		}
+		//}
 		/*
 		for (GameObject* ptr : item.second) {
 			if (ptr->getRenderSettings().isHighlighted) {
