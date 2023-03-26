@@ -15,6 +15,9 @@
 #include <engine/render/open_gl/model/model.h>
 #include <engine/render/core/constants.h>
 #include <engine/render/open_gl/model/model_component.h>
+#include <engine/render/open_gl/shaders/open_gl_shader.h>
+#include <engine/render/core/shader_component.h>
+#include <engine/render/core/view_point_component.h>
 
 //controls are inverted
 
@@ -23,9 +26,9 @@
 GameObject* createCube(
 		glm::vec3 pos, glm::vec3 scale, GameObject::RenderSettings renderSettings) {
 	GameObject* goPtr = GameObjectHolder::getInstance().createGO("cube", renderSettings);
-	PositionComponent* position = goPtr->createComponent<PositionComponent>(pos);
+	PositionComponent* position = goPtr->createComponent<PositionComponent>(Vector3<float>(3.0f, 0.0f, 0.0f));
 
-	RotationComponent* rotation = goPtr->createComponent<RotationComponent>();
+	RotationComponent* rotation = goPtr->createComponent<RotationComponent>(10.0f, 10.0f, 10.0f);
 	
 
 	TexturesCtrl& texturesCtrl = TexturesCtrl::getInstance();
@@ -39,6 +42,10 @@ GameObject* createCube(
 	ModelComponent* modelComponent = goPtr->createComponent<ModelComponent>();
 	modelComponent->model = std::make_shared<Model>();
 	modelComponent->model->m_meshes = {mesh};
+	modelComponent->model->setupModel();
+	std::shared_ptr<OpenGLShader> test = ShadersManager::getInstance().createProgram<OpenGLShader>("solidObject");
+	std::shared_ptr<Shader> shader = test;
+	goPtr->createComponent<ShaderComponent>(shader);
 	//goPtr->createComponent<TransformComponent>(pos, scale);
 	//goPtr->createComponent<Generated3DVisualsComponent>("cube", "cube", "box.png", "box_specular_map.png");
 	return goPtr;
@@ -76,9 +83,10 @@ GameObject* createSpotLight(GameObject::RenderSettings renderSettings) {
 GameObject* createCamera(
 		glm::vec3 pos, float yaw, float pitch, float roll, GameObject::RenderSettings renderSettings) {
 	GameObject* goPtr = GameObjectHolder::getInstance().createGO("camera", renderSettings);
-	//TransformComponent* transform = goPtr->createComponent<TransformComponent>();
+	PositionComponent* position = goPtr->createComponent<PositionComponent>();
+	RotationComponent* rotation = goPtr->createComponent<RotationComponent>();
 	//goPtr->createComponent<DirectionalMoverComponent>(transform);
-	//goPtr->createComponent<ViewPointComponent>(goPtr);
+	goPtr->createComponent<ViewPointComponent>();
 	//goPtr->createComponent<PlayerControlsComponent>(goPtr);
 	return goPtr;
 }

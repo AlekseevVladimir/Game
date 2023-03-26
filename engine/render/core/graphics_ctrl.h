@@ -7,7 +7,7 @@
 #include <engine/core/game_object.h>
 #include <memory>
 #include <glfw3.h>
-#include <engine/render/core/shaders_ctrl.h>
+//#include <engine/render/core/shaders_ctrl.h>
 //#include <Model.h>
 
 
@@ -23,7 +23,7 @@ public:
 		if (!res)
 			return;
 		//Model model("models/backpack/backpack.obj");
-		ShadersCtrl::getInstance().createProgram("solidObject", {true, true});
+	//	ShadersCtrl::getInstance().createProgram("solidObject", {true, true});
 		//ShadersCtrl::getInstance().createProgram("light", {false, false});
 		GameObject::RenderSettings invisibleSettings = { false, false };
 		GameObject::RenderSettings visibleSettings = { true, false };

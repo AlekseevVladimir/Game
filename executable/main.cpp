@@ -7,12 +7,14 @@
 int main() {
 	GraphicsCtrl graphicsCtrl;
 	GameCtrl game;
-	SystemsHolder::getInstance().process(1.0f);
+	//SystemsHolder::getInstance().process(1.0f);
 	float lastFrameTime = glfwGetTime(), currentFrameTime = glfwGetTime();
 	while (graphicsCtrl.isValid()) {
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		currentFrameTime = glfwGetTime();
-		graphicsCtrl.drawLoop();
 		game.tick(currentFrameTime - lastFrameTime);
+		graphicsCtrl.drawLoop();
 		lastFrameTime = currentFrameTime;
 
 	}

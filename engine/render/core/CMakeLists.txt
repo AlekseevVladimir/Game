@@ -11,7 +11,8 @@ SET(CORE_SOURCES
 	"glad.c"
 	"render_system.h"
 	"shaders_manager.h"
-)
+	"shader_component.h"
+ "view_point_component.h")
 
 SET(LIGHT_SOURCES
 	"light/light_direction_component.h"

@@ -4,20 +4,21 @@
 
 #include <glfw3.h>
 #include <glad/glad.h>
+#include <engine/render/core/shaders_manager.h>
 
-#include "utils.h"
+#include "shader_utils.h"
 
-class ShaderBase {
+class OpenGLShader : public Shader {
 public:
-	ShaderBase(std::string alias) {
+	OpenGLShader(std::string alias) {
 		unsigned int programID = glCreateProgram();
 		auto vertexShaderCreationRes = createShader(alias + ".vs", GL_VERTEX_SHADER, programID);
 		if (!vertexShaderCreationRes.first) {
-			return;
+			//return;
 		}
 		auto fragmentShaderCreationRes = createShader(alias + ".fs", GL_FRAGMENT_SHADER, programID);
 		if (!fragmentShaderCreationRes.first) {
-			return;
+			//return;
 		}
 
 		glLinkProgram(programID);
@@ -28,7 +29,7 @@ public:
 		if (!success) {
 			glGetProgramInfoLog(programID, 512, NULL, infoLog);
 			std::cerr << "Shader program linking failed \n" << infoLog << std::endl;
-			return;
+			//return;
 
 		}
 		glDeleteShader(vertexShaderCreationRes.second);
@@ -36,7 +37,7 @@ public:
 		m_programID = programID;
 	}
 
-	virtual void use() {
+	void use() override {
 		glUseProgram(m_programID);
 	}
 

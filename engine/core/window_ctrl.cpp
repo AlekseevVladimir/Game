@@ -50,8 +50,6 @@ void WindowCtrl::draw() {
 	}
 
 	glfwPollEvents();
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	processInput();
 
@@ -63,9 +61,9 @@ void WindowCtrl::draw() {
 	const auto& gameObjects = GameObjectHolder::getInstance().getObjectsByShader();
 	//ShadersCtrl& shadersCtrl = ShadersCtrl::getInstance();
 
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 	for (const auto& item : gameObjects) {
-		glStencilMask(0x00);
+		//glStencilMask(0x00);
 		//std::shared_ptr<Shader> shader = shadersCtrl.useProgram(item.first);
 
 		//if (shader->getProps().usesLightData) {
