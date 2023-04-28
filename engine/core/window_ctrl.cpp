@@ -2,7 +2,6 @@
 #include <engine/player_controls/player_controls_component.h>
 #include <algorithm>
 #include <iostream>
-#include <glad/glad.h>
 //#include <engine/render/core/shaders_ctrl.h>
 #include <memory>
 //#include <Render/TexturesCtrl.h>
@@ -12,6 +11,7 @@
 //#include <glm/gtc/type_ptr.hpp>
 #include <utility>
 #include <glfw3.h>
+#include <glad/glad.h>
 #include <engine/core/systems_holder.h>
 #include <engine/player_controls/input_control_system.h>
 

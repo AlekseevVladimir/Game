@@ -1,3 +1,4 @@
+#include <iostream>
 #include "render_utils.h"
 #include <engine/transform/position_component.h>
 #include <engine/transform/rotation_component.h>
@@ -14,6 +15,7 @@ glm::mat4 getView(GameObject* goPtr) {
 	const float radius = 10.0f;
 	Vector3<float> position = goPtr->getComponent<PositionComponent>()->getPos();
 	Vector3<float> direction = goPtr->getComponent<RotationComponent>()->getDirection();
+	//std::cout << "DIRECTION " << position.x << " " << position.y << " " << position.z << std::endl;
 	glm::mat4 view = glm::lookAt(position.getGlm(), position.getGlm() + direction.getGlm(), glm::vec3(0.0f, 1.0f, 0.0f));
 	
 	//view = glm::mat4(1.0f);

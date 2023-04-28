@@ -12,7 +12,7 @@ SET(CORE_SOURCES
 	"render_system.h"
 	"shaders_manager.h"
 	"shader_component.h"
- "view_point_component.h")
+ "view_point_component.h" "textures_ctrl.cpp")
 
 SET(LIGHT_SOURCES
 	"light/light_direction_component.h"

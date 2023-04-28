@@ -11,6 +11,7 @@ add_library(${PROJECT_NAME} ${SOURCES})
 
 LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/engine)
 LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/engine/render)
+LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/engine/render/open_gl)
 target_link_libraries(utils PUBLIC transform)
 target_link_libraries(utils PUBLIC player_controls)
 target_link_libraries(utils PUBLIC render_core)

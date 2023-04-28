@@ -1,16 +1,16 @@
+#include <glad/glad.h>
 #include "shader_utils.h"
 #include <filesystem>
 #include <fstream>
 #include <string>
 #include <iostream>
 
-#include <glad/glad.h>
 
 std::pair<bool, unsigned int> createShader(const std::string& shaderSrcFileName, int shaderType, unsigned int programID) {
 	int success;
 	unsigned int shaderID;
 	char infoLog[512];
-	const std::filesystem::path path{ "F:/cmake_the_game/resources/shaders/" + shaderSrcFileName };
+	const std::filesystem::path path{ "../../resources/shaders/" + shaderSrcFileName };
 	std::ifstream shaderFstream(path);
 	std::string shaderSrc;
 	std::string buf;

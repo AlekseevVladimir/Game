@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include <glad/glad.h>
 #include <glfw3.h>
 #include <engine/render/open_gl/model/model.h>
 

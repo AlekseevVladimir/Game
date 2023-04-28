@@ -1,7 +1,7 @@
 #pragma once
 #define GLFW_INCLUDE_NONE
 #include <iostream>
-#include <glad/glad.h>
+//#include <glad/glad.h>
 #include <set>
 #include <map>
 #include <memory>
@@ -20,6 +20,8 @@
 class Shader {
 public:
 	virtual void use() = 0;
+	
+	virtual void configure() = 0;
 
 	virtual ~Shader() = default;
 };

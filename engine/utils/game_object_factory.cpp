@@ -21,7 +21,7 @@
 
 //controls are inverted
 
-
+std::shared_ptr<Model> generateModel(std::string, std::string);
 
 GameObject* createCube(
 		glm::vec3 pos, glm::vec3 scale, GameObject::RenderSettings renderSettings) {
@@ -30,7 +30,7 @@ GameObject* createCube(
 
 	RotationComponent* rotation = goPtr->createComponent<RotationComponent>(10.0f, 10.0f, 10.0f);
 	
-
+/*
 	TexturesCtrl& texturesCtrl = TexturesCtrl::getInstance();
 	texturesCtrl.setWrapParams(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
 	unsigned int texture = texturesCtrl.loadImage("box.png");
@@ -43,6 +43,10 @@ GameObject* createCube(
 	modelComponent->model = std::make_shared<Model>();
 	modelComponent->model->m_meshes = {mesh};
 	modelComponent->model->setupModel();
+	*/
+	ModelComponent* modelComponent = goPtr->createComponent<ModelComponent>();
+	modelComponent->model = 
+		generateModel("box.png", "box_specular_map.png");
 	std::shared_ptr<OpenGLShader> test = ShadersManager::getInstance().createProgram<OpenGLShader>("solidObject");
 	std::shared_ptr<Shader> shader = test;
 	goPtr->createComponent<ShaderComponent>(shader);
@@ -62,15 +66,16 @@ GameObject* createBackPack(
 GameObject* createPointLight(
 		glm::vec3 pos, glm::vec3 scale, GameObject::RenderSettings renderSettings) {
 	GameObject* goPtr = GameObjectHolder::getInstance().createGO("pointLight", renderSettings);
-	//goPtr->createComponent<TransformComponent>(pos, scale);
+	goPtr->createComponent<PositionComponent>(pos);
 	//goPtr->createComponent<Generated3DVisualsComponent>("light", "cube");
-	//goPtr->createComponent<LightEmitterComponent>();
+	goPtr->createComponent<LightEmitterComponent>();
 	return goPtr;
 }
 
 GameObject* createDirectionalLight(GameObject::RenderSettings renderSettings) {
 	GameObject* goPtr = GameObjectHolder::getInstance().createGO("directionalLight", renderSettings);
-	//goPtr->createComponent<DirectionalLightEmitterComponent>();
+	goPtr->createComponent<LightEmitterComponent>();
+	goPtr->createComponent<LightDirectionComponent>();
 	return goPtr;
 }
 
@@ -87,14 +92,21 @@ GameObject* createCamera(
 	RotationComponent* rotation = goPtr->createComponent<RotationComponent>();
 	//goPtr->createComponent<DirectionalMoverComponent>(transform);
 	goPtr->createComponent<ViewPointComponent>();
-	//goPtr->createComponent<PlayerControlsComponent>(goPtr);
+	goPtr->createComponent<PlayerControlsComponent>();
 	return goPtr;
 }
 
 GameObject* createFloor(glm::vec3 pos, GameObject::RenderSettings renderSettings) {
 	GameObject* goPtr = GameObjectHolder::getInstance().createGO("floor", renderSettings);
-	//TransformComponent* transform = goPtr->createComponent<TransformComponent>();
-	//transform->setPos(pos);
+	PositionComponent* posComponent = goPtr->createComponent<PositionComponent>();
+	posComponent->setPos(pos);
+	RotationComponent* rotComponent = goPtr->createComponent<RotationComponent>();
+	rotComponent->setYaw(90.0f);
+	ModelComponent* modelComponent = goPtr->createComponent<ModelComponent>();
+	modelComponent->model = generateModel("floor.png", "box_specular_map.png");
+	std::shared_ptr<OpenGLShader> test = ShadersManager::getInstance().createProgram<OpenGLShader>("solidObject");
+	std::shared_ptr<Shader> shader = test;
+	goPtr->createComponent<ShaderComponent>(shader);
 	//transform->setScale({10.0f, 1.0f, 10.0f});
 	//goPtr->createComponent<Generated3DVisualsComponent>("plate", "plate", "floor.png", "box_specular_map.png");
 	return goPtr;
@@ -103,9 +115,34 @@ GameObject* createFloor(glm::vec3 pos, GameObject::RenderSettings renderSettings
 
 GameObject* createTroll(glm::vec3 pos, GameObject::RenderSettings renderSettings) {
 	GameObject* goPtr = GameObjectHolder::getInstance().createGO("troll", renderSettings);
+	ModelComponent* modelCompPtr = goPtr->createComponent<ModelComponent>();
+	std::shared_ptr<Model> modelPtr = ModelLoader::getInstance().getModel("test");
+	modelCompPtr->model = modelPtr;
+	modelPtr->setupModel();
+	std::shared_ptr<OpenGLShader> test = ShadersManager::getInstance().createProgram<OpenGLShader>("solidObject");
+	std::shared_ptr<Shader> shader = test;
+	goPtr->createComponent<ShaderComponent>(shader);
+	goPtr->createComponent<PositionComponent>(pos);
+	goPtr->createComponent<RotationComponent>();
 	//TransformComponent* transform = goPtr->createComponent<TransformComponent>();
 	//transform->setPos(pos);
 	//goPtr->createComponent<ModelComponent>("models/troll/troll.obj");
 	return goPtr;
 
+}
+
+std::shared_ptr<Model> generateModel(
+		std::string diffuseName, std::string specularName) {
+	TexturesCtrl& texturesCtrl = TexturesCtrl::getInstance();
+	texturesCtrl.setWrapParams(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+	unsigned int texture = texturesCtrl.loadImage(diffuseName);
+	texturesCtrl.setWrapParams(GL_REPEAT, GL_REPEAT);
+	unsigned int specularMap = texturesCtrl.loadImage(specularName);
+	std::vector<Mesh::Vertex> vertices = cubeVertices;
+	std::vector<Mesh::Texture> textures{ {texture, "texture_diffuse", ""}, {specularMap, "texture_specular", ""} };
+	Mesh mesh{ vertices, textures };
+	std::shared_ptr<Model> model = std::make_shared<Model>();
+	model->m_meshes = {mesh};
+	model->setupModel();
+	return model;
 }

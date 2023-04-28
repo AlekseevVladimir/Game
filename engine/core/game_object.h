@@ -1,4 +1,7 @@
 #pragma once
+#include <iterator>
+#include <algorithm>
+#include <typeindex>
 #include <memory>
 #include <vector>
 #include <utility>
@@ -41,21 +44,52 @@ public:
 		return m_alias;
 	}
 
-	template<typename T>
-	T* getComponent() {
-		for (auto& componentPtr : m_components) {
-			T* ptr = dynamic_cast<T*>(componentPtr.get());
-			if (ptr) {
-				return ptr;
-			}
+	template<typename TComponent>
+	TComponent* getComponent() {
+		return dynamic_cast<TComponent*>(getComponentByTypeId(typeid(TComponent)));
+	}
+
+	Component* getComponentByTypeId(std::type_index targetType) {
+		auto found = m_components.find(targetType);
+		if (found != m_components.end()) {
+			return found->second.front().get();
 		}
 		return nullptr;
 	}
+		
+	std::vector<Component*> getComponentsByTypeId(std::type_index targetType) {
+		auto found = m_components.find(targetType);
+		std::vector<Component*> res;
+		if (found != m_components.end()) {
+			std::transform(found->second.begin(), found->second.end(),
+				std::back_inserter(res),
+				[](std::unique_ptr<Component>& inPtr) { return inPtr.get(); });
+		}
+		return res;
+	}
 
-	template<typename ComponentT, typename... Args>
-	ComponentT* createComponent(Args&&... args) {
-		m_components.push_back(std::make_unique<ComponentT>(getAlias(), std::forward<Args>(args)...));
-		return dynamic_cast<ComponentT*>(m_components.back().get());
+
+	template<typename TComponent>
+	std::vector<Component*> getComponentsByClass() {
+		return getComponentsByTypeId(typeid(TComponent));
+	}
+
+	template<typename TComponent>
+	void removeComponents() {
+		m_components.erase(typeid(TComponent));
+	}
+
+	template<typename TComponent, typename... Args>
+	TComponent* createComponent(Args&&... args) {
+		m_components[typeid(TComponent)].
+			push_back(std::make_unique<TComponent>(getAlias(), std::forward<Args>(args)...));
+//		std::cout << "num components " << m_components.size() << std::endl;
+		TComponent* componentPtr = dynamic_cast<TComponent*>(
+			m_components[typeid(TComponent)].back().get());
+		if (dynamic_cast<UniqueComponent*>(componentPtr) && m_components[typeid(TComponent)].size() != 1) {
+			throw std::logic_error("Attempt to create multiple instances of a unique component");
+		}
+		return componentPtr;
 	}
 
 protected:
@@ -63,7 +97,7 @@ protected:
 	unsigned int m_id = 0;
 
 private:
-	std::vector<std::unique_ptr<Component>> m_components;
+	std::map<std::type_index, std::vector<std::unique_ptr<Component>>> m_components;
 	RenderSettings m_renderSettings;
 };
 
@@ -93,11 +127,11 @@ public:
 		return res;
 	}
 
-	template<typename ComponentT>
+	template<typename TComponent>
 	std::vector<GameObject*> getObjectsWithComponent() {
 		std::vector<GameObject*> res;
 		for (auto& go : m_gameObjects) {
-			if (go.second->getComponent<ComponentT>()) {
+			if (go.second->getComponent<TComponent>()) {
 				res.push_back(go.second.get());
 			}
 		}

@@ -56,8 +56,12 @@ public:
 		};
 	}
 
+	bool isZero() {
+		return !x && !y && !z;
+	}
+
 	T& operator[](size_t idx) {
-		assert(idx >= 0 && idx < 3);
+		//assert(idx >= 0 && idx < 3);
 		switch(idx) {
 		case 0: 
 			return x;
@@ -68,6 +72,8 @@ public:
 		case 2:
 			return z;
 			break;
+		default:
+			throw std::out_of_range("test");
 		}
 	}
 

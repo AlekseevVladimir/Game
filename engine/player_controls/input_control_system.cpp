@@ -1,4 +1,5 @@
 #include <glfw3.h>
+#include <iostream>
 
 #include "input_control_system.h"
 #include <engine/transform/movement_request_component.h>
@@ -27,8 +28,15 @@ void InputControlSystem::processInput() {
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
 		movementModifier.x++;
 	}
-	for (auto goPtr : GameObjectHolder::getInstance().getObjectsWithComponents<PlayerControlsComponent, PositionComponent>()) {
-		goPtr->createComponent<MovementRequestComponent>(movementModifier);
+	if (!movementModifier.isZero()) {
+		for (auto goPtr : GameObjectHolder::getInstance().getObjectsWithComponents<PlayerControlsComponent, PositionComponent>()) {
+			Vector3<float> direction = goPtr->getComponent<RotationComponent>()->getDirection();
+			Vector3<float> modifierBuf(movementModifier);
+			movementModifier = direction.cross({ 0.0f, 1.0f, 0.0f }) * modifierBuf.x +
+				direction * modifierBuf.z;
+			goPtr->createComponent<MovementRequestComponent>(movementModifier);
+			//std::cout << "test" << MovementRequestComponent::getComponentName() << std::endl;
+		}
 	}
 }
 
@@ -55,10 +63,13 @@ void InputControlSystem::processMousePos() {
 		float pitch = transform->getPitch();
 		yaw += xoffset;
 		pitch += yoffset;
+		if (!xoffset && !yoffset) {
+			continue;
+		}
 		if (pitch > 89.0f)
 			pitch = 89.0f;
 		if (pitch < -89.0f)
 			pitch = -89.0f;
-		goPtr->createComponent<RotationRequestComponent>(yaw, pitch, transform->getRoll());
+		goPtr->createComponent<RotationRequestComponent>(xoffset, yoffset, 0);
 	}
 }
