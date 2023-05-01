@@ -107,8 +107,10 @@ void Mesh::setupMesh() {
 		glBindVertexArray(0);
 	}
 
+//void Model::setModelDataAndDraw(std::shared_ptr<Shader> shaderBase, GameObject* goPtr) {}
 
-void Model::setModelDataAndDraw(std::shared_ptr<Shader> shaderBase, GameObject* goPtr) {
+template<typename TMesh>
+void Model<TMesh>::setModelDataAndDraw(std::shared_ptr<Shader> shaderBase, GameObject* goPtr) {
 	OpenGLShader* shader = dynamic_cast<OpenGLShader*>(shaderBase.get());
 	TexturesCtrl& texCtrl = TexturesCtrl::getInstance();
 	GameObject* viewPointPtr = GameObjectHolder::getInstance().getObjectsWithComponent<ViewPointComponent>()[0];
@@ -119,7 +121,8 @@ void Model::setModelDataAndDraw(std::shared_ptr<Shader> shaderBase, GameObject* 
 	shader->setMatrix4Float(
 		"model", GL_FALSE,
 		glm::value_ptr(getTransform(goPtr->getComponent<PositionComponent>(), 
-			goPtr->getComponent<RotationComponent>())));
+			goPtr->getComponent<RotationComponent>(), 
+			goPtr->getComponent<ScaleComponent>())));
 
 	int cnt = 0;
 	for (auto mesh : m_meshes) {
@@ -134,8 +137,22 @@ void Model::setModelDataAndDraw(std::shared_ptr<Shader> shaderBase, GameObject* 
 		glActiveTexture(GL_TEXTURE0);
 		glBindVertexArray(mesh.VAO);
 		//glDrawElements(GL_TRIANGLES, mesh.getIndices().size(), GL_UNSIGNED_INT, 0);
-		glDrawArrays(GL_TRIANGLES, 0, mesh.m_vertices.size());
+	//.	glDrawArrays(GL_TRIANGLES, 0, mesh.m_vertices.size());
+		mesh.drawMesh();
 		//glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 	}
 }
+
+void Mesh::drawMesh()
+{
+	glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
+}
+
+void ElementsMesh::drawMesh()
+{
+	glDrawElements(GL_TRIANGLES, getIndices().size(), GL_UNSIGNED_INT, 0);
+}
+
+template class Model<Mesh>;
+template class Model<ElementsMesh>;

@@ -13,30 +13,31 @@ public:
 		return inst;
 	}
 
-	std::shared_ptr<Model> getModel(std::string name) {
+	std::shared_ptr<ModelBase> getModel(std::string name) {
 		auto found = m_models.find(name);
 		if (found != m_models.end() && !found->second.expired()) {
 			return found->second.lock();
 		}
-		std::shared_ptr<Model> modelPtr = std::make_shared<Model>(loadModel(name));
+		std::shared_ptr<ModelBase> modelPtr = std::make_shared<Model<ElementsMesh>>(
+			loadModel(name));
 		m_models[name] = modelPtr;
 		return modelPtr;
 	}
-
-	std::shared_ptr<Model> generateModel(std::string name, std::vector<Mesh> meshes) {
+/*
+	std::shared_ptr<Model<Mesh>> generateModel(std::string name, std::vector<Mesh> meshes) {
 		auto found = m_models.find(name);
 		if (found != m_models.end() && !found->second.expired()) {
 			return found->second.lock();
 		}
-		Model model = Model();
+		Model model = Model<Mesh>();
 		model.m_meshes = meshes;
-		std::shared_ptr<Model> modelPtr = std::make_shared<Model>(model);
+		std::shared_ptr<Model<Mesh>> modelPtr = std::make_shared<Model<Mesh>>(model);
 		m_models[name] = modelPtr;
 		return modelPtr;
 	}
-
+*/
 private:
-	Model loadModel(std::string name);
+	Model<ElementsMesh> loadModel(std::string name);
 
-	std::map<std::string, std::weak_ptr<Model>> m_models;
+	std::map<std::string, std::weak_ptr<ModelBase>> m_models;
 };

@@ -22,7 +22,7 @@ std::vector<Mesh::Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType t
 }
 
 
-Mesh processMesh(aiMesh* mesh, const aiScene* scene) {
+ElementsMesh processMesh(aiMesh* mesh, const aiScene* scene) {
 
 	std::vector<Mesh::Vertex> vertices;
 	std::vector<unsigned int> indices;
@@ -79,7 +79,7 @@ Mesh processMesh(aiMesh* mesh, const aiScene* scene) {
 }
 
 
-void processNode(aiNode* node, const aiScene* scene, Model& model) {
+void processNode(aiNode* node, const aiScene* scene, Model<ElementsMesh>& model) {
 	for (unsigned int i = 0; i < node->mNumMeshes; i++) {
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		model.m_meshes.push_back(processMesh(mesh, scene));
@@ -89,7 +89,7 @@ void processNode(aiNode* node, const aiScene* scene, Model& model) {
 	}
 }
 
-Model ModelLoader::loadModel(std::string name) {
+Model<ElementsMesh> ModelLoader::loadModel(std::string name) {
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(
 		"D:/TheGame1/TheGame/models/troll/troll.obj", aiProcess_Triangulate | aiProcess_FlipUVs);
@@ -97,7 +97,7 @@ Model ModelLoader::loadModel(std::string name) {
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
 		throw(std::exception("ASSIMP ERROR"));
 	}
-	Model model;
+	Model<ElementsMesh> model;
 	processNode(scene->mRootNode, scene, model);
 	return model;
 }

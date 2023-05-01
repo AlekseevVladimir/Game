@@ -2,9 +2,14 @@
 #include <engine/engine_math/vector3.h>
 #include <engine/transform/position_component.h>
 #include <engine/transform/rotation_component.h>
+#include "engine/transform/scale_component.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-glm::mat4 getTransform(PositionComponent* position, RotationComponent* rotation) {
+glm::mat4 getTransform(
+	PositionComponent* position, 
+	RotationComponent* rotation,
+	ScaleComponent* scale=nullptr) 
+{
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::vec3 pos = position->getPos().getGlm();//getWorldPos();
 	model = glm::translate(model, pos);
@@ -18,6 +23,7 @@ glm::mat4 getTransform(PositionComponent* position, RotationComponent* rotation)
 		model = glm::rotate(model, glm::radians(rotation->getPitch()), glm::vec3(1.0f, 0.0f, 0.0f));
 	}
 	//glm::vec2 test = { m_scale.x, m_scale.y };
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+	glm::vec3 scaleVector = scale ? scale->getScale().getGlm() : glm::vec3(1.f, 1.f, 1.f);
+	model = glm::scale(model, scaleVector);
 	return model;
 }

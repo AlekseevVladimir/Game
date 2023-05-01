@@ -1,19 +1,19 @@
 #pragma once
 
+#include "engine/core/component.h"
 #include <string>
-#include <glm/glm.hpp>
-#include <glm/ext.hpp>
-#include <Math/Vector3.h>
-#include <core/component.h>
+#include "engine/engine_math/vector3.h"
 
-class TransformComponent : public Component {
+// check if copy constructor called in set scale ewithout std move
+
+class ScaleComponent : public Component {
 public:
-	TransformComponent(std::string goID, Vector3<float> scale = Vector3<float>(1.0f, 1.0f, 1.0f))
+	ScaleComponent(std::string goID, Vector3<float> scale = Vector3<float>(1.0f, 1.0f, 1.0f))
 		: Component(goID)
-		, m_scale(std::move(scale)) {}
+		, m_scale(scale) {}
 
 	void setScale(Vector3<float> newScale) {
-		m_scale = std::move(newScale);
+		m_scale = newScale;
 	}
 
 	Vector3<float> getScale() const {

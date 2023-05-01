@@ -36,6 +36,8 @@ public:
 
 	void setupMesh();
 
+	void drawMesh();
+
 	unsigned int VAO, VBO;
 	std::vector<Vertex> m_vertices;
 	std::vector<Texture> m_textures;
@@ -54,6 +56,9 @@ public:
 		Mesh(vertices, textures), m_indices(indices) {
 		setupMesh();
 	}
+
+	void drawMesh();
+
 	unsigned int EBO;
 	std::vector<unsigned int> m_indices;
 	void setupMesh();
@@ -61,23 +66,28 @@ private:
 	// Данные для рендеринга
 };
 
-class Model {
+class ModelBase
+{
 public:
+	virtual ~ModelBase() = default;
+
+	virtual void setModelDataAndDraw(std::shared_ptr<Shader> shaderBase, GameObject* goPtr) = 0;
+
+};
+
+template<typename TMesh>
+class Model : public ModelBase {
+public:
+	/*
 	void setupModel() {
 		for (Mesh& mesh : m_meshes) {
 			//mesh.setupMesh();
 		}
 	}
-	
-	void setModelDataAndDraw(std::shared_ptr<Shader> shaderBase, GameObject* goPtr);
+	*/
+	virtual ~Model() = default;
+	virtual void setModelDataAndDraw(std::shared_ptr<Shader> shaderBase, GameObject* goPtr) override;
 
-	std::vector<Mesh> m_meshes;
-private:
-};
-
-class ElementsModel {
-public:
-
-	std::vector<ElementsMesh> m_meshes;
+	std::vector<TMesh> m_meshes;
 private:
 };
