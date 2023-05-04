@@ -11,6 +11,8 @@ class OpenGLShader : public Shader {
 public:
 	OpenGLShader(std::string alias);
 
+	virtual void setModelDataAndDraw() = 0;
+
 	void configure() override;
 
 	void use() override;

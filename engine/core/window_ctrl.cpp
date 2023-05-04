@@ -21,6 +21,8 @@ void WindowCtrl::init() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	m_window = glfwCreateWindow(RES_WIDTH, RES_HEIGHT, "First OpenGL app", NULL, NULL);
+	m_height = RES_HEIGHT;
+	m_width = RES_WIDTH;
 	if (m_window == NULL) {
 		std::cerr << "Failed to create window" << std::endl;
 		return;
@@ -42,6 +44,12 @@ void WindowCtrl::init() {
 	glfwSetWindowUserPointer(m_window, this);
 }
 
+void WindowCtrl::setWindowDimensions(int width, int height)
+{
+	m_height = height;
+	m_width = width;
+	glViewport(0, 0, width, height);
+}
 
 void WindowCtrl::draw() {
 	if (glfwWindowShouldClose(m_window) || !m_isValid) {
@@ -120,7 +128,8 @@ void WindowCtrl::onMousePosChanged(double x, double y) {
 }
 
 void WindowCtrl::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-	glViewport(0, 0, width, height);
+	static_cast<WindowCtrl*>(glfwGetWindowUserPointer(window))->setWindowDimensions(width, height);
+
 }
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {

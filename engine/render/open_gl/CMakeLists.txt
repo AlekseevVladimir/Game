@@ -6,7 +6,10 @@ SET(SHADER_SOURCES
 	"shaders/open_gl_shader.cpp"
 	"shaders/shader_utils.h"
 	"shaders/shader_utils.cpp"
-)
+	"shaders/open_gl_shadow_map_shader.h" 
+	"shaders/open_gl_shadow_map_shader.cpp" 
+	"shaders/open_gl_solid_object_shader.h"
+	"shaders/open_gl_solid_object_shader.cpp")
 SET(MODEL_SOURCES
 	"model/vao_component.h"
 	"model/model_loader.h" 

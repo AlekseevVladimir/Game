@@ -109,11 +109,13 @@ void Mesh::setupMesh() {
 
 //void Model::setModelDataAndDraw(std::shared_ptr<Shader> shaderBase, GameObject* goPtr) {}
 
+//TODO: move this to shader as it is shader specific
 template<typename TMesh>
-void Model<TMesh>::setModelDataAndDraw(std::shared_ptr<Shader> shaderBase, GameObject* goPtr) {
+void Model<TMesh>::setModelDataAndDraw(
+	std::shared_ptr<Shader> shaderBase, GameObject* goPtr, GameObject* viewPointPtr) 
+{
 	OpenGLShader* shader = dynamic_cast<OpenGLShader*>(shaderBase.get());
 	TexturesCtrl& texCtrl = TexturesCtrl::getInstance();
-	GameObject* viewPointPtr = GameObjectHolder::getInstance().getObjectsWithComponent<ViewPointComponent>()[0];
 //	GameObject* cube = GameObjectHolder::getInstance().getObject("cube2");
 	shader->setFloat3("viewPos", &viewPointPtr->getComponent<PositionComponent>()->getPos()[0]);
 	shader->setMatrix4Float("view", GL_FALSE, glm::value_ptr(getView(viewPointPtr)));

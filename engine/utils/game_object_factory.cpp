@@ -17,7 +17,10 @@
 #include <engine/render/core/constants.h>
 #include <engine/render/open_gl/model/model_component.h>
 #include <engine/render/open_gl/shaders/open_gl_shader.h>
+#include "engine/render/open_gl/shaders/open_gl_solid_object_shader.h"
+#include "engine/render/open_gl/shaders/open_gl_shadow_map_shader.h"
 #include <engine/render/core/shader_component.h>
+#include <engine/render/core/shadows/shadow_map_shader_component.h>
 #include <engine/render/core/view_point_component.h>
 
 //controls are inverted
@@ -48,9 +51,12 @@ GameObject* createCube(
 	ModelComponent* modelComponent = goPtr->createComponent<ModelComponent>();
 	modelComponent->model = 
 		generateModel("box.png", "box_specular_map.png");
-	std::shared_ptr<OpenGLShader> test = ShadersManager::getInstance().createProgram<OpenGLShader>("solidObject");
-	std::shared_ptr<Shader> shader = test;
+	std::shared_ptr<Shader> shader = ShadersManager::getInstance().
+		createProgram<SolidObjectShader>("solidObject");
 	goPtr->createComponent<ShaderComponent>(shader);
+	std::shared_ptr<Shader> shadowMapShader = ShadersManager::getInstance().
+		createProgram<ShadowMapShader>("shadow_map");
+	goPtr->createComponent<ShadowMapShaderComponent>(shadowMapShader);
 	//goPtr->createComponent<TransformComponent>(pos, scale);
 	//goPtr->createComponent<Generated3DVisualsComponent>("cube", "cube", "box.png", "box_specular_map.png");
 	return goPtr;
@@ -105,9 +111,12 @@ GameObject* createFloor(glm::vec3 pos, GameObject::RenderSettings renderSettings
 	rotComponent->setYaw(90.0f);
 	ModelComponent* modelComponent = goPtr->createComponent<ModelComponent>();
 	modelComponent->model = generateModel("floor.png", "box_specular_map.png");
-	std::shared_ptr<OpenGLShader> test = ShadersManager::getInstance().createProgram<OpenGLShader>("solidObject");
-	std::shared_ptr<Shader> shader = test;
+	std::shared_ptr<Shader> shader = ShadersManager::getInstance().
+		createProgram<SolidObjectShader>("solidObject");;
 	goPtr->createComponent<ShaderComponent>(shader);
+	std::shared_ptr<Shader> shadowMapShader = ShadersManager::getInstance().
+		createProgram<ShadowMapShader>("shadow_map");
+	goPtr->createComponent<ShadowMapShaderComponent>(shadowMapShader);
 	goPtr->createComponent<ScaleComponent>(Vector3<float>(10.f, 1.f, 10.f));
 	//transform->setScale({10.0f, 1.0f, 10.0f});
 	//goPtr->createComponent<Generated3DVisualsComponent>("plate", "plate", "floor.png", "box_specular_map.png");
@@ -121,8 +130,11 @@ GameObject* createTroll(glm::vec3 pos, GameObject::RenderSettings renderSettings
 	std::shared_ptr<ModelBase> modelPtr = ModelLoader::getInstance().getModel("test");
 	modelCompPtr->model = modelPtr;
 	//modelPtr->setupModel();
-	std::shared_ptr<OpenGLShader> test = ShadersManager::getInstance().createProgram<OpenGLShader>("solidObject");
-	std::shared_ptr<Shader> shader = test;
+	std::shared_ptr<Shader> shader = ShadersManager::getInstance().
+		createProgram<SolidObjectShader>("solidObject");;
+	std::shared_ptr<Shader> shadowMapShader = ShadersManager::getInstance().
+		createProgram<ShadowMapShader>("shadow_map");
+	goPtr->createComponent<ShadowMapShaderComponent>(shadowMapShader);
 	goPtr->createComponent<ShaderComponent>(shader);
 	goPtr->createComponent<PositionComponent>(pos);
 	goPtr->createComponent<RotationComponent>();

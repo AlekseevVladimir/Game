@@ -8,12 +8,10 @@
 #include <engine/render/open_gl/model/model_component.h>
 
 class RenderSystem : public System {
-	void process(float delta) override {
-		for (GameObject* goPtr : GameObjectHolder::getInstance().getObjectsWithComponent<ShaderComponent>()) {
-			std::shared_ptr<Shader> shaderPtr = goPtr->getComponent<ShaderComponent>()->m_shaderPtr;
-			shaderPtr->use();
-			shaderPtr->configure();
-			goPtr->getComponent<ModelComponent>()->model->setModelDataAndDraw(shaderPtr, goPtr);
-		}
-	}
+public:
+	void process(float delta) override;
+
+	template<typename TShaderComponent>
+	void render(GameObject* viewPointPtr);
+	
 };

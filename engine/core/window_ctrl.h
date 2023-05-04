@@ -24,6 +24,13 @@ public:
 		return m_isValid;
 	}
 
+	void restoreWindow()
+	{
+		setWindowDimensions(m_width, m_height);
+	}
+
+	void setWindowDimensions(int width, int height);
+
 	void draw();
 
 	void onKeyPressed(int key, int scancode) {
@@ -36,6 +43,10 @@ private:
 	GLFWwindow* m_window;
 
 	float m_alpha = 0.2f;
+
+	int m_width = 0;
+
+	int m_height = 0;
 
 	mutable bool m_isValid = false;
 

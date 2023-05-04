@@ -7,7 +7,8 @@
 
 class ShaderComponent : public Component {
 public:
-	ShaderComponent(std::string goID, std::shared_ptr<Shader> shaderPtr) : Component(goID), m_shaderPtr(shaderPtr) {}
+	ShaderComponent(std::string goID, std::shared_ptr<Shader> shaderPtr) : 
+		Component(goID), m_shaderPtr(shaderPtr) {}
 
 	std::shared_ptr<Shader> m_shaderPtr;
 };
