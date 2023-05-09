@@ -7,6 +7,12 @@
 #include "engine/render/core/light/spot_light_component.h"
 #include "engine/transform/position_component.h"
 
+#include "engine/transform/transform_utils.h"
+#include <engine/render/core/shaders_manager.h>
+#include "engine/render/open_gl/model/model.h"
+#include "engine/render/utils/render_utils.h"
+
+
 
 OpenGLShader::OpenGLShader(std::string alias) {
 	unsigned int programID = glCreateProgram();
@@ -64,4 +70,35 @@ OpenGLShader::OpenGLShader(std::string alias) {
 			1, transpose, values);
 	}
 
+template<typename TModel>
+void OpenGLShader::setModelDataAndDraw(ModelBase* model, GameObject* goPtr,
+	GameObject* viewPointPtr)
+{
+//	GameObject* cube = GameObjectHolder::getInstance().getObject("cube2");
+	
+	setMatrix4Float(
+		"model", GL_FALSE,
+		glm::value_ptr(TransformUtils::getTransform(goPtr->getComponent<PositionComponent>(),
+			goPtr->getComponent<RotationComponent>(), 
+			goPtr->getComponent<ScaleComponent>())));
+			
+
+	int cnt = 0;
+	for (auto mesh : dynamic_cast<TModel*>(model)->m_meshes) 
+	{
+		setTextureData(mesh.m_textures);
+		glBindVertexArray(mesh.VAO);
+		//glDrawElements(GL_TRIANGLES, mesh.getIndices().size(), GL_UNSIGNED_INT, 0);
+	//.	glDrawArrays(GL_TRIANGLES, 0, mesh.m_vertices.size());
+		mesh.drawMesh();
+		//glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
+	}
+}
+template void OpenGLShader::setModelDataAndDraw<Model<ElementsMesh>>(ModelBase*, GameObject*,
+	GameObject*);
+
+
+template void OpenGLShader::setModelDataAndDraw<Model<Mesh>>(ModelBase*, GameObject*,
+	GameObject*);
 

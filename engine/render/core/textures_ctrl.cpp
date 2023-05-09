@@ -3,16 +3,18 @@
 #include "glad/glad.h"
 
 
-
 unsigned int TexturesCtrl::bindTexture(unsigned int textureID) {
 	auto found = std::find(m_textureIDs.begin(), m_textureIDs.end(), textureID);
-	if (found == m_textureIDs.end()) {
+	if (found == m_textureIDs.end()) 
+	{
 		throw std::logic_error("Attemp to bind not exisiting texture");
 	}
-	if (m_currentTexIdx > GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS) {
+	if (m_currentTexIdx > GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS) 
+	{
 		throw std::logic_error("Max number of units exceeded");
 	}
-	if (m_boundTextures.count(*found)) {
+	if (m_boundTextures.count(*found)) 
+	{
 		return m_boundTextures[*found];
 	}
 	glActiveTexture(GL_TEXTURE0 + m_currentTexIdx);
@@ -22,9 +24,9 @@ unsigned int TexturesCtrl::bindTexture(unsigned int textureID) {
 }
 
 
-
 void TexturesCtrl::bindAllTextures() {
-	for (size_t i = 0; i < m_textureIDs.size(); i++) {
+	for (size_t i = 0; i < m_textureIDs.size(); i++) 
+	{
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, m_textureIDs[i]);
 		m_boundTextures[m_textureIDs[i]] = i;
@@ -34,11 +36,11 @@ void TexturesCtrl::bindAllTextures() {
 }
 
 
-
 unsigned int TexturesCtrl::loadImage(std::string imageName, std::string directory) {
 	int width, height, nrChannels;
 	const auto found = m_loadedTextures.find(imageName);
-	if (found != m_loadedTextures.end()) {
+	if (found != m_loadedTextures.end()) 
+	{
 		return found->second;
 	}
 	std::string path = directory + "/" + std::string(imageName);

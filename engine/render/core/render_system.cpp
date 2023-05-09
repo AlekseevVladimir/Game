@@ -2,6 +2,10 @@
 #include "engine/render/core/shader_component.h"
 #include "engine/render/core/view_point_component.h"
 #include "glad/glad.h"
+#include "engine/render/open_gl/shaders/open_gl_shader.h"
+#include "engine/render/open_gl/model/model_component.h"
+#include "engine/render/open_gl/model/model.h"
+#include "engine/render/core/shadows/shadow_map_shader_component.h"
 
 
 void RenderSystem::process(float delta)
@@ -23,11 +27,23 @@ void RenderSystem::render(GameObject* viewPointPtr)
 		GameObject* goPtr :
 		GameObjectHolder::getInstance().getObjectsWithComponent<TShaderComponent>())
 	{
-		std::shared_ptr<Shader> shaderPtr = goPtr->getComponent<TShaderComponent>()->m_shaderPtr;
+		std::shared_ptr<OpenGLShader> shaderPtr = 
+			std::dynamic_pointer_cast<OpenGLShader>(
+				goPtr->getComponent<TShaderComponent>()->m_shaderPtr);
 		shaderPtr->use();
-		shaderPtr->configure();
-		
-		goPtr->getComponent<ModelComponent>()->model->setModelDataAndDraw(
-			shaderPtr, goPtr, viewPointPtr);
+		shaderPtr->configure();	
+		shaderPtr->setMatrices(viewPointPtr);
+		ModelBase* modelPtr = goPtr->getComponent<ModelComponent>()->model.get();
+		if (dynamic_cast<Model<ElementsMesh>*>(modelPtr))
+		{
+			shaderPtr->setModelDataAndDraw<Model<ElementsMesh>>(modelPtr, goPtr, viewPointPtr);
+		}
+		else
+		{
+			shaderPtr->setModelDataAndDraw<Model<Mesh>>(modelPtr, goPtr, viewPointPtr);
+		}
+
 	}
 }
+
+template void RenderSystem::render<ShadowMapShaderComponent>(GameObject*);

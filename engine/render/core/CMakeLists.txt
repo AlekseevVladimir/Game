@@ -28,6 +28,7 @@ SET(SHADOW_SOURCES
 	"shadows/shadow_map_generation_system.h"
 	"shadows/shadow_map_generation_system.cpp"
 	"shadows/shadow_map_component.h" 
+	"shadows/shadow_map_component.cpp" 
 	"shadows/shadow_map_shader_component.h"
 	)
 

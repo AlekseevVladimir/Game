@@ -1,5 +1,5 @@
 #include "glad/glad.h"
-#include "Model.h"
+#include "model.h"
 #include <engine/render/core/textures_ctrl.h>
 #include <engine/render/open_gl/shaders/open_gl_shader.h>
 #include <engine/core/game_object.h>
@@ -8,7 +8,7 @@
 #include <engine/render/core/shaders_manager.h>
 #include "engine/render/core/textures_ctrl.h"
 #include <engine/transform/position_component.h>
-#include <engine/transform/transform_utils.h>
+//#include <engine/transform/transform_utils.h>
 	
 void ElementsMesh::setupMesh() {
 		glGenVertexArrays(1, &VAO);
@@ -108,7 +108,7 @@ void Mesh::setupMesh() {
 	}
 
 //void Model::setModelDataAndDraw(std::shared_ptr<Shader> shaderBase, GameObject* goPtr) {}
-
+/*
 //TODO: move this to shader as it is shader specific
 template<typename TMesh>
 void Model<TMesh>::setModelDataAndDraw(
@@ -145,7 +145,7 @@ void Model<TMesh>::setModelDataAndDraw(
 		glBindVertexArray(0);
 	}
 }
-
+*/
 void Mesh::drawMesh()
 {
 	glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
@@ -156,5 +156,5 @@ void ElementsMesh::drawMesh()
 	glDrawElements(GL_TRIANGLES, getIndices().size(), GL_UNSIGNED_INT, 0);
 }
 
-template class Model<Mesh>;
-template class Model<ElementsMesh>;
+//template class Model<Mesh>;
+//template class Model<ElementsMesh>;

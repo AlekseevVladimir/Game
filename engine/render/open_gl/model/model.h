@@ -71,8 +71,8 @@ class ModelBase
 public:
 	virtual ~ModelBase() = default;
 
-	virtual void setModelDataAndDraw(
-		std::shared_ptr<Shader> shaderBase, GameObject* goPtr, GameObject* viewPointPtr) = 0;
+//	virtual void setModelDataAndDraw(
+//		std::shared_ptr<Shader> shaderBase, GameObject* goPtr, GameObject* viewPointPtr) = 0;
 
 };
 
@@ -87,8 +87,8 @@ public:
 	}
 	*/
 	virtual ~Model() = default;
-	virtual void setModelDataAndDraw(
-		std::shared_ptr<Shader> shaderBase, GameObject* goPtr, GameObject* viewPointPtr) override;
+	//virtual void setModelDataAndDraw(
+	//	std::shared_ptr<Shader> shaderBase, GameObject* goPtr, GameObject* viewPointPtr) override;
 
 	std::vector<TMesh> m_meshes;
 private:

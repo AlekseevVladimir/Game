@@ -1,3 +1,5 @@
+#pragma once
+
 #include <engine/core/component.h>
 #include <string>
 

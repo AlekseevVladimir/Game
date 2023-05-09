@@ -5,20 +5,26 @@
 #include <engine/render/core/render_system.h>
 #include "engine/transform/Movement_system.h"
 #include "engine/transform/rotation_system.h"
+#include "engine/render/core/shadows/shadow_map_generation_system.h"
 
 GameCtrl::GameCtrl() {
 	createDirectionalLight({ false, false, "" });
-	createCube({ -3.0f, 0.0f, -3.0f }, { 1.0f, 1.0f, 1.0f }, { true, false, "solidObject" });
+	//createCube({ -3.0f, -2.0f, -3.0f }, { 1.0f, 1.0f, 1.0f }, { true, false, "solidObject" });
+	//createCube({ -3.0f, -9.0f, -3.0f }, { 1.0f, 1.0f, 1.0f }, { true, false, "solidObject" });
+	//createCube({ -3.0f, 9.0f, -3.0f }, { 1.0f, 1.0f, 1.0f }, { true, false, "solidObject" });
+	createCube({ 1.0f, 1.0f, 3.0f }, { 1.0f, 1.0f, 1.0f }, { true, false, "solidObject" });
 	createCamera({ 0.0f, 0.0f, 0.0f }, 0.0f, 0.0f, 0.0f, { false, false, "" });
-	createPointLight({ 3.0f, 3.0f, 3.0f }, { 1.0f, 1.0f , 1.0f }, { true, false, "light" });
-	createFloor({0.0f, -3.0f, 0.0f}, {true, false, "solidObject"});
+	//createPointLight({ 3.0f, 3.0f, 3.0f }, { 1.0f, 1.0f , 1.0f }, { true, false, "light" });
+	createFloor({0.0f, -1.0f, 0.0f}, {true, false, "solidObject"});
 	//createTroll({true, false, "solidObject"});
 	//createFloor({ 0.0f, -1.0f, 0.0f }, { true, false, "solidObject" });
-	createTroll({ 0.0f, 0.0f, 0.0f }, { true, false, "solidObject" });
+	//createTroll({ 0.0f, 0.0f, 0.0f }, { true, false, "solidObject" });
 	SystemsHolder::getInstance().addSystem<InputControlSystem>();
 	SystemsHolder::getInstance().addSystem<MovementSystem>();
 	SystemsHolder::getInstance().addSystem<RotationSystem>();
+	SystemsHolder::getInstance().addSystem<ShadowMapGenerationSystem>();
 	SystemsHolder::getInstance().addSystem<RenderSystem>();
+
 
 	//createSpotLight({ false, false, "" });
 	//createBackPack({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { true, false, "solidObject" });

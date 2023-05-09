@@ -2,20 +2,23 @@
 #include <string>
 #include <iostream>
 
-#include <glfw3.h>
 #include <engine/render/core/shaders_manager.h>
+#include "engine/render/open_gl/model/model.h"
 
 #include "shader_utils.h"
+
 
 class OpenGLShader : public Shader {
 public:
 	OpenGLShader(std::string alias);
 
-	virtual void setModelDataAndDraw() = 0;
-
-	void configure() override;
+	template<typename TModel>
+	void setModelDataAndDraw(ModelBase* model, GameObject* goPtr,
+		GameObject* viewPointPtr);
 
 	void use() override;
+
+	virtual void setMatrices(GameObject* viewPointPtr) = 0;
 
 	void setInt1(const char* name, int value);
 
@@ -26,6 +29,10 @@ public:
 
 	void setMatrix4Float(const char* name, int transpose, const float* values);
 
+	~OpenGLShader() = default;
+
+protected:
+	virtual void setTextureData(std::vector<Mesh::Texture>& textures) {};
 private:
 	unsigned int m_programID = 0;
 };

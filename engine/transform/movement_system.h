@@ -1,3 +1,5 @@
+#pragma once
+
 #include "engine/core/system.h"
 
 class MovementSystem : public System {

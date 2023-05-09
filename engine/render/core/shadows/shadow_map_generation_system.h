@@ -1,4 +1,7 @@
+#pragma once
+
 #include "engine/core/system.h"
+
 
 class ShadowMapGenerationSystem : public System
 {

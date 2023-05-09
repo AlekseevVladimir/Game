@@ -12,6 +12,7 @@
 #include "engine/transform/scale_component.h"
 #include <engine/render/core/model/material_component.h>
 #include <engine/render/core/textures_ctrl.h>
+#include <engine/render/core/shadows/shadow_map_component.h>
 #include <engine/render/open_gl/model/model_loader.h>
 #include <engine/render/open_gl/model/model.h>
 #include <engine/render/core/constants.h>
@@ -30,7 +31,7 @@ std::shared_ptr<ModelBase> generateModel(std::string, std::string);
 GameObject* createCube(
 		glm::vec3 pos, glm::vec3 scale, GameObject::RenderSettings renderSettings) {
 	GameObject* goPtr = GameObjectHolder::getInstance().createGO("cube", renderSettings);
-	PositionComponent* position = goPtr->createComponent<PositionComponent>(Vector3<float>(3.0f, 0.0f, 0.0f));
+	PositionComponent* position = goPtr->createComponent<PositionComponent>(Vector3<float>(pos));
 
 	RotationComponent* rotation = goPtr->createComponent<RotationComponent>(10.0f, 10.0f, 10.0f);
 	
@@ -83,6 +84,7 @@ GameObject* createDirectionalLight(GameObject::RenderSettings renderSettings) {
 	GameObject* goPtr = GameObjectHolder::getInstance().createGO("directionalLight", renderSettings);
 	goPtr->createComponent<LightEmitterComponent>();
 	goPtr->createComponent<LightDirectionComponent>();
+	goPtr->createComponent<ShadowMapComponent>();
 	return goPtr;
 }
 
@@ -117,7 +119,7 @@ GameObject* createFloor(glm::vec3 pos, GameObject::RenderSettings renderSettings
 	std::shared_ptr<Shader> shadowMapShader = ShadersManager::getInstance().
 		createProgram<ShadowMapShader>("shadow_map");
 	goPtr->createComponent<ShadowMapShaderComponent>(shadowMapShader);
-	goPtr->createComponent<ScaleComponent>(Vector3<float>(10.f, 1.f, 10.f));
+	goPtr->createComponent<ScaleComponent>(Vector3<float>(100.f, 1.f, 100.f));
 	//transform->setScale({10.0f, 1.0f, 10.0f});
 	//goPtr->createComponent<Generated3DVisualsComponent>("plate", "plate", "floor.png", "box_specular_map.png");
 	return goPtr;

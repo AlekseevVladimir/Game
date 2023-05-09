@@ -1,3 +1,5 @@
+#pragma once
+
 #include <memory>
 #include "engine/core/component.h"
 #include "engine/render/core/shaders_manager.h"
