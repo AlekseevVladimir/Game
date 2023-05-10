@@ -7,5 +7,5 @@
 class ModelComponent : public Component {
 public:
 	ModelComponent(std::string goID) : Component(goID) {};
-	std::shared_ptr<ModelBase> model;
+	std::shared_ptr<Model> model;
 };

@@ -33,16 +33,8 @@ void RenderSystem::render(GameObject* viewPointPtr)
 		shaderPtr->use();
 		shaderPtr->configure();	
 		shaderPtr->setMatrices(viewPointPtr);
-		ModelBase* modelPtr = goPtr->getComponent<ModelComponent>()->model.get();
-		if (dynamic_cast<Model<ElementsMesh>*>(modelPtr))
-		{
-			shaderPtr->setModelDataAndDraw<Model<ElementsMesh>>(modelPtr, goPtr, viewPointPtr);
-		}
-		else
-		{
-			shaderPtr->setModelDataAndDraw<Model<Mesh>>(modelPtr, goPtr, viewPointPtr);
-		}
-
+		Model* modelPtr = goPtr->getComponent<ModelComponent>()->model.get();
+		shaderPtr->setModelDataAndDraw(modelPtr, goPtr, viewPointPtr);
 	}
 }
 

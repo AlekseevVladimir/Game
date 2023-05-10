@@ -15,7 +15,7 @@ public:
 		static TexturesCtrl inst;
 		return inst;
 	}
-	unsigned int TexturesCtrl::loadImage(std::string imageName, std::string directory = "../../resources/textures");
+	unsigned int loadImage(std::string imageName, std::string directory = "../../resources/textures");
 	void bindAllTextures();
 
 	unsigned int bindTexture(unsigned int textureID);

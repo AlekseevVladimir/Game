@@ -12,8 +12,7 @@ class OpenGLShader : public Shader {
 public:
 	OpenGLShader(std::string alias);
 
-	template<typename TModel>
-	void setModelDataAndDraw(ModelBase* model, GameObject* goPtr,
+	void setModelDataAndDraw(Model* model, GameObject* goPtr,
 		GameObject* viewPointPtr);
 
 	void use() override;

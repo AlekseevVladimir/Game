@@ -1,6 +1,8 @@
 #pragma once
 
 #include <memory>
+#include <concepts>
+#include <variant>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -12,8 +14,6 @@
 
 class Shader;
 class GameObject;
-
-
 class Mesh {
 public:
 	struct Vertex {
@@ -36,7 +36,9 @@ public:
 
 	void setupMesh();
 
-	void drawMesh();
+	void draw();
+
+	std::vector<Mesh::Texture> getTextures() { return m_textures; };
 
 	unsigned int VAO, VBO;
 	std::vector<Vertex> m_vertices;
@@ -44,7 +46,8 @@ public:
 protected:
 };
 
-class ElementsMesh : public Mesh {
+class ElementsMesh : public Mesh 
+{
 public:
 	const std::vector<unsigned int>& getIndices() {
 		return m_indices;
@@ -57,7 +60,9 @@ public:
 		setupMesh();
 	}
 
-	void drawMesh();
+	std::vector<Mesh::Texture> getTextures() { return m_textures; };
+
+	void draw();
 
 	unsigned int EBO;
 	std::vector<unsigned int> m_indices;
@@ -66,18 +71,10 @@ private:
 	// Данные для рендеринга
 };
 
-class ModelBase
+
+
+class Model
 {
-public:
-	virtual ~ModelBase() = default;
-
-//	virtual void setModelDataAndDraw(
-//		std::shared_ptr<Shader> shaderBase, GameObject* goPtr, GameObject* viewPointPtr) = 0;
-
-};
-
-template<typename TMesh>
-class Model : public ModelBase {
 public:
 	/*
 	void setupModel() {
@@ -86,10 +83,18 @@ public:
 		}
 	}
 	*/
-	virtual ~Model() = default;
 	//virtual void setModelDataAndDraw(
 	//	std::shared_ptr<Shader> shaderBase, GameObject* goPtr, GameObject* viewPointPtr) override;
 
-	std::vector<TMesh> m_meshes;
+	std::vector<std::variant<Mesh, ElementsMesh>> m_meshes;
 private:
 };
+
+template<typename T>
+concept MeshConcept = requires(T mesh)
+{
+	{mesh.getTextures()} -> std::same_as<std::vector<Mesh::Texture>>;
+
+	//{mesh.draw()};
+};
+

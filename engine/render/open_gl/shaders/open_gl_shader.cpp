@@ -70,8 +70,7 @@ OpenGLShader::OpenGLShader(std::string alias) {
 			1, transpose, values);
 	}
 
-template<typename TModel>
-void OpenGLShader::setModelDataAndDraw(ModelBase* model, GameObject* goPtr,
+void OpenGLShader::setModelDataAndDraw(Model* model, GameObject* goPtr,
 	GameObject* viewPointPtr)
 {
 //	GameObject* cube = GameObjectHolder::getInstance().getObject("cube2");
@@ -84,9 +83,12 @@ void OpenGLShader::setModelDataAndDraw(ModelBase* model, GameObject* goPtr,
 			
 
 	int cnt = 0;
-	for (auto mesh : dynamic_cast<TModel*>(model)->m_meshes) 
+	for (std::variant<Mesh, ElementsMesh>& mesh : model->m_meshes) 
 	{
-		setTextureData(mesh.m_textures);
+		auto texturesGetter = [](MeshConcept auto& inMesh) -> std::vector<Mesh::Texture> {return inMesh.getTextures(); };
+		//texturesGetter(std::get<1>(mesh));
+		std::vector<Mesh::Texture> textures = std::visit(texturesGetter, mesh);
+		setTextureData(textures);
 		glBindVertexArray(mesh.VAO);
 		//glDrawElements(GL_TRIANGLES, mesh.getIndices().size(), GL_UNSIGNED_INT, 0);
 	//.	glDrawArrays(GL_TRIANGLES, 0, mesh.m_vertices.size());
@@ -95,10 +97,4 @@ void OpenGLShader::setModelDataAndDraw(ModelBase* model, GameObject* goPtr,
 		glBindVertexArray(0);
 	}
 }
-template void OpenGLShader::setModelDataAndDraw<Model<ElementsMesh>>(ModelBase*, GameObject*,
-	GameObject*);
-
-
-template void OpenGLShader::setModelDataAndDraw<Model<Mesh>>(ModelBase*, GameObject*,
-	GameObject*);
 

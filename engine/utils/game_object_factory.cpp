@@ -26,7 +26,7 @@
 
 //controls are inverted
 
-std::shared_ptr<ModelBase> generateModel(std::string, std::string);
+std::shared_ptr<Model> generateModel(std::string, std::string);
 
 GameObject* createCube(
 		glm::vec3 pos, glm::vec3 scale, GameObject::RenderSettings renderSettings) {
@@ -129,7 +129,7 @@ GameObject* createFloor(glm::vec3 pos, GameObject::RenderSettings renderSettings
 GameObject* createTroll(glm::vec3 pos, GameObject::RenderSettings renderSettings) {
 	GameObject* goPtr = GameObjectHolder::getInstance().createGO("troll", renderSettings);
 	ModelComponent* modelCompPtr = goPtr->createComponent<ModelComponent>();
-	std::shared_ptr<ModelBase> modelPtr = ModelLoader::getInstance().getModel("test");
+	std::shared_ptr<Model> modelPtr = ModelLoader::getInstance().getModel("test");
 	modelCompPtr->model = modelPtr;
 	//modelPtr->setupModel();
 	std::shared_ptr<Shader> shader = ShadersManager::getInstance().
@@ -147,7 +147,7 @@ GameObject* createTroll(glm::vec3 pos, GameObject::RenderSettings renderSettings
 
 }
 
-std::shared_ptr<ModelBase> generateModel(
+std::shared_ptr<Model> generateModel(
 		std::string diffuseName, std::string specularName) {
 	TexturesCtrl& texturesCtrl = TexturesCtrl::getInstance();
 	texturesCtrl.setWrapParams(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
@@ -157,9 +157,9 @@ std::shared_ptr<ModelBase> generateModel(
 	std::vector<Mesh::Vertex> vertices = cubeVertices;
 	std::vector<Mesh::Texture> textures{ {texture, "texture_diffuse", ""}, {specularMap, "texture_specular", ""} };
 	Mesh mesh{ vertices, textures };
-	std::shared_ptr<ModelBase> model = std::make_shared<Model<Mesh>>();
-	Model<Mesh>* concreteModel = dynamic_cast<Model<Mesh>*>(model.get());
-	concreteModel->m_meshes = {mesh};
+	std::shared_ptr<Model> model = std::make_shared<Model>();
+	// TODO FIX THIS
+	model->m_meshes = {mesh};
 	//concreteModel->setupModel();
 	return model;
 }

@@ -146,12 +146,12 @@ void Model<TMesh>::setModelDataAndDraw(
 	}
 }
 */
-void Mesh::drawMesh()
+void Mesh::draw()
 {
 	glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
 }
 
-void ElementsMesh::drawMesh()
+void ElementsMesh::draw()
 {
 	glDrawElements(GL_TRIANGLES, getIndices().size(), GL_UNSIGNED_INT, 0);
 }

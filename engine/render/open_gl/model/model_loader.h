@@ -13,12 +13,12 @@ public:
 		return inst;
 	}
 
-	std::shared_ptr<ModelBase> getModel(std::string name) {
+	std::shared_ptr<Model> getModel(std::string name) {
 		auto found = m_models.find(name);
 		if (found != m_models.end() && !found->second.expired()) {
 			return found->second.lock();
 		}
-		std::shared_ptr<ModelBase> modelPtr = std::make_shared<Model<ElementsMesh>>(
+		std::shared_ptr<Model> modelPtr = std::make_shared<Model>(
 			loadModel(name));
 		m_models[name] = modelPtr;
 		return modelPtr;
@@ -37,7 +37,7 @@ public:
 	}
 */
 private:
-	Model<ElementsMesh> loadModel(std::string name);
+	Model loadModel(std::string name);
 
-	std::map<std::string, std::weak_ptr<ModelBase>> m_models;
+	std::map<std::string, std::weak_ptr<Model>> m_models;
 };
