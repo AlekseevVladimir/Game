@@ -17,11 +17,15 @@ SET(MODEL_SOURCES
 	"model/model_component.h" 
 	"model/model.h" 
 	"model/model.cpp")
+SET(CORE_SOURCES
+	"renderer.h"
+	"renderer.cpp"
+)
 SOURCE_GROUP("shaders" FILES ${SHADER_SOURCES})
 SOURCE_GROUP("model" FILES ${MODEL_SOURCES})
 LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/engine/render/utils)
 LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/engine/render/core)
-ADD_LIBRARY(open_gl ${SHADER_SOURCES} ${MODEL_SOURCES})
+ADD_LIBRARY(open_gl ${CORE_SOURCES} ${SHADER_SOURCES} ${MODEL_SOURCES})
 target_link_libraries(open_gl PUBLIC render_utils) 
 target_link_libraries(open_gl PUBLIC render_core) 
 
