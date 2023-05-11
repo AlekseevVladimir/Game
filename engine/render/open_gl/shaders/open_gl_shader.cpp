@@ -89,12 +89,15 @@ void OpenGLShader::setModelDataAndDraw(Model* model, GameObject* goPtr,
 		//texturesGetter(std::get<1>(mesh));
 		std::vector<Mesh::Texture> textures = std::visit(texturesGetter, mesh);
 		setTextureData(textures);
-		glBindVertexArray(mesh.VAO);
+		auto meshDrawer = [](MeshConcept auto& inMesh) {inMesh.draw(); };
+		std::visit(meshDrawer, mesh);
+		//glBindVertexArray(mesh.VAO);
 		//glDrawElements(GL_TRIANGLES, mesh.getIndices().size(), GL_UNSIGNED_INT, 0);
 	//.	glDrawArrays(GL_TRIANGLES, 0, mesh.m_vertices.size());
-		mesh.drawMesh();
+		//mesh.drawMesh();
 		//glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
+		//glBindVertexArray(0);
 	}
+	glBindVertexArray(0);
 }
 

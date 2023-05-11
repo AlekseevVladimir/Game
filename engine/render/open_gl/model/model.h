@@ -95,6 +95,6 @@ concept MeshConcept = requires(T mesh)
 {
 	{mesh.getTextures()} -> std::same_as<std::vector<Mesh::Texture>>;
 
-	//{mesh.draw()};
+	{mesh.draw()};
 };
 

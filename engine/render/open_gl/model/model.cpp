@@ -148,11 +148,13 @@ void Model<TMesh>::setModelDataAndDraw(
 */
 void Mesh::draw()
 {
+	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
 }
 
 void ElementsMesh::draw()
 {
+	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, getIndices().size(), GL_UNSIGNED_INT, 0);
 }
 

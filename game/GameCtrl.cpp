@@ -18,7 +18,7 @@ GameCtrl::GameCtrl() {
 	createFloor({0.0f, -1.0f, 0.0f}, {true, false, "solidObject"});
 	//createTroll({true, false, "solidObject"});
 	//createFloor({ 0.0f, -1.0f, 0.0f }, { true, false, "solidObject" });
-	//createTroll({ 0.0f, 0.0f, 0.0f }, { true, false, "solidObject" });
+	createTroll({ 0.0f, 0.0f, 0.0f }, { true, false, "solidObject" });
 	SystemsHolder::getInstance().addSystem<InputControlSystem>();
 	SystemsHolder::getInstance().addSystem<MovementSystem>();
 	SystemsHolder::getInstance().addSystem<RotationSystem>();
