@@ -13,5 +13,3 @@ FOREACH(subfolder ${SUBFOLDERS})
 	ADD_SUBDIRECTORY(${subfolder})
 ENDFOREACH()
 
-
-

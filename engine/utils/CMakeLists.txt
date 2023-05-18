@@ -17,3 +17,4 @@ target_link_libraries(utils PUBLIC player_controls)
 target_link_libraries(utils PUBLIC render_core)
 target_link_libraries(utils PUBLIC open_gl)
 set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER "engine")
+

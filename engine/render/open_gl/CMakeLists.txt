@@ -9,14 +9,16 @@ SET(SHADER_SOURCES
 	"shaders/open_gl_shadow_map_shader.h" 
 	"shaders/open_gl_shadow_map_shader.cpp" 
 	"shaders/open_gl_solid_object_shader.h"
-	"shaders/open_gl_solid_object_shader.cpp")
+	"shaders/open_gl_solid_object_shader.cpp"
+)
 SET(MODEL_SOURCES
 	"model/vao_component.h"
 	"model/model_loader.h" 
 	"model/model_loader.cpp" 
 	"model/model_component.h" 
 	"model/model.h" 
-	"model/model.cpp")
+	"model/model.cpp"
+)
 SET(CORE_SOURCES
 	"renderer.h"
 	"renderer.cpp"
@@ -31,3 +33,4 @@ target_link_libraries(open_gl PUBLIC render_core)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)                 
 SET_PROPERTY(TARGET ${PROJECT_NAME} PROPERTY FOLDER "engine/render")
+

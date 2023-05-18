@@ -12,7 +12,10 @@ SET(CORE_SOURCES
 	"render_system.h"
 	"shaders_manager.h"
 	"shader_component.h"
- "view_point_component.h" "textures_ctrl.cpp" "render_system.cpp" )
+	"view_point_component.h" 
+	"textures_ctrl.cpp" 
+	"render_system.cpp" 
+)
 
 SET(LIGHT_SOURCES
 	"light/light_direction_component.h"
@@ -37,7 +40,14 @@ SOURCE_GROUP("model" FILES ${MODEL_SOURCES})
 SOURCE_GROUP("shadow" FILES ${SHADOW_SOURCES})
 SOURCE_GROUP("" FILES ${CORE_SOURCES})
 LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/engine/core)
-ADD_LIBRARY(render_core ${CORE_SOURCES} ${LIGHT_SOURCES} ${MODEL_SOURCES} ${SHADOW_SOURCES})
+ADD_LIBRARY(
+	render_core 
+	${CORE_SOURCES} 
+	${LIGHT_SOURCES} 
+	${MODEL_SOURCES} 
+	${SHADOW_SOURCES}
+)
 target_link_libraries(render_core PUBLIC core) 
 SOURCE_GROUP("simple" FILES "subfolder_item.cpp" "subfolder_item.h")                      
 SET_PROPERTY(TARGET ${PROJECT_NAME} PROPERTY FOLDER "engine/render")
+

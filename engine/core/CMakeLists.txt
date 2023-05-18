@@ -13,3 +13,4 @@ SET(SOURCES
 add_library(${PROJECT_NAME} ${SOURCES})                      
 set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER "engine")
 message(${CMAKE_BINARY_DIR})
+
