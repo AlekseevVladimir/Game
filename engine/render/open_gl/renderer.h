@@ -5,6 +5,6 @@
 class Renderer : public IRenderer
 {
 public:
-	virtual void render(GameObject* viewPointPtr) override;
+	virtual void render(GameObject* goPtr, GameObject* viewPointPtr, Shader* shaderPtr) override;
 	virtual ~Renderer() = default;
 };

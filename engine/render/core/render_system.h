@@ -3,10 +3,12 @@
 #include <engine/core/system.h>
 #include <engine/core/game_object.h>
 
+class Shader;
+
 class IRenderer
 {
 public:
-	virtual void render(GameObject* viewPointPtr) = 0;
+	virtual void render(GameObject* goPtr, GameObject* viewPointPtr, Shader* shaderPtr) = 0;
 
 	virtual ~IRenderer() = default;
 };
@@ -17,6 +19,7 @@ public:
 
 	template<typename TShaderComponent>
 	void render(GameObject* viewPointPtr);
+	void setRenderer(std::unique_ptr<IRenderer>&& rendererPtr);
 	
 private:
 	std::unique_ptr<IRenderer> m_renderer;

@@ -1,4 +1,5 @@
 #include "GameCtrl.h"
+#include "engine/render/open_gl/renderer.h"
 #include <engine/utils/game_object_factory.h>
 #include <engine/core/systems_holder.h>
 #include <engine/player_controls/input_control_system.h>
@@ -23,7 +24,10 @@ GameCtrl::GameCtrl() {
 	SystemsHolder::getInstance().addSystem<MovementSystem>();
 	SystemsHolder::getInstance().addSystem<RotationSystem>();
 	SystemsHolder::getInstance().addSystem<ShadowMapGenerationSystem>();
-	SystemsHolder::getInstance().addSystem<RenderSystem>();
+	RenderSystem* renderSystemPtr = SystemsHolder::getInstance().addSystem<RenderSystem>();
+	//Renderer test();
+	//std::unique_ptr<Renderer> test = std::make_unique<Renderer>();
+	renderSystemPtr->setRenderer(std::make_unique<Renderer>());
 
 
 	//createSpotLight({ false, false, "" });

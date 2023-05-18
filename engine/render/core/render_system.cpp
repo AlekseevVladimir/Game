@@ -23,10 +23,15 @@ void RenderSystem::process(float delta)
 template<typename TShaderComponent>
 void RenderSystem::render(GameObject* viewPointPtr)
 {
+	//m_renderer->render(viewPointPtr);
+	
 	for (
 		GameObject* goPtr :
 		GameObjectHolder::getInstance().getObjectsWithComponent<TShaderComponent>())
 	{
+		m_renderer->render(
+			goPtr, viewPointPtr, goPtr->getComponent<TShaderComponent>()->m_shaderPtr.get());
+		/*
 		std::shared_ptr<OpenGLShader> shaderPtr = 
 			std::dynamic_pointer_cast<OpenGLShader>(
 				goPtr->getComponent<TShaderComponent>()->m_shaderPtr);
@@ -35,7 +40,14 @@ void RenderSystem::render(GameObject* viewPointPtr)
 		shaderPtr->setMatrices(viewPointPtr);
 		Model* modelPtr = goPtr->getComponent<ModelComponent>()->model.get();
 		shaderPtr->setModelDataAndDraw(modelPtr, goPtr, viewPointPtr);
+		*/
 	}
+	
+}
+
+void RenderSystem::setRenderer(std::unique_ptr<IRenderer>&& rendererPtr)
+{
+	m_renderer = std::move(rendererPtr);
 }
 
 template void RenderSystem::render<ShadowMapShaderComponent>(GameObject*);

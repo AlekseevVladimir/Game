@@ -15,8 +15,9 @@ public:
 	void process(float delta);
 
 	template<typename SystemT>
-	void addSystem() {
+	SystemT* addSystem() {
 		m_systems.push_back(std::make_unique<SystemT>());
+		return dynamic_cast<SystemT*>(m_systems.back().get());
 	}
 
 	template<typename SystemT>
