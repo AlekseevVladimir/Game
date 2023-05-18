@@ -8,9 +8,10 @@
 #include <engine/render/core/shaders_manager.h>
 #include "engine/render/core/textures_ctrl.h"
 #include <engine/transform/position_component.h>
-//#include <engine/transform/transform_utils.h>
 	
-void ElementsMesh::setupMesh() {
+
+void ElementsMesh::setupMesh() 
+{
 		glGenVertexArrays(1, &VAO);
 		glGenBuffers(1, &VBO);
 		glGenBuffers(1, &EBO);
@@ -39,50 +40,8 @@ void ElementsMesh::setupMesh() {
 		glBindVertexArray(0);
 	}
 
-void Mesh::setupMesh() {
-		float vertices[] = {
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-		};
+void Mesh::setupMesh() 
+{
 		glGenVertexArrays(1, &VAO);
 		glGenBuffers(1, &VBO);
 
@@ -107,45 +66,6 @@ void Mesh::setupMesh() {
 		glBindVertexArray(0);
 	}
 
-//void Model::setModelDataAndDraw(std::shared_ptr<Shader> shaderBase, GameObject* goPtr) {}
-/*
-//TODO: move this to shader as it is shader specific
-template<typename TMesh>
-void Model<TMesh>::setModelDataAndDraw(
-	std::shared_ptr<Shader> shaderBase, GameObject* goPtr, GameObject* viewPointPtr) 
-{
-	OpenGLShader* shader = dynamic_cast<OpenGLShader*>(shaderBase.get());
-	TexturesCtrl& texCtrl = TexturesCtrl::getInstance();
-//	GameObject* cube = GameObjectHolder::getInstance().getObject("cube2");
-	shader->setFloat3("viewPos", &viewPointPtr->getComponent<PositionComponent>()->getPos()[0]);
-	shader->setMatrix4Float("view", GL_FALSE, glm::value_ptr(getView(viewPointPtr)));
-	shader->setMatrix4Float("projection", GL_FALSE, glm::value_ptr(getProjection()));
-	shader->setMatrix4Float(
-		"model", GL_FALSE,
-		glm::value_ptr(getTransform(goPtr->getComponent<PositionComponent>(), 
-			goPtr->getComponent<RotationComponent>(), 
-			goPtr->getComponent<ScaleComponent>())));
-
-	int cnt = 0;
-	for (auto mesh : m_meshes) {
-		for (const Mesh::Texture& texture : mesh.m_textures)
-		{
-			// Получаем номер текстуры (значение N в diffuse_textureN)
-			std::string name = texture.type;
-			unsigned idx = texCtrl.bindTexture(texture.id);
-			shader->setInt1(("material." + name).c_str(), idx);
-		}
-		shader->setFloat1("material.shininess", 32.0f);
-		glActiveTexture(GL_TEXTURE0);
-		glBindVertexArray(mesh.VAO);
-		//glDrawElements(GL_TRIANGLES, mesh.getIndices().size(), GL_UNSIGNED_INT, 0);
-	//.	glDrawArrays(GL_TRIANGLES, 0, mesh.m_vertices.size());
-		mesh.drawMesh();
-		//glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
-	}
-}
-*/
 void Mesh::draw()
 {
 	glBindVertexArray(VAO);
@@ -158,5 +78,3 @@ void ElementsMesh::draw()
 	glDrawElements(GL_TRIANGLES, getIndices().size(), GL_UNSIGNED_INT, 0);
 }
 
-//template class Model<Mesh>;
-//template class Model<ElementsMesh>;

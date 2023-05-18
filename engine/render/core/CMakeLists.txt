@@ -33,7 +33,9 @@ SET(SHADOW_SOURCES
 	"shadows/shadow_map_component.h" 
 	"shadows/shadow_map_component.cpp" 
 	"shadows/shadow_map_shader_component.h"
-	)
+	"shadows/omnidir_shadow_map_component.h"
+	"shadows/omnidir_shadow_map_component.cpp"
+)
 
 SOURCE_GROUP("light" FILES ${LIGHT_SOURCES})
 SOURCE_GROUP("model" FILES ${MODEL_SOURCES})

@@ -11,6 +11,7 @@ public:
 	void setMatrices(GameObject* viewPointPtr) override {};
 	void configure() override 
 	{
+		// TODO fix this
 		//ShadowMapComponent* shadowMapCmp = goPtr->getComponent<ShadowMapComponent>();
 		glm::mat4 lightProjection = glm::ortho(
 			-10.f, 10.f, -10.f, 10.f, 1.f, 7.5f);

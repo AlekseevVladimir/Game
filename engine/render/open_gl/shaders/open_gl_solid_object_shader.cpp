@@ -2,7 +2,6 @@
 #include "engine/transform/position_component.h"
 #include "engine/transform/rotation_component.h"
 #include "engine/transform/scale_component.h"
-//#include "engine/transform/transform_utils.h"
 #include "engine/render/core/textures_ctrl.h"
 #include "engine/render/core/light/light_direction_component.h"
 #include "engine/render/core/light/light_emitter_component.h"
@@ -45,6 +44,7 @@ void SolidObjectShader::configure() {
 			goPtr->getComponent<LightDirectionComponent>();
 		setFloat3("directionalLight.direction", &lightDirectionComponentPtr->getDirection()[0]);
 		ShadowMapComponent* shadowMapCmp = goPtr->getComponent<ShadowMapComponent>();
+		// TODO fix this
 		glm::mat4 lightProjection = glm::ortho(
 			-10.f, 10.f, -10.f, 10.f, 1.f, 7.5f);
 

@@ -1,4 +1,7 @@
 #include "shadow_map_component.h"
+
+
+// TODO fix this mess
 namespace {
 	int SHADOW_WIDTH = 1024;
 	int SHADOW_HEIGHT = 1024;
