@@ -11,4 +11,5 @@ public:
 
 private:
 	unsigned int m_depthMapFBO = 0;
+	unsigned int m_depthCubeMapFBO = 0;
 };

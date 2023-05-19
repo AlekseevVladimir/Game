@@ -22,6 +22,7 @@
 #include "engine/render/open_gl/shaders/open_gl_shadow_map_shader.h"
 #include <engine/render/core/shader_component.h>
 #include <engine/render/core/shadows/shadow_map_shader_component.h>
+#include "engine/render/core/shadows/omnidir_shadow_map_component.h"
 #include <engine/render/core/view_point_component.h>
 
 //controls are inverted
@@ -74,9 +75,21 @@ GameObject* createBackPack(
 GameObject* createPointLight(
 		glm::vec3 pos, glm::vec3 scale, GameObject::RenderSettings renderSettings) {
 	GameObject* goPtr = GameObjectHolder::getInstance().createGO("pointLight", renderSettings);
+	RotationComponent* rotation = goPtr->createComponent<RotationComponent>(10.0f, 10.0f, 10.0f);
 	goPtr->createComponent<PositionComponent>(pos);
 	//goPtr->createComponent<Generated3DVisualsComponent>("light", "cube");
 	goPtr->createComponent<LightEmitterComponent>();
+	ModelComponent* modelComponent = goPtr->createComponent<ModelComponent>();
+	modelComponent->model = 
+		generateModel("box.png", "box_specular_map.png");
+	std::shared_ptr<Shader> shader = ShadersManager::getInstance().
+		createProgram<SolidObjectShader>("solidObject");
+	goPtr->createComponent<ShaderComponent>(shader);
+	std::shared_ptr<Shader> shadowMapShader = ShadersManager::getInstance().
+		createProgram<ShadowMapShader>("shadow_map");
+	goPtr->createComponent<ShadowMapShaderComponent>(shadowMapShader);
+	goPtr->createComponent<OmnidirShadowMapComponent>();
+
 	return goPtr;
 }
 

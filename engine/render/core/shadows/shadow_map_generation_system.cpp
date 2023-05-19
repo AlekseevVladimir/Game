@@ -15,6 +15,7 @@ namespace
 ShadowMapGenerationSystem::ShadowMapGenerationSystem()
 {
 	glGenFramebuffers(1, &m_depthMapFBO);
+	glGenFramebuffers(1, &m_depthCubeMapFBO);
 }
 
 void ShadowMapGenerationSystem::process(float delta)
@@ -55,3 +56,8 @@ void ShadowMapGenerationSystem::process(float delta)
 	WindowCtrl::getInstance().restoreWindow();
 }
 
+void configureFramebuffer(
+	unsigned int FBOID, GLenum textureTargetType, unsigned int outputTextureID)
+{
+
+}

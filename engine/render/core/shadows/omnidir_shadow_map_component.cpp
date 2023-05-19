@@ -8,6 +8,7 @@ OmnidirShadowMapComponent::OmnidirShadowMapComponent(std::string goID)
 	glGenTextures(1, &m_shadowMapID);
 	const unsigned int SHADOW_WIDTH = 1024;
 	const unsigned int SHADOW_HEIGHT = 1024;
+	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, m_shadowMapID);
 	for (unsigned int i = 0; i < 6; ++i)
 	{
@@ -20,5 +21,7 @@ OmnidirShadowMapComponent::OmnidirShadowMapComponent(std::string goID)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 	}
+	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+	glActiveTexture(GL_TEXTURE0);
 
 }
