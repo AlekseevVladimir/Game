@@ -46,10 +46,11 @@ void SolidObjectShader::configure() {
 		ShadowMapComponent* shadowMapCmp = goPtr->getComponent<ShadowMapComponent>();
 		// TODO fix this
 		glm::mat4 lightProjection = glm::ortho(
-			-10.f, 10.f, -10.f, 10.f, 1.f, 7.5f);
+			-30.f, 30.f, -30.f, 30.f, 1.f, 30.f);
 
 		glm::mat lightView = glm::lookAt(
-			glm::vec3(-2.f, 4.f, -1.f),
+			//glm::vec3(-2.f, 4.f, -1.f),
+			glm::vec3(-10.f, 10.f, -10.f),
 			glm::vec3(0.f, 0.f, 0.f),
 			glm::vec3(0.f, 1.f, 0.f)
 		);

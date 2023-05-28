@@ -87,7 +87,7 @@ GameObject* createPointLight(
 	goPtr->createComponent<ShaderComponent>(shader);
 	std::shared_ptr<Shader> shadowMapShader = ShadersManager::getInstance().
 		createProgram<ShadowMapShader>("shadow_map");
-	goPtr->createComponent<ShadowMapShaderComponent>(shadowMapShader);
+	//goPtr->createComponent<ShadowMapShaderComponent>(shadowMapShader);
 	goPtr->createComponent<OmnidirShadowMapComponent>();
 
 	return goPtr;

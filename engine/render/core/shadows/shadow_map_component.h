@@ -9,4 +9,6 @@ public:
 	ShadowMapComponent(std::string goID);
 
 	unsigned int m_shadowMapID;
+	unsigned int _shadowWidth = 1024;
+	unsigned int _shadowHeight = 1024;
 };

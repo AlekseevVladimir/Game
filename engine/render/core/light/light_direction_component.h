@@ -6,12 +6,27 @@ class LightDirectionComponent : public Component {
 public:
 	LightDirectionComponent(std::string goID) : Component(goID) {
 		m_direction = { -0.2f, -1.0f, -0.3f };
+		_to = { 0.f, 0.f, 0.f };
+		_from = { -10.f, 10.f, -10.f };
 	}
 
 	Vector3<float> getDirection() {
-		return m_direction;
+		return (_to - _from).normalised();
+		//return m_direction;
+	}
+
+	Vector3<float> getTo() {
+		return _to;
+		//return m_direction;
+	}
+
+	Vector3<float> getFrom() {
+		return _from;
+		//return m_direction;
 	}
 
 private:
 	Vector3<float> m_direction;
+	Vector3<float> _from;
+	Vector3<float> _to;
 };
