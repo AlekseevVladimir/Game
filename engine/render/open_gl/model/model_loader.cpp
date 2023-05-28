@@ -1,4 +1,5 @@
 #include "model_loader.h"
+#include <filesystem>
 #include <engine/render/core/textures_ctrl.h>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -12,7 +13,7 @@ std::vector<Mesh::Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType t
 		aiString str;
 		mat->GetTexture(type, i, &str);
 		Mesh::Texture texture;
-		texture.id = texCtrl.loadImage(str.C_Str(), "D:/TheGame1/TheGame/models/troll/");
+		texture.id = texCtrl.loadImage(str.C_Str(), "../../resources/models/troll/");
 		texture.type = typeName;
 		texture.path = str.C_Str();
 		textures.push_back(texture);
@@ -91,10 +92,15 @@ void processNode(aiNode* node, const aiScene* scene, Model& model) {
 
 Model ModelLoader::loadModel(std::string name) {
 	Assimp::Importer importer;
+	auto test = std::filesystem::path("../../resources/models/troll/troll.obj");
+	auto test1 = std::filesystem::current_path();
+	std::cout << test1;
 	const aiScene* scene = importer.ReadFile(
-		"D:/TheGame1/TheGame/models/troll/troll.obj", aiProcess_Triangulate | aiProcess_FlipUVs);
+		"../../resources/models/troll/troll.obj", aiProcess_Triangulate | aiProcess_FlipUVs);
 
-	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) 
+	{
+		std::cout << importer.GetErrorString();
 		throw(std::exception("ASSIMP ERROR"));
 	}
 	Model model;
