@@ -5,14 +5,11 @@
 #include "engine/render/core/shadows/shadow_map_component.h"
 #include "engine/render/core/shadows/shadow_map_shader_component.h"
 #include "engine/render/core/shadows/omnidir_shadow_map_component.h"
+#include "engine/render/core/shadows/omnidir_shadow_map_shader_component.h"
 #include "glad/glad.h"
 
-namespace 
-{
-	int SHADOW_WIDTH = 1024;
-	int SHADOW_HEIGHT = 1024;
-}
 
+template<typename TShaderComponent>
 void configureFramebuffer(
 	GameObject* lightObjectPtr, unsigned int FBOID, 
 	GLenum textureTargetType, unsigned int shadowMapID);
@@ -36,7 +33,7 @@ void ShadowMapGenerationSystem::process(float delta)
 		ShadowMapComponent* shadowMap = goPtr->getComponent<ShadowMapComponent>();
 		glViewport(0, 0, shadowMap->_shadowWidth, shadowMap->_shadowHeight);
 		unsigned int shadowMapID = shadowMap->m_shadowMapID;
-		configureFramebuffer(goPtr, m_depthMapFBO, GL_TEXTURE_2D, shadowMapID);
+		configureFramebuffer<ShadowMapShaderComponent>(goPtr, m_depthMapFBO, GL_TEXTURE_2D, shadowMapID);
 		/*
 		unsigned int shadowMapID = 
 			goPtr->getComponent<ShadowMapComponent>()->m_shadowMapID;
@@ -63,7 +60,7 @@ void ShadowMapGenerationSystem::process(float delta)
 		GameObjectHolder::getInstance().getObjectsWithComponent<OmnidirShadowMapComponent>())
 	{
 		unsigned int shadowMapID = goPtr->getComponent<OmnidirShadowMapComponent>()->m_shadowMapID;
-		configureFramebuffer(goPtr, m_depthMapFBO, GL_TEXTURE_CUBE_MAP, shadowMapID);
+		configureFramebuffer<OmnidirShadowMapShaderComponent>(goPtr, m_depthMapFBO, GL_TEXTURE_CUBE_MAP, shadowMapID);
 	}
 		
 	
@@ -72,6 +69,7 @@ void ShadowMapGenerationSystem::process(float delta)
 	WindowCtrl::getInstance().restoreWindow();
 }
 
+template<typename TShaderComponent>
 void configureFramebuffer(
 	GameObject* lightObjectPtr, unsigned int FBOID, 
 	GLenum textureTargetType, unsigned int shadowMapID) 
@@ -94,6 +92,6 @@ void configureFramebuffer(
 		//glBindTexture(GL_TEXTURE_2D, shadowMapID);
 		glCullFace(GL_FRONT);
 		SystemsHolder::getInstance().getSystem<RenderSystem>()->
-			render<ShadowMapShaderComponent>(lightObjectPtr);
+			render<TShaderComponent>(lightObjectPtr);
 		glCullFace(GL_BACK);
 }

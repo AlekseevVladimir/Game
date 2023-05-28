@@ -25,6 +25,8 @@ OpenGLShader::OpenGLShader(std::string alias) {
 		//return;
 	}
 
+	auto geometryShaderCreationRes = createShader(alias + ".gs", GL_GEOMETRY_SHADER, programID);
+
 	glLinkProgram(programID);
 	int success;
 	char infoLog[512];
@@ -38,6 +40,10 @@ OpenGLShader::OpenGLShader(std::string alias) {
 	}
 	glDeleteShader(vertexShaderCreationRes.second);
 	glDeleteShader(fragmentShaderCreationRes.second);
+	if (geometryShaderCreationRes.first)
+	{
+		glDeleteShader(geometryShaderCreationRes.second);
+	}
 	m_programID = programID;
 }
 

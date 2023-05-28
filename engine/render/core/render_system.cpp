@@ -6,6 +6,7 @@
 #include "engine/render/open_gl/model/model_component.h"
 #include "engine/render/open_gl/model/model.h"
 #include "engine/render/core/shadows/shadow_map_shader_component.h"
+#include "engine/render/core/shadows/omnidir_shadow_map_shader_component.h"
 
 
 void RenderSystem::process(float delta)
@@ -30,7 +31,7 @@ void RenderSystem::render(GameObject* viewPointPtr)
 		GameObjectHolder::getInstance().getObjectsWithComponent<TShaderComponent>())
 	{
 		m_renderer->render(
-			goPtr, viewPointPtr, goPtr->getComponent<TShaderComponent>()->m_shaderPtr.get());
+			goPtr, viewPointPtr, goPtr->getComponent<TShaderComponent>()->_shaderPtr.get());
 		/*
 		std::shared_ptr<OpenGLShader> shaderPtr = 
 			std::dynamic_pointer_cast<OpenGLShader>(
@@ -51,3 +52,4 @@ void RenderSystem::setRenderer(std::unique_ptr<IRenderer>&& rendererPtr)
 }
 
 template void RenderSystem::render<ShadowMapShaderComponent>(GameObject*);
+template void RenderSystem::render<OmnidirShadowMapShaderComponent>(GameObject*);

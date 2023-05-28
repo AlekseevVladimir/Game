@@ -12,6 +12,10 @@ std::pair<bool, unsigned int> createShader(const std::string& shaderSrcFileName,
 	char infoLog[512];
 	const std::filesystem::path path{ "../../resources/shaders/" + shaderSrcFileName };
 	std::ifstream shaderFstream(path);
+	if (!shaderFstream.is_open())
+	{
+		return { false, 0 };
+	}
 	std::string shaderSrc;
 	std::string buf;
 

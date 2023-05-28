@@ -8,7 +8,6 @@
 void Renderer::render(GameObject* goPtr, GameObject* viewPointPtr, Shader* shaderPtr)
 {
 	OpenGLShader* OGLShaderPtr = dynamic_cast<OpenGLShader*>(shaderPtr);
-	// TODO taKE SHADER CONFIGURATION OUT OF RENDER CA;;
 	OGLShaderPtr->use();
 	OGLShaderPtr->configure();
 	OGLShaderPtr->setMatrices(viewPointPtr);

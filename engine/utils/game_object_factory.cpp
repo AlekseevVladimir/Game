@@ -13,6 +13,7 @@
 #include <engine/render/core/model/material_component.h>
 #include <engine/render/core/textures_ctrl.h>
 #include <engine/render/core/shadows/shadow_map_component.h>
+#include <engine/render/core/shadows/omnidir_shadow_map_shader_component.h>
 #include <engine/render/open_gl/model/model_loader.h>
 #include <engine/render/open_gl/model/model.h>
 #include <engine/render/core/constants.h>
@@ -87,8 +88,8 @@ GameObject* createPointLight(
 	goPtr->createComponent<ShaderComponent>(shader);
 	std::shared_ptr<Shader> shadowMapShader = ShadersManager::getInstance().
 		createProgram<ShadowMapShader>("shadow_map");
-	//goPtr->createComponent<ShadowMapShaderComponent>(shadowMapShader);
-	goPtr->createComponent<OmnidirShadowMapComponent>();
+	//goPtr->createComponent<OmnidirShadowMapShaderComponent>(shadowMapShader);
+	//goPtr->createComponent<OmnidirShadowMapComponent>();
 
 	return goPtr;
 }
