@@ -16,7 +16,9 @@ public:
 		GameObject* viewPointPtr);
 
 	void use() override;
-
+// TODO rename setMatrices to better represent method actions
+	// for seteMatrices to set world data, persistent data
+	// configure to set object data or set relative data, set local data
 	virtual void setMatrices(GameObject* viewPointPtr) = 0;
 
 	void setInt1(const char* name, int value);

@@ -21,6 +21,7 @@
 #include <engine/render/open_gl/shaders/open_gl_shader.h>
 #include "engine/render/open_gl/shaders/open_gl_solid_object_shader.h"
 #include "engine/render/open_gl/shaders/open_gl_shadow_map_shader.h"
+#include "engine/render/open_gl/shaders/omnidir_shadow_map_shader.h"
 #include <engine/render/core/shader_component.h>
 #include <engine/render/core/shadows/shadow_map_shader_component.h>
 #include "engine/render/core/shadows/omnidir_shadow_map_component.h"
@@ -89,7 +90,7 @@ GameObject* createPointLight(
 	std::shared_ptr<Shader> shadowMapShader = ShadersManager::getInstance().
 		createProgram<ShadowMapShader>("shadow_map");
 	//goPtr->createComponent<OmnidirShadowMapShaderComponent>(shadowMapShader);
-	//goPtr->createComponent<OmnidirShadowMapComponent>();
+	goPtr->createComponent<OmnidirShadowMapComponent>();
 
 	return goPtr;
 }
@@ -150,6 +151,10 @@ GameObject* createTroll(glm::vec3 pos, GameObject::RenderSettings renderSettings
 		createProgram<SolidObjectShader>("solidObject");;
 	std::shared_ptr<Shader> shadowMapShader = ShadersManager::getInstance().
 		createProgram<ShadowMapShader>("shadow_map");
+
+	std::shared_ptr<Shader> omnidirShadowMapShader = ShadersManager::getInstance().
+		createProgram<OmnidirShadowMapShader>("omnidir_shadow_map");
+
 	goPtr->createComponent<ShadowMapShaderComponent>(shadowMapShader);
 	goPtr->createComponent<ShaderComponent>(shader);
 	goPtr->createComponent<PositionComponent>(pos);

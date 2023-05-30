@@ -10,6 +10,7 @@ SET(SHADER_SOURCES
 	"shaders/open_gl_shadow_map_shader.cpp" 
 	"shaders/open_gl_solid_object_shader.h"
 	"shaders/open_gl_solid_object_shader.cpp"
+	"shaders/omnidir_shadow_map_shader.h"
 )
 SET(MODEL_SOURCES
 	"model/vao_component.h"
