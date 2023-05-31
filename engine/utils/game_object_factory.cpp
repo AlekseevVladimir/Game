@@ -90,7 +90,8 @@ GameObject* createPointLight(
 	std::shared_ptr<Shader> shadowMapShader = ShadersManager::getInstance().
 		createProgram<ShadowMapShader>("shadow_map");
 	//goPtr->createComponent<OmnidirShadowMapShaderComponent>(shadowMapShader);
-	goPtr->createComponent<OmnidirShadowMapComponent>();
+	// this breaks shadows
+//	goPtr->createComponent<OmnidirShadowMapComponent>();
 
 	return goPtr;
 }
@@ -152,8 +153,8 @@ GameObject* createTroll(glm::vec3 pos, GameObject::RenderSettings renderSettings
 	std::shared_ptr<Shader> shadowMapShader = ShadersManager::getInstance().
 		createProgram<ShadowMapShader>("shadow_map");
 
-	std::shared_ptr<Shader> omnidirShadowMapShader = ShadersManager::getInstance().
-		createProgram<OmnidirShadowMapShader>("omnidir_shadow_map");
+//	std::shared_ptr<Shader> omnidirShadowMapShader = ShadersManager::getInstance().
+//		createProgram<OmnidirShadowMapShader>("omnidir_shadow_map");
 
 	goPtr->createComponent<ShadowMapShaderComponent>(shadowMapShader);
 	goPtr->createComponent<ShaderComponent>(shader);

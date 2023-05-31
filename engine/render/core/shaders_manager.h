@@ -21,7 +21,7 @@ class Shader {
 public:
 	virtual void use() = 0;
 	
-	virtual void configure() = 0;
+	virtual void configure() {};
 
 	virtual ~Shader() = default;
 };
