@@ -60,6 +60,9 @@ GameObject* createCube(
 	goPtr->createComponent<ShaderComponent>(shader);
 	std::shared_ptr<Shader> shadowMapShader = ShadersManager::getInstance().
 		createProgram<ShadowMapShader>("shadow_map");
+	std::shared_ptr<Shader> omnidirShadowMapShader = ShadersManager::getInstance().
+		createProgram<OmnidirShadowMapShader>("omnidir_shadow_map");
+	goPtr->createComponent<OmnidirShadowMapShaderComponent>(omnidirShadowMapShader);
 	goPtr->createComponent<ShadowMapShaderComponent>(shadowMapShader);
 	//goPtr->createComponent<TransformComponent>(pos, scale);
 	//goPtr->createComponent<Generated3DVisualsComponent>("cube", "cube", "box.png", "box_specular_map.png");
@@ -90,8 +93,8 @@ GameObject* createPointLight(
 	std::shared_ptr<Shader> shadowMapShader = ShadersManager::getInstance().
 		createProgram<ShadowMapShader>("shadow_map");
 	//goPtr->createComponent<OmnidirShadowMapShaderComponent>(shadowMapShader);
-	// this breaks shadows
-//	goPtr->createComponent<OmnidirShadowMapComponent>();
+	// TODO this breaks shadows
+	goPtr->createComponent<OmnidirShadowMapComponent>();
 
 	return goPtr;
 }
@@ -153,11 +156,12 @@ GameObject* createTroll(glm::vec3 pos, GameObject::RenderSettings renderSettings
 	std::shared_ptr<Shader> shadowMapShader = ShadersManager::getInstance().
 		createProgram<ShadowMapShader>("shadow_map");
 
-//	std::shared_ptr<Shader> omnidirShadowMapShader = ShadersManager::getInstance().
-//		createProgram<OmnidirShadowMapShader>("omnidir_shadow_map");
+	std::shared_ptr<Shader> omnidirShadowMapShader = ShadersManager::getInstance().
+		createProgram<OmnidirShadowMapShader>("omnidir_shadow_map");
 
 	goPtr->createComponent<ShadowMapShaderComponent>(shadowMapShader);
 	goPtr->createComponent<ShaderComponent>(shader);
+	goPtr->createComponent<OmnidirShadowMapShaderComponent>(omnidirShadowMapShader);
 	goPtr->createComponent<PositionComponent>(pos);
 	goPtr->createComponent<RotationComponent>();
 	//TransformComponent* transform = goPtr->createComponent<TransformComponent>();

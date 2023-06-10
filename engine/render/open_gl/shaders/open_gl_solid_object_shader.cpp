@@ -6,6 +6,7 @@
 #include "engine/render/core/light/light_direction_component.h"
 #include "engine/render/core/light/light_emitter_component.h"
 #include "engine/render/core/shadows/shadow_map_component.h"
+#include "engine/render/core/shadows/omnidir_shadow_map_component.h"
 #include "engine/render/utils/render_utils.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -29,9 +30,18 @@ void SolidObjectShader::configure() {
 
 		setFloat3((baseStr + std::string("].position")).c_str(), &goPtr->getComponent<PositionComponent>()->getPos()[0]);
 
-		setFloat1((baseStr + std::string("].constant")).c_str(), 1.0f);
-		setFloat1((baseStr + std::string("].linear")).c_str(), 0.09f);
-		setFloat1((baseStr + std::string("].quadratic")).c_str(), 0.032f);
+		// TODO experimantal
+		setFloat1((baseStr + std::string("].constant")).c_str(), 1.f); //1.f
+		setFloat1((baseStr + std::string("].linear")).c_str(), 0.09f); //0.09f
+		setFloat1((baseStr + std::string("].quadratic")).c_str(), 0.032f); //0.032f
+
+		OmnidirShadowMapComponent* shadowMap = goPtr->getComponent<OmnidirShadowMapComponent>();
+		setFloat1("farPlane", shadowMap->_farPlane);
+		
+		glActiveTexture(GL_TEXTURE0 + 13);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, shadowMap->m_shadowMapID);
+		setInt1("omnidirShadowMap", 13);
+		glActiveTexture(GL_TEXTURE0);
 	}
 
 
@@ -44,17 +54,13 @@ void SolidObjectShader::configure() {
 			goPtr->getComponent<LightDirectionComponent>();
 		setFloat3("directionalLight.direction", &lightDirectionComponentPtr->getDirection()[0]);
 		ShadowMapComponent* shadowMapCmp = goPtr->getComponent<ShadowMapComponent>();
-		// TODO fix this
-		glm::mat4 lightProjection = glm::ortho(
-			-30.f, 30.f, -30.f, 30.f, 1.f, 30.f);
 
 		glm::mat lightView = glm::lookAt(
-			//glm::vec3(-2.f, 4.f, -1.f),
-			glm::vec3(-10.f, 10.f, -10.f),
-			glm::vec3(0.f, 0.f, 0.f),
+			lightDirectionComponentPtr->getFrom().getGlm(),
+			lightDirectionComponentPtr->getTo().getGlm(),
 			glm::vec3(0.f, 1.f, 0.f)
 		);
-		glm::mat4 lightSpaceMatrix = lightProjection * lightView;
+		glm::mat4 lightSpaceMatrix = lightDirectionComponentPtr->_projectionMatrix * lightView;
 		setMatrix4Float("lightSpaceMatrix", GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 
 		glActiveTexture(GL_TEXTURE0 + 12);

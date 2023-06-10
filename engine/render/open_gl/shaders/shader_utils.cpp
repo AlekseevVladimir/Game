@@ -33,7 +33,8 @@ std::pair<bool, unsigned int> createShader(const std::string& shaderSrcFileName,
 
 	if (!success) {
 		glGetShaderInfoLog(shaderID, 512, NULL, infoLog);
-		std::cerr << "Vertex shader compilation failed\n" << infoLog << std::endl;
+		std::cerr << "Vertex shader compilation failed\n" << shaderSrcFileName <<
+			std::endl << infoLog << std::endl;
 		return { false, 0 };
 	}
 

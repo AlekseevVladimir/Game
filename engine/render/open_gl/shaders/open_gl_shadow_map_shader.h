@@ -8,13 +8,10 @@ class ShadowMapShader : public OpenGLShader
 public:
 	ShadowMapShader(std::string alias) : OpenGLShader(alias)
 	{
-		// TODO calculate matrices here once as they do not change
 	};
 
 	void setMatrices(GameObject* viewPointPtr) override 
 	{
-		// TODO fix this
-		//ShadowMapComponent* shadowMapCmp = goPtr->getComponent<ShadowMapComponent>();
 		LightDirectionComponent* lightDirComponent = 
 			viewPointPtr->getComponent<LightDirectionComponent>();
 		glm::mat lightView = glm::lookAt(

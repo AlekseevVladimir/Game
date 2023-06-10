@@ -25,7 +25,8 @@ public:
 		//return m_direction;
 	}
 
-	// TODO replace with core math to get rid of opengl mentions
+	// TODO replace with core math to get rid of opengl mentions, take out of here
+	// to shader specific stuff or smth
 	glm::mat4 _projectionMatrix = glm::ortho(-30.f, 30.f, -30.f, 30.f, 1.f, 30.f); 
 
 private:

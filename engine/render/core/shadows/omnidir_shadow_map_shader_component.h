@@ -8,7 +8,8 @@ class Shader;
 class OmnidirShadowMapShaderComponent : public Component
 {
 public:
-	OmnidirShadowMapShaderComponent(std::string goID, std::shared_ptr<Shader> shaderPtr) : Component(goID)
+	OmnidirShadowMapShaderComponent(std::string goID, std::shared_ptr<Shader> shaderPtr) 
+		: Component(goID), _shaderPtr(shaderPtr)
 	{
 
 	}
