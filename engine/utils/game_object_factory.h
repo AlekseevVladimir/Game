@@ -24,3 +24,4 @@ GameObject* createCamera(
 GameObject* createFloor(glm::vec3 pos, GameObject::RenderSettings renderSettings = {});
 
 GameObject* createTroll(glm::vec3 pos, GameObject::RenderSettings renderSettings = {});
+

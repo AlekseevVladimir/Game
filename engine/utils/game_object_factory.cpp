@@ -90,10 +90,10 @@ GameObject* createPointLight(
 	std::shared_ptr<Shader> shader = ShadersManager::getInstance().
 		createProgram<SolidObjectShader>("solidObject");
 	goPtr->createComponent<ShaderComponent>(shader);
-	std::shared_ptr<Shader> shadowMapShader = ShadersManager::getInstance().
-		createProgram<ShadowMapShader>("shadow_map");
-	//goPtr->createComponent<OmnidirShadowMapShaderComponent>(shadowMapShader);
-	// TODO this breaks shadows
+//	std::shared_ptr<Shader> shadowMapShader = ShadersManager::getInstance().
+//		createProgram<ShadowMapShader>("shadow_map");
+//	goPtr->createComponent<OmnidirShadowMapShaderComponent>(shadowMapShader);
+
 	goPtr->createComponent<OmnidirShadowMapComponent>();
 
 	return goPtr;

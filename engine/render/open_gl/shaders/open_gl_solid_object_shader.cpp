@@ -30,10 +30,9 @@ void SolidObjectShader::configure() {
 
 		setFloat3((baseStr + std::string("].position")).c_str(), &goPtr->getComponent<PositionComponent>()->getPos()[0]);
 
-		// TODO experimantal
-		setFloat1((baseStr + std::string("].constant")).c_str(), 1.f); //1.f
-		setFloat1((baseStr + std::string("].linear")).c_str(), 0.09f); //0.09f
-		setFloat1((baseStr + std::string("].quadratic")).c_str(), 0.032f); //0.032f
+		setFloat1((baseStr + std::string("].constant")).c_str(), 1.f);
+		setFloat1((baseStr + std::string("].linear")).c_str(), 0.09f); 
+		setFloat1((baseStr + std::string("].quadratic")).c_str(), 0.032f);
 
 		OmnidirShadowMapComponent* shadowMap = goPtr->getComponent<OmnidirShadowMapComponent>();
 		setFloat1("farPlane", shadowMap->_farPlane);

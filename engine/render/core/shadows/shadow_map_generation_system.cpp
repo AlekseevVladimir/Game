@@ -69,7 +69,6 @@ void ShadowMapGenerationSystem::process(float delta)
 		OmnidirShadowMapComponent* omnidirShadow = goPtr->getComponent<OmnidirShadowMapComponent>();
 		glViewport(0, 0, omnidirShadow->_shadowMapWidth, omnidirShadow->_shadowMapHeight);
 		unsigned int shadowMapID = omnidirShadow->m_shadowMapID;
-		// TODO this breaks shadows
 		configureFramebuffer<OmnidirShadowMapShaderComponent>(
 			goPtr, m_depthCubeMapFBO, GL_TEXTURE_CUBE_MAP, shadowMapID);
 	}

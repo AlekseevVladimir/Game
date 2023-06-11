@@ -19,7 +19,8 @@ public:
 		OmnidirShadowMapComponent* shadowMap = viewPointPtr->
 			getComponent<OmnidirShadowMapComponent>();
 		glm::vec3 lightPos = viewPointPtr->getComponent<PositionComponent>()->getPos().getGlm();
-		std::vector<glm::mat4> shadowTransforms = {
+		std::vector<glm::mat4> shadowTransforms = 
+		{
 			shadowMap->_projectionMatrix * glm::lookAt(
 				lightPos, lightPos + glm::vec3(1.f, 0.f, 0.f), glm::vec3(0.f, -1.f, 0.f)),
 			shadowMap->_projectionMatrix * glm::lookAt(

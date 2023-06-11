@@ -22,7 +22,7 @@ void RenderSystem::process(float delta)
 
 
 template<typename TShaderComponent>
-void RenderSystem::render(GameObject* viewPointPtr)
+void RenderSystem::render(GameObject* viewPointPtr, bool ignoreViewPoint)
 {
 	//m_renderer->render(viewPointPtr);
 	
@@ -30,6 +30,10 @@ void RenderSystem::render(GameObject* viewPointPtr)
 		GameObject* goPtr :
 		GameObjectHolder::getInstance().getObjectsWithComponent<TShaderComponent>())
 	{
+		if (ignoreViewPoint && goPtr->getAlias() == viewPointPtr->getAlias())
+		{
+			continue;
+		}
 		m_renderer->render(
 			goPtr, viewPointPtr, goPtr->getComponent<TShaderComponent>()->_shaderPtr.get());
 		/*
@@ -51,5 +55,5 @@ void RenderSystem::setRenderer(std::unique_ptr<IRenderer>&& rendererPtr)
 	m_renderer = std::move(rendererPtr);
 }
 
-template void RenderSystem::render<ShadowMapShaderComponent>(GameObject*);
-template void RenderSystem::render<OmnidirShadowMapShaderComponent>(GameObject*);
+template void RenderSystem::render<ShadowMapShaderComponent>(GameObject*, bool);
+template void RenderSystem::render<OmnidirShadowMapShaderComponent>(GameObject*, bool);
