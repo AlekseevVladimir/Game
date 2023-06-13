@@ -2,19 +2,25 @@
 #include <string>
 #include <typeinfo>
 
-#define quote(x) #x
-class Component {
+class Component 
+{
 public:
 	Component(std::string goID) : m_goID(goID) {};
 	std::string m_goID{ "" };
-	std::string getComponentName() {
+
+	std::string getComponentName() 
+	{
 		return typeid(*this).name();
 	}
-	virtual ~Component() = default;
-private:
 
+	virtual ~Component() = default;
 };
 
-class UniqueComponent : public Component {
+//TODO use this
+class UniqueComponent : public Component 
+{
+public:
 	UniqueComponent(std::string goID) : Component(goID) {}
+
+	virtual ~UniqueComponent() = default;
 };

@@ -3,23 +3,28 @@
 
 #include <vector>
 
-class LightEmitterComponent : public Component {
+
+class LightEmitterComponent : public Component 
+{
 public:
-	struct Light {
+	struct Light 
+	{
 		std::vector<float> ambient;
 		std::vector<float> diffuse;
 		std::vector<float> specular;
 	};
 
-	LightEmitterComponent(std::string goID) : Component(goID) {
+	LightEmitterComponent(std::string goID) : Component(goID) 
+	{
 		m_light = { {0.1f, 0.1f, 0.1f}, {1.0f, 1.0f, 1.0f}, {1.0, 1.0f, 1.0f} };
 	}
 
-	const Light getLightData() {
+	const Light getLightData() 
+	{
 		return m_light;
 	}
 
-	~LightEmitterComponent() {};
+	virtual ~LightEmitterComponent() = default;
 
 private:
 	Light m_light;

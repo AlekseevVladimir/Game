@@ -1,23 +1,30 @@
 #pragma once
 #include <engine/core/component.h>
 
-class MaterialComponent : public Component {
+class MaterialComponent : public Component 
+{
 public:
-	struct Material {
+	struct Material 
+	{
 		unsigned int diffuse;
 		unsigned int specular;
 		float shininess;
 	};
 
-	MaterialComponent(std::string goID, Material materialData = {}) : Component(goID), m_materialData(materialData) {}
+	MaterialComponent(std::string goID, Material materialData = {}) 
+		: Component(goID), m_materialData(materialData) {}
 
-	Material getMaterialData() const {
+	Material getMaterialData() const 
+	{
 		return m_materialData;
 	}
 
-	void setMaterialData(Material data) {
+	void setMaterialData(Material data) 
+	{
 		m_materialData = data;
 	}
+
+	virtual ~MaterialComponent() = default;
 
 private:
 	Material m_materialData;

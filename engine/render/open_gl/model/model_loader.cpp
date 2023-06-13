@@ -5,7 +5,8 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-std::vector<Mesh::Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName) {
+std::vector<Mesh::Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName) 
+{
 	std::vector<Mesh::Texture> textures;
 	TexturesCtrl& texCtrl = TexturesCtrl::getInstance();
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
@@ -13,17 +14,18 @@ std::vector<Mesh::Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType t
 		aiString str;
 		mat->GetTexture(type, i, &str);
 		Mesh::Texture texture;
+		//TODO fix paths ?
 		texture.id = texCtrl.loadImage(str.C_Str(), "../../resources/models/troll/");
 		texture.type = typeName;
 		texture.path = str.C_Str();
 		textures.push_back(texture);
-
 	}
 	return textures;
 }
 
 
-ElementsMesh processMesh(aiMesh* mesh, const aiScene* scene) {
+ElementsMesh processMesh(aiMesh* mesh, const aiScene* scene) 
+{
 
 	std::vector<Mesh::Vertex> vertices;
 	std::vector<unsigned int> indices;
@@ -53,7 +55,9 @@ ElementsMesh processMesh(aiMesh* mesh, const aiScene* scene) {
 			vertex.TexCoords = vec;
 		}
 		else
+		{
 			vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+		}
 		vertices.push_back(vertex);
 
 	}
@@ -62,7 +66,9 @@ ElementsMesh processMesh(aiMesh* mesh, const aiScene* scene) {
 	{
 		aiFace face = mesh->mFaces[i];
 		for (unsigned int j = 0; j < face.mNumIndices; j++)
+		{
 			indices.push_back(face.mIndices[j]);
+		}
 	}
 	// Обрабатываем материал
 	if (mesh->mMaterialIndex >= 0)
@@ -80,17 +86,21 @@ ElementsMesh processMesh(aiMesh* mesh, const aiScene* scene) {
 }
 
 
-void processNode(aiNode* node, const aiScene* scene, Model& model) {
-	for (unsigned int i = 0; i < node->mNumMeshes; i++) {
+void processNode(aiNode* node, const aiScene* scene, Model& model) 
+{
+	for (unsigned int i = 0; i < node->mNumMeshes; i++) 
+	{
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		model.m_meshes.push_back(processMesh(mesh, scene));
 	}
-	for (unsigned int i = 0; i < node->mNumChildren; i++) {
+	for (unsigned int i = 0; i < node->mNumChildren; i++) 
+	{
 		processNode(node->mChildren[i], scene, model);
 	}
 }
 
-Model ModelLoader::loadModel(std::string name) {
+Model ModelLoader::loadModel(std::string name) 
+{
 	Assimp::Importer importer;
 	auto test = std::filesystem::path("../../resources/models/troll/troll.obj");
 	auto test1 = std::filesystem::current_path();

@@ -49,7 +49,6 @@ void Mesh::setupMesh()
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
 		glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), &m_vertices[0], GL_STATIC_DRAW);
-		//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 		// Координаты вершин
 		glEnableVertexAttribArray(0);

@@ -14,23 +14,27 @@
 
 class Shader;
 class GameObject;
-class Mesh {
+class Mesh 
+{
 public:
-	struct Vertex {
+	struct Vertex 
+	{
 		glm::vec3 Position;
 		glm::vec3 Normal;
 		glm::vec2 TexCoords;
 	};
 
-	struct Texture {
+	struct Texture 
+	{
 		unsigned int id;
 		std::string type;
 		std::string path;
 	};
 	
-	Mesh(std::vector<Vertex> vertices, std::vector<Texture> textures) :
-		m_vertices(vertices)
-		, m_textures(textures) {
+	Mesh(std::vector<Vertex> vertices, std::vector<Texture> textures) 
+		: m_vertices(vertices)
+		, m_textures(textures) 
+	{
 		setupMesh();
 	}
 
@@ -43,20 +47,19 @@ public:
 	unsigned int VAO, VBO;
 	std::vector<Vertex> m_vertices;
 	std::vector<Texture> m_textures;
-protected:
 };
 
 class ElementsMesh : public Mesh 
 {
 public:
-	const std::vector<unsigned int>& getIndices() {
+	const std::vector<unsigned int>& getIndices() 
+	{
 		return m_indices;
 	}
 
-	// Mesh-данные
-
-	ElementsMesh(std::vector<Vertex> vertices, std::vector<Texture> textures, std::vector<unsigned int> indices) :
-		Mesh(vertices, textures), m_indices(indices) {
+	ElementsMesh(std::vector<Vertex> vertices, std::vector<Texture> textures, std::vector<unsigned int> indices) 
+		: Mesh(vertices, textures), m_indices(indices) 
+	{
 		setupMesh();
 	}
 
@@ -67,8 +70,6 @@ public:
 	unsigned int EBO;
 	std::vector<unsigned int> m_indices;
 	void setupMesh();
-private:
-	// Данные для рендеринга
 };
 
 
@@ -76,18 +77,7 @@ private:
 class Model
 {
 public:
-	/*
-	void setupModel() {
-		for (Mesh& mesh : m_meshes) {
-			//mesh.setupMesh();
-		}
-	}
-	*/
-	//virtual void setModelDataAndDraw(
-	//	std::shared_ptr<Shader> shaderBase, GameObject* goPtr, GameObject* viewPointPtr) override;
-
 	std::vector<std::variant<Mesh, ElementsMesh>> m_meshes;
-private:
 };
 
 template<typename T>

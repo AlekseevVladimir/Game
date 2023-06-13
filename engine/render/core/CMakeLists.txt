@@ -24,7 +24,6 @@ SET(LIGHT_SOURCES
 )
 SET(MODEL_SOURCES
 	"model/material_component.h"
-    "model/model_component.h"
 )
 
 SET(SHADOW_SOURCES
