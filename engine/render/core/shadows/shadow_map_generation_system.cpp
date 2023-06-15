@@ -32,7 +32,6 @@ ShadowMapGenerationSystem::ShadowMapGenerationSystem()
 
 void ShadowMapGenerationSystem::process(float delta)
 {
-	
 	for (GameObject* goPtr :
 		GameObjectHolder::getInstance().getObjectsWithComponent<ShadowMapComponent>())
 	{
@@ -41,28 +40,8 @@ void ShadowMapGenerationSystem::process(float delta)
 		unsigned int shadowMapID = shadowMap->m_shadowMapID;
 		configureFramebuffer<ShadowMapShaderComponent>(
 			goPtr, m_depthMapFBO, GL_TEXTURE_2D, shadowMapID);
-		/*
-		unsigned int shadowMapID = 
-			goPtr->getComponent<ShadowMapComponent>()->m_shadowMapID;
-		goPtr->getComponent<ShadowMapComponent>();
-			//	glBindFramebuffer(GL_FRAMEBUFFER, m_depthMapFBO);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowMapID, 0);
-		glDrawBuffer(GL_NONE);
-		glReadBuffer(GL_NONE);
-
-
-		unsigned int test = glCheckFramebufferStatus(m_depthMapFBO);
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-			throw(std::exception());
-		}
-		//glActiveTexture(GL_TEXTURE0);
-		//glBindTexture(GL_TEXTURE_2D, shadowMapID);
-		glCullFace(GL_FRONT);
-		SystemsHolder::getInstance().getSystem<RenderSystem>()->
-			render<ShadowMapShaderComponent>(goPtr);
-		glCullFace(GL_BACK);
-		*/
 	}
+
 	for (GameObject* goPtr :
 		GameObjectHolder::getInstance().getObjectsWithComponent<OmnidirShadowMapComponent>())
 	{
@@ -85,36 +64,28 @@ void configureFramebuffer(
 	GLenum textureTargetType, unsigned int shadowMapID) 
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, FBOID);
-		glClear(GL_DEPTH_BUFFER_BIT);
-	//	unsigned int shadowMapID = 
-	//		lightObjectPtr->getComponent<ShadowMapComponent>()->m_shadowMapID;
-		// wrong function !!!!!!!!!!!!!
-		if (FBOID == 2)
-		{
-			glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
-				shadowMapID, 0);
-		}
-		else 
-		{
+	glClear(GL_DEPTH_BUFFER_BIT);
+	// TODO fix messy if statement here
+	if (FBOID == 2)
+	{
+		glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+			shadowMapID, 0);
+	}
+	else 
+	{
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, 
+			textureTargetType, shadowMapID, 0);
+	}
 
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, 
-				textureTargetType, shadowMapID, 0);
-		}
-		//glDrawBuffer(GL_NONE);
-		//glReadBuffer(GL_NONE);
-
-
-		unsigned int test = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-//		std::cout << test << std::endl;
+	unsigned int test = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 		
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-			throw(std::exception());
-		}
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) 
+	{
+		throw(std::exception());
+	}
 		
-		//glActiveTexture(GL_TEXTURE0);
-		//glBindTexture(GL_TEXTURE_2D, shadowMapID);
-		glCullFace(GL_FRONT);
-		SystemsHolder::getInstance().getSystem<RenderSystem>()->
-			render<TShaderComponent>(lightObjectPtr);
-		glCullFace(GL_BACK);
+	glCullFace(GL_FRONT);
+	SystemsHolder::getInstance().getSystem<RenderSystem>()->
+		render<TShaderComponent>(lightObjectPtr);
+	glCullFace(GL_BACK);
 }

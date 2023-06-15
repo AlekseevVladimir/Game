@@ -57,7 +57,9 @@ public:
 		return m_indices;
 	}
 
-	ElementsMesh(std::vector<Vertex> vertices, std::vector<Texture> textures, std::vector<unsigned int> indices) 
+	ElementsMesh(
+		std::vector<Vertex> vertices, std::vector<Texture> textures, 
+		std::vector<unsigned int> indices) 
 		: Mesh(vertices, textures), m_indices(indices) 
 	{
 		setupMesh();

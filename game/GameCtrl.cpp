@@ -25,7 +25,7 @@ GameCtrl::GameCtrl() {
 	SystemsHolder::getInstance().addSystem<RotationSystem>();
 	SystemsHolder::getInstance().addSystem<ShadowMapGenerationSystem>();
 	RenderSystem* renderSystemPtr = SystemsHolder::getInstance().addSystem<RenderSystem>();
-	renderSystemPtr->setRenderer(std::make_unique<Renderer>());
+	renderSystemPtr->setRenderer(std::make_unique<OpenGL::Renderer>());
 
 
 	//createSpotLight({ false, false, "" });

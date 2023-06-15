@@ -7,20 +7,24 @@ class GLFWwindow;
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void mouseCallback(GLFWwindow* window, double x, double y);
 
-class WindowCtrl {
+class WindowCtrl 
+{
 public:
-	static WindowCtrl& getInstance() {
+	static WindowCtrl& getInstance() 
+	{
 		static WindowCtrl inst;
 		return inst;
 	}
 
-	GLFWwindow* getWindow() {
+	GLFWwindow* getWindow() 
+	{
 		return m_window;
 	}
 
 	void init();
 
-	bool isValid() const {
+	bool isValid() const 
+	{
 		return m_isValid;
 	}
 

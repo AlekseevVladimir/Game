@@ -8,7 +8,8 @@
 #include "shader_utils.h"
 
 
-class OpenGLShader : public Shader {
+class OpenGLShader : public Shader 
+{
 public:
 	OpenGLShader(std::string alias);
 

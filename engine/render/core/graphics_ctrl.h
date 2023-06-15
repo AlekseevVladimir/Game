@@ -10,10 +10,12 @@
 //#include <engine/render/core/shaders_ctrl.h>
 //#include <Model.h>
 
-
-class GraphicsCtrl {
+// TODO move cod to cpp
+class GraphicsCtrl 
+{
 public:
-	GraphicsCtrl() {
+	GraphicsCtrl() 
+	{
 		glfwInit();
 		WindowCtrl& windowCtrl = WindowCtrl::getInstance();
 		windowCtrl.init();
@@ -22,20 +24,14 @@ public:
 			return;
 		if (!res)
 			return;
-		//Model model("models/backpack/backpack.obj");
-	//	ShadersCtrl::getInstance().createProgram("solidObject", {true, true});
-		//ShadersCtrl::getInstance().createProgram("light", {false, false});
-		GameObject::RenderSettings invisibleSettings = { false, false };
-		GameObject::RenderSettings visibleSettings = { true, false };
 
-		//GameObjectHolder::getInstance().createBrick(glm::vec3(0.0f, 0.0f, 0.0f), { 100.0f, 100.0f, 100.0f }, visibleSettings);
-		//GameObjectHolder::getInstance().createBrick(glm::vec3(100.0f, 0.0f, 0.0f), { 100.0f, 100.0f, 100.0f }, visibleSettings);
 		m_isValid = true;
-		
 	}
 
-	void drawLoop() {
-		if (!m_isValid) {
+	void drawLoop() 
+	{
+		if (!m_isValid) 
+		{
 			std::cerr << "Cannot start draw: not properly configured" << std::endl;
 			return;
 		}
@@ -43,16 +39,15 @@ public:
 
 		windowCtrl.draw();
 		m_isValid = windowCtrl.isValid();
-		//while (m_windowCtrl.isValid()) {
-		//	m_windowCtrl.draw();
-		//}
 	}
 
-	bool isValid() {
+	bool isValid() 
+	{
 		return m_isValid;
 	}
 
-	~GraphicsCtrl() {
+	~GraphicsCtrl() 
+	{
 		glfwTerminate();
 	}
 private:

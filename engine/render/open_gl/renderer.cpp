@@ -5,7 +5,7 @@
 #include "engine/render/core/shadows/shadow_map_shader_component.h"
 
 
-void Renderer::render(GameObject* goPtr, GameObject* viewPointPtr, Shader* shaderPtr)
+void OpenGL::Renderer::render(GameObject* goPtr, GameObject* viewPointPtr, Shader* shaderPtr)
 {
 	OpenGLShader* OGLShaderPtr = dynamic_cast<OpenGLShader*>(shaderPtr);
 	OGLShaderPtr->use();

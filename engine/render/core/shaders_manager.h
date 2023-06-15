@@ -13,11 +13,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <engine/core/game_object.h>
-//#include <glfw3.h>
 
-//std::pair<bool, unsigned int> createShader(const std::string& shaderSrcFileName, int shaderType, unsigned int programID);
 
-class Shader {
+class Shader 
+{
 public:
 	virtual void use() = 0;
 	
@@ -26,18 +25,22 @@ public:
 	virtual ~Shader() = default;
 };
 
-class ShadersManager {
+class ShadersManager 
+{
 public:
 
-	static ShadersManager& getInstance() {
+	static ShadersManager& getInstance() 
+	{
 		static ShadersManager inst;
 		return inst;
 	}
 
 	template<typename ShaderT>
-	std::shared_ptr<ShaderT> createProgram(const std::string& alias) {
+	std::shared_ptr<ShaderT> createProgram(const std::string& alias) 
+	{
 		auto found = m_shaders.find(alias);
-		if (found != m_shaders.end() && !found->second.expired()) {
+		if (found != m_shaders.end() && !found->second.expired()) 
+		{
 			return std::dynamic_pointer_cast<ShaderT>(found->second.lock());
 		}
 		std::shared_ptr<ShaderT> shaderPtr = std::make_shared<ShaderT>(alias);
@@ -47,5 +50,5 @@ public:
 
 private:
 	std::map<std::string, std::weak_ptr<Shader>> m_shaders;
-
 };
+

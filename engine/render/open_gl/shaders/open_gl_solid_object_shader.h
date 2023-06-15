@@ -7,12 +7,8 @@ class GameObject;
 class SolidObjectShader : public OpenGLShader
 {
 public:
-	SolidObjectShader(std::string alias) : OpenGLShader(alias)
-	{};
-/*
-	void setModelDataAndDraw(ModelBase* model, 
-		GameObject* goPtr, GameObject* viewPointPtr) override;
-*/
+	SolidObjectShader(std::string alias) : OpenGLShader(alias) {};
+
 	void configure() override;
 
 	void setMatrices(GameObject* viewPointPtr) override;

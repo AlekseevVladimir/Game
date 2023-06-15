@@ -1,10 +1,9 @@
 #pragma once
 
-class System {
+class System 
+{
 public:
-	System() {
-
-	}
+	System() {}
 
 	virtual void process(float delta) = 0;
 };

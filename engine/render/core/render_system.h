@@ -13,12 +13,14 @@ public:
 	virtual ~IRenderer() = default;
 };
 
-class RenderSystem : public System {
+class RenderSystem : public System 
+{
 public:
 	void process(float delta) override;
 
 	template<typename TShaderComponent>
 	void render(GameObject* viewPointPtr, bool ignoreViewPoint=true);
+
 	void setRenderer(std::unique_ptr<IRenderer>&& rendererPtr);
 	
 private:

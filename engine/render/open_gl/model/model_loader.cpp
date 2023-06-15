@@ -5,7 +5,8 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-std::vector<Mesh::Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName) 
+std::vector<Mesh::Texture> loadMaterialTextures(
+	aiMaterial* mat, aiTextureType type, std::string typeName) 
 {
 	std::vector<Mesh::Texture> textures;
 	TexturesCtrl& texCtrl = TexturesCtrl::getInstance();

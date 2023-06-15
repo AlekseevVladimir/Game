@@ -2,9 +2,12 @@
 #include "engine/core/game_object.h"
 
 
-class Renderer : public IRenderer
+namespace OpenGL
 {
-public:
-	virtual void render(GameObject* goPtr, GameObject* viewPointPtr, Shader* shaderPtr) override;
-	virtual ~Renderer() = default;
-};
+	class Renderer : public IRenderer
+	{
+	public:
+		virtual void render(GameObject* goPtr, GameObject* viewPointPtr, Shader* shaderPtr) override;
+		virtual ~Renderer() = default;
+	};
+}

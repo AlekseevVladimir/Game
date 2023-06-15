@@ -19,7 +19,8 @@ std::pair<bool, unsigned int> createShader(const std::string& shaderSrcFileName,
 	std::string shaderSrc;
 	std::string buf;
 
-	while (std::getline(shaderFstream, buf)) {
+	while (std::getline(shaderFstream, buf)) 
+	{
 		shaderSrc += buf;
 		shaderSrc.push_back('\n');
 	}
@@ -31,7 +32,8 @@ std::pair<bool, unsigned int> createShader(const std::string& shaderSrcFileName,
 
 	glGetShaderiv(shaderID, GL_COMPILE_STATUS, &success);
 
-	if (!success) {
+	if (!success)
+	{
 		glGetShaderInfoLog(shaderID, 512, NULL, infoLog);
 		std::cerr << "Vertex shader compilation failed\n" << shaderSrcFileName <<
 			std::endl << infoLog << std::endl;

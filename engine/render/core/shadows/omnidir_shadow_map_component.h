@@ -17,5 +17,4 @@ public:
 	glm::mat4 _projectionMatrix = glm::perspective(
 		glm::radians(90.f), static_cast<float>(_shadowMapWidth) / _shadowMapHeight,
 		1.f, _farPlane);
-	
 };

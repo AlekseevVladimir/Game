@@ -13,7 +13,6 @@ SET(SHADER_SOURCES
 	"shaders/omnidir_shadow_map_shader.h"
 )
 SET(MODEL_SOURCES
-	"model/vao_component.h"
 	"model/model_loader.h" 
 	"model/model_loader.cpp" 
 	"model/model_component.h" 

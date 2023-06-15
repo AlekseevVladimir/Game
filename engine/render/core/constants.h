@@ -9,7 +9,8 @@
 
 #define MAX_POINT_LIGHTS 4
 
-const std::vector<Mesh::Vertex> cubeVertices = {
+const std::vector<Mesh::Vertex> cubeVertices = 
+{
    {{-0.5f, -0.5f, -0.5f},  {0.0f,  0.0f, -1.0f},  {0.0f, 0.0f}},
 	{{0.5f, -0.5f, -0.5f},  {0.0f,  0.0f, -1.0f},  {1.0f, 0.0f}},
 	{{0.5f,  0.5f, -0.5f},  {0.0f,  0.0f, -1.0f},  {1.0f, 1.0f}},
@@ -54,7 +55,8 @@ const std::vector<Mesh::Vertex> cubeVertices = {
 };
 
 
-const std::vector<Mesh::Vertex> rectVertices = {
+const std::vector<Mesh::Vertex> rectVertices = 
+{
 		{{0.0f, 1.0f, 0.0f}, {}, {0.0f, 1.0f}},
 		{{1.0f, 0.0f, 0.0f}, {}, {1.0f, 0.0f}},
 		{{0.0f, 0.0f, 0.0f}, {}, {0.0f, 0.0f}},
@@ -64,8 +66,8 @@ const std::vector<Mesh::Vertex> rectVertices = {
 		{{1.0f, 0.0f, 0.0f}, {}, {1.0f, 0.0f}}
 };
 
-const std::vector<Mesh::Vertex> plateVertices = {
-
+const std::vector<Mesh::Vertex> plateVertices = 
+{
    {{-0.5f, -0.1f, -0.5f}, { 0.0f,  0.0f, -1.0f},  {0.0f, 0.0f}},
 	{{0.5f, -0.1f, -0.5f}, { 0.0f,  0.0f, -1.0f},  {1.0f, 0.0f}},
 	{{0.5f,  0.1f, -0.5f}, { 0.0f,  0.0f, -1.0f},  {1.0f, 1.0f}},
@@ -109,17 +111,21 @@ const std::vector<Mesh::Vertex> plateVertices = {
    {{-0.5f,  0.1f, -0.5f}, { 0.0f,  1.0f,  0.0f},  {0.0f, 1.0f}}
 };
 
-const std::map<std::string, const std::vector<Mesh::Vertex>> verticesConfig = {
+const std::map<std::string, const std::vector<Mesh::Vertex>> verticesConfig = 
+{
 	{"cube", cubeVertices}, {"rectangle", rectVertices}, {"plate", plateVertices},
 };
 
-const std::map<std::string, const std::pair<unsigned int, unsigned int>> drawConfig = {
+const std::map<std::string, const std::pair<unsigned int, unsigned int>> drawConfig = 
+{
 	{"cube", {GL_TRIANGLES, 36}}, {"rectangle", {GL_TRIANGLES, 6}}, {"plate", {GL_TRIANGLES, 36}},
 };
 
-const std::map<std::string, std::pair<std::vector<int>, int>> verticesLayout = {
+const std::map<std::string, std::pair<std::vector<int>, int>> verticesLayout =
+{
 	{"cube", {{3, 3, 2}, 8}}, {"light", {{3}, 8}}, {"rectangle", {{2, 2}, 4}}, {"plate", {{3, 3, 2}, 8}},
 };
 
 const float RES_WIDTH = 800.0f;
 const float RES_HEIGHT = 600.0f;
+

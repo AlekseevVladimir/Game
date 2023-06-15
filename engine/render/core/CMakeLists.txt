@@ -3,11 +3,9 @@ project(render_core)
 SET(CORE_SOURCES
 	"constants.h"
 	"graphics_ctrl.h"
-	"primitives.h"
 	"stb_image.h"
 	"stb_image.cpp"
 	"textures_ctrl.h"
-	"vertices_array.h"
 	"glad.c"
 	"render_system.h"
 	"shaders_manager.h"

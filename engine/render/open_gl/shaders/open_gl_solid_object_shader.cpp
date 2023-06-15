@@ -67,8 +67,6 @@ void SolidObjectShader::configure() {
 		setInt1("shadowMap", 12);
 		glActiveTexture(GL_TEXTURE0);
 	}
-
-
 }
 
 void SolidObjectShader::setMatrices(GameObject* viewPointPtr)
@@ -83,7 +81,6 @@ void SolidObjectShader::setTextureData(std::vector<Mesh::Texture>& textures)
 	TexturesCtrl& texCtrl = TexturesCtrl::getInstance();
 	for (const Mesh::Texture& texture : textures)
 		{
-			// Получаем номер текстуры (значение N в diffuse_textureN)
 			std::string name = texture.type;
 			unsigned idx = texCtrl.bindTexture(texture.id);
 			setInt1(("material." + name).c_str(), idx);
@@ -91,3 +88,4 @@ void SolidObjectShader::setTextureData(std::vector<Mesh::Texture>& textures)
 		setFloat1("material.shininess", 32.0f);
 		glActiveTexture(GL_TEXTURE0);
 }
+
