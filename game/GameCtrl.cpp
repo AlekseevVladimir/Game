@@ -8,7 +8,8 @@
 #include "engine/transform/rotation_system.h"
 #include "engine/render/core/shadows/shadow_map_generation_system.h"
 
-GameCtrl::GameCtrl() {
+GameCtrl::GameCtrl() 
+{
 	createDirectionalLight({ false, false, "" });
 	//createCube({ -3.0f, -2.0f, -3.0f }, { 1.0f, 1.0f, 1.0f }, { true, false, "solidObject" });
 	//createCube({ -3.0f, -9.0f, -3.0f }, { 1.0f, 1.0f, 1.0f }, { true, false, "solidObject" });

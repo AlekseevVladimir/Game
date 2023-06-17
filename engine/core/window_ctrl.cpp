@@ -52,7 +52,8 @@ void WindowCtrl::setWindowDimensions(int width, int height)
 
 void WindowCtrl::draw() 
 {
-	if (glfwWindowShouldClose(m_window) || !m_isValid) {
+	if (glfwWindowShouldClose(m_window) || !m_isValid) 
+	{
 		m_isValid = false;
 		return;
 	}
@@ -73,31 +74,37 @@ void WindowCtrl::draw()
 }
 
 void WindowCtrl::processInput() {
-	if (glfwGetKey(m_window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+	if (glfwGetKey(m_window, GLFW_KEY_ESCAPE) == GLFW_PRESS) 
+	{
 		glfwSetWindowShouldClose(m_window, true);
 	}
-	if (glfwGetKey(m_window, GLFW_KEY_UP) == GLFW_PRESS) {
+	if (glfwGetKey(m_window, GLFW_KEY_UP) == GLFW_PRESS) 
+	{
 		m_alpha = std::clamp(m_alpha + 0.001f, 0.0f, 1.0f);
 	}
-	if (glfwGetKey(m_window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+	if (glfwGetKey(m_window, GLFW_KEY_DOWN) == GLFW_PRESS) 
+	{
 		m_alpha = std::clamp(m_alpha - 0.001f, 0.0f, 1.0f);
 	}
 }
 
-void WindowCtrl::onMousePosChanged(double x, double y) {
+void WindowCtrl::onMousePosChanged(double x, double y) 
+{
 	//for (auto item : GameObjectHolder::getInstance().getObjectsOfType("camera")) {
 	//	item->getComponent<PlayerControlsComponent>()->onMousePosChanged(x, y);
 	//}
 }
 
-void WindowCtrl::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+void WindowCtrl::framebuffer_size_callback(GLFWwindow* window, int width, int height) 
+{
 	static_cast<WindowCtrl*>(glfwGetWindowUserPointer(window))->setWindowDimensions(width, height);
-
 }
 
-void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) 
+{
 	static_cast<WindowCtrl*>(glfwGetWindowUserPointer(window))->onKeyPressed(key, action);
 }
-void mouseCallback(GLFWwindow* window, double x, double y) {
+void mouseCallback(GLFWwindow* window, double x, double y) 
+{
 	static_cast<WindowCtrl*>(glfwGetWindowUserPointer(window))->onMousePosChanged(x, y);
 }

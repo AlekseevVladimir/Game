@@ -7,7 +7,8 @@
 
 class GameObject;
 
-class HierarchyComponent : public Component {
+class HierarchyComponent : public Component 
+{
 public:
 	HierarchyComponent(std::string goID) : Component(goID) {}
 
@@ -19,11 +20,13 @@ public:
 
 	void addChild(std::string goID);
 
-	std::string getParentID() {
+	std::string getParentID() 
+	{
 		return m_parentID;
 	}
 
-	std::unordered_set<std::string> getChildren() {
+	std::unordered_set<std::string> getChildren() 
+	{
 		return m_children;
 	}
 

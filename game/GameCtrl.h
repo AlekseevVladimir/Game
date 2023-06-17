@@ -6,11 +6,14 @@
 #include <vector>
 #include <engine/core/systems_holder.h>
 
-class GameCtrl {
+
+class GameCtrl 
+{
 public:
 	GameCtrl();
 
-	void tick(float delta) {
+	void tick(float delta) 
+	{
 		SystemsHolder::getInstance().process(delta);
 		/*meObjectHolder::getInstance();
 		for (auto& object : objectCtrl.getObjects()) {
@@ -19,7 +22,8 @@ public:
 		*/
 	}
 private:
-	std::vector<std::vector<int>> readLevelData() {
+	std::vector<std::vector<int>> readLevelData() 
+	{
 		std::fstream file;
 		file.open("level_data/level1.txt", std::ios::in);
 		std::string buf;

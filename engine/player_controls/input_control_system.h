@@ -6,13 +6,13 @@
 
 class GLFWwindow;
 
-class InputControlSystem : public System {
+class InputControlSystem : public System 
+{
 public:
-	InputControlSystem() {
+	InputControlSystem() {}
 
-	}
-
-	void process(float delta) override {
+	void process(float delta) override 
+	{
 		processInput();
 		processMousePos();
 

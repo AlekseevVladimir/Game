@@ -5,6 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+// TODO remove render settings
 GameObject* createCube(
 	glm::vec3 pos, glm::vec3 scale = glm::vec3(1.0f), GameObject::RenderSettings renderSettings = {});
 

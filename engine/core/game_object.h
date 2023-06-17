@@ -25,6 +25,7 @@ public:
 		std::string shader = "";
 	};
 
+	// TODO move nontemplate code to cpp
 	GameObject(unsigned int id, std::string alias, RenderSettings renderSettings) 
 		: m_id(id)
 		, m_alias(alias + std::to_string(id)) 
@@ -41,7 +42,8 @@ public:
 		}
 	};
 
-	const RenderSettings getRenderSettings() {
+	const RenderSettings getRenderSettings() 
+	{
 		return m_renderSettings;
 	}
 

@@ -3,7 +3,8 @@
 #include "glad/glad.h"
 
 
-unsigned int TexturesCtrl::bindTexture(unsigned int textureID) {
+unsigned int TexturesCtrl::bindTexture(unsigned int textureID) 
+{
 	auto found = std::find(m_textureIDs.begin(), m_textureIDs.end(), textureID);
 	if (found == m_textureIDs.end()) 
 	{
@@ -24,7 +25,8 @@ unsigned int TexturesCtrl::bindTexture(unsigned int textureID) {
 }
 
 
-void TexturesCtrl::bindAllTextures() {
+void TexturesCtrl::bindAllTextures() 
+{
 	for (size_t i = 0; i < m_textureIDs.size(); i++) 
 	{
 		glActiveTexture(GL_TEXTURE0 + i);
@@ -36,7 +38,8 @@ void TexturesCtrl::bindAllTextures() {
 }
 
 
-unsigned int TexturesCtrl::loadImage(std::string imageName, std::string directory) {
+unsigned int TexturesCtrl::loadImage(std::string imageName, std::string directory) 
+{
 	int width, height, nrChannels;
 	const auto found = m_loadedTextures.find(imageName);
 	if (found != m_loadedTextures.end()) 
@@ -46,21 +49,23 @@ unsigned int TexturesCtrl::loadImage(std::string imageName, std::string director
 	std::string path = directory + "/" + std::string(imageName);
 	//stbi_set_flip_vertically_on_load(true);
 	unsigned char* data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
-	if (data) {
+	if (data) 
+	{
 		GLenum format;
-		switch (nrChannels) {
-		case 1:
-			format = GL_RED;
-			break;
-		case 3:
-			format = GL_RGB;
-			break;
-		case 4:
-			format = GL_RGBA;
-			break;
-		default:
-			throw(std::logic_error("Unexpected number of channels"));
-			break;
+		switch (nrChannels) 
+		{
+			case 1:
+				format = GL_RED;
+				break;
+			case 3:
+				format = GL_RGB;
+				break;
+			case 4:
+				format = GL_RGBA;
+				break;
+			default:
+				throw(std::logic_error("Unexpected number of channels"));
+				break;
 		}
 		m_textureIDs.emplace_back();
 		glGenTextures(1, &m_textureIDs.back());
@@ -79,10 +84,10 @@ unsigned int TexturesCtrl::loadImage(std::string imageName, std::string director
 		glBindTexture(GL_TEXTURE_2D, 0);
 		return m_textureIDs.back();
 	}
-	else {
+	else 
+	{
 		stbi_image_free(data);
 		throw(std::logic_error("Failed to load texture" + imageName));
-
 	}
 }
 

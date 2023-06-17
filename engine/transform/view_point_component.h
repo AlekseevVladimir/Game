@@ -2,6 +2,4 @@
 
 #include <engine/core/component.h>
 
-class ViewPointComponent : public Component {
-
-};
+class ViewPointComponent : public Component {};

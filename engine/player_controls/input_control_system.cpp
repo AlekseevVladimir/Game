@@ -12,24 +12,31 @@
 #include <engine/transform/movement_request_component.h>
 #include <engine/player_controls/player_controls_component.h>
 
-void InputControlSystem::processInput() {
+void InputControlSystem::processInput() 
+{
 	const float cameraSpeed = 0.1f; 
 	GLFWwindow* window = WindowCtrl::getInstance().getWindow();
 	Vector3<float> movementModifier;
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) 
+	{
 		movementModifier.z++;
 	}
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) 
+	{
 		movementModifier.z--;
 	}
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) 
+	{
 		movementModifier.x--;
 	}
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) 
+	{
 		movementModifier.x++;
 	}
-	if (!movementModifier.isZero()) {
-		for (auto goPtr : GameObjectHolder::getInstance().getObjectsWithComponents<PlayerControlsComponent, PositionComponent>()) {
+	if (!movementModifier.isZero()) 
+	{
+		for (auto goPtr : GameObjectHolder::getInstance().getObjectsWithComponents<PlayerControlsComponent, PositionComponent>()) 
+		{
 			Vector3<float> direction = goPtr->getComponent<RotationComponent>()->getDirection();
 			Vector3<float> modifierBuf(movementModifier);
 			movementModifier = direction.cross({ 0.0f, 1.0f, 0.0f }) * modifierBuf.x +
@@ -40,7 +47,8 @@ void InputControlSystem::processInput() {
 	}
 }
 
-void InputControlSystem::processMousePos() {
+void InputControlSystem::processMousePos() 
+{
 	double xpos, ypos;
 	glfwGetCursorPos(WindowCtrl::getInstance().getWindow(), &xpos, &ypos);
 	if (m_firstMouse)
@@ -57,19 +65,25 @@ void InputControlSystem::processMousePos() {
 	const float sensitivity = 0.05f;
 	xoffset *= sensitivity;
 	yoffset *= sensitivity;
-	for (auto goPtr : GameObjectHolder::getInstance().getObjectsWithComponents<PlayerControlsComponent, RotationComponent>()) {
+	for (auto goPtr : GameObjectHolder::getInstance().getObjectsWithComponents<PlayerControlsComponent, RotationComponent>()) 
+	{
 		auto transform = goPtr->getComponent<RotationComponent>();
 		float yaw = transform->getYaw();
 		float pitch = transform->getPitch();
 		yaw += xoffset;
 		pitch += yoffset;
-		if (!xoffset && !yoffset) {
+		if (!xoffset && !yoffset) 
+		{
 			continue;
 		}
 		if (pitch > 89.0f)
+		{
 			pitch = 89.0f;
+		}
 		if (pitch < -89.0f)
+		{
 			pitch = -89.0f;
+		}
 		goPtr->createComponent<RotationRequestComponent>(xoffset, yoffset, 0);
 	}
 }
