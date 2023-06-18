@@ -2,6 +2,17 @@
 
 #include "engine/core/system.h"
 
+class ShadowMapFramebuffer
+{
+public:
+	ShadowMapFramebuffer();
+
+	virtual ~ShadowMapFramebuffer();
+
+	virtual void _bindTextureAsTarget(unsigned int textureID) = 0;
+	
+	unsigned int _FBOID;
+};
 
 class ShadowMapGenerationSystem : public System
 {

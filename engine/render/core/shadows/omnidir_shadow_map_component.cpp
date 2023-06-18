@@ -3,11 +3,10 @@
 
 
 OmnidirShadowMapComponent::OmnidirShadowMapComponent(std::string goID) 
-	: Component(goID) 
+	: ShadowMapComponent(goID) 
 {
-	glGenTextures(1, &m_shadowMapID);
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, m_shadowMapID);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, _shadowMapID);
 	for (unsigned int i = 0; i < 6; ++i)
 	{
 		glTexImage2D(
@@ -22,4 +21,15 @@ OmnidirShadowMapComponent::OmnidirShadowMapComponent(std::string goID)
 	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 	glActiveTexture(GL_TEXTURE0);
 
+}
+
+OmnidirShadowMapComponent::~OmnidirShadowMapComponent()
+{
+	glDeleteTextures(1, &_shadowMapID);
+}
+
+void OmnidirShadowMapComponent::_bindToCurrentFramebuffer()
+{
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+		_shadowMapID, 0);
 }

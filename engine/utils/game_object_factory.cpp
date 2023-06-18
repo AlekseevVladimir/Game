@@ -12,7 +12,7 @@
 #include "engine/transform/scale_component.h"
 #include <engine/render/core/model/material_component.h>
 #include <engine/render/core/textures_ctrl.h>
-#include <engine/render/core/shadows/shadow_map_component.h>
+#include <engine/render/core/shadows/directional_shadow_map_component.h>
 #include <engine/render/core/shadows/omnidir_shadow_map_shader_component.h>
 #include <engine/render/open_gl/model/model_loader.h>
 #include <engine/render/open_gl/model/model.h>
@@ -107,7 +107,7 @@ GameObject* createDirectionalLight(GameObject::RenderSettings renderSettings)
 	GameObject* goPtr = GameObjectHolder::getInstance().createGO("directionalLight", renderSettings);
 	goPtr->createComponent<LightEmitterComponent>();
 	goPtr->createComponent<LightDirectionComponent>();
-	goPtr->createComponent<ShadowMapComponent>();
+	goPtr->createComponent<DirectionalShadowMapComponent>();
 	return goPtr;
 }
 

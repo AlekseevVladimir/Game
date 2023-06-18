@@ -5,7 +5,7 @@
 #include "engine/render/core/textures_ctrl.h"
 #include "engine/render/core/light/light_direction_component.h"
 #include "engine/render/core/light/light_emitter_component.h"
-#include "engine/render/core/shadows/shadow_map_component.h"
+#include "engine/render/core/shadows/directional_shadow_map_component.h"
 #include "engine/render/core/shadows/omnidir_shadow_map_component.h"
 #include "engine/render/utils/render_utils.h"
 #include "glm/glm.hpp"
@@ -38,7 +38,7 @@ void SolidObjectShader::configure() {
 		setFloat1("farPlane", shadowMap->_farPlane);
 		
 		glActiveTexture(GL_TEXTURE0 + 13);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, shadowMap->m_shadowMapID);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, shadowMap->_shadowMapID);
 		setInt1("omnidirShadowMap", 13);
 		glActiveTexture(GL_TEXTURE0);
 	}
@@ -52,7 +52,7 @@ void SolidObjectShader::configure() {
 		LightDirectionComponent* lightDirectionComponentPtr =
 			goPtr->getComponent<LightDirectionComponent>();
 		setFloat3("directionalLight.direction", &lightDirectionComponentPtr->getDirection()[0]);
-		ShadowMapComponent* shadowMapCmp = goPtr->getComponent<ShadowMapComponent>();
+		DirectionalShadowMapComponent* shadowMapCmp = goPtr->getComponent<DirectionalShadowMapComponent>();
 
 		glm::mat lightView = glm::lookAt(
 			lightDirectionComponentPtr->getFrom().getGlm(),
@@ -63,7 +63,7 @@ void SolidObjectShader::configure() {
 		setMatrix4Float("lightSpaceMatrix", GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 
 		glActiveTexture(GL_TEXTURE0 + 12);
-		glBindTexture(GL_TEXTURE_2D, shadowMapCmp->m_shadowMapID);
+		glBindTexture(GL_TEXTURE_2D, shadowMapCmp->_shadowMapID);
 		setInt1("shadowMap", 12);
 		glActiveTexture(GL_TEXTURE0);
 	}

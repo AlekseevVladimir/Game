@@ -27,12 +27,15 @@ SET(MODEL_SOURCES
 SET(SHADOW_SOURCES
 	"shadows/shadow_map_generation_system.h"
 	"shadows/shadow_map_generation_system.cpp"
-	"shadows/shadow_map_component.h" 
-	"shadows/shadow_map_component.cpp" 
+	"shadows/directional_shadow_map_component.h" 
+	"shadows/directional_shadow_map_component.cpp" 
 	"shadows/shadow_map_shader_component.h"
 	"shadows/omnidir_shadow_map_component.h"
 	"shadows/omnidir_shadow_map_component.cpp"
-	"shadows/omnidir_shadow_map_shader_component.h")
+	"shadows/omnidir_shadow_map_shader_component.h" 
+	"shadows/shadow_map_component.h"
+	"shadows/shadow_map_component.cpp"
+ )
 
 SOURCE_GROUP("light" FILES ${LIGHT_SOURCES})
 SOURCE_GROUP("model" FILES ${MODEL_SOURCES})

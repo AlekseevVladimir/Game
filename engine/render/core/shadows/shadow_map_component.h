@@ -1,14 +1,16 @@
 #pragma once
-
 #include "engine/core/component.h"
-#include "glad/glad.h"
 
 class ShadowMapComponent : public Component
 {
 public:
-	ShadowMapComponent(std::string goID);
+	ShadowMapComponent(std::string alias, unsigned int shadowMapWidth = 2048, unsigned int shadowMapHeight = 2048);
 
-	unsigned int m_shadowMapID;
-	unsigned int _shadowWidth = 2048;
-	unsigned int _shadowHeight = 2048;
+	virtual ~ShadowMapComponent();
+
+	virtual void _bindToCurrentFramebuffer() = 0;
+
+	unsigned int _shadowMapID;
+	unsigned int _shadowMapWidth;
+	unsigned int _shadowMapHeight;
 };
