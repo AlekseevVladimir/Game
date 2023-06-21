@@ -18,7 +18,7 @@ void MovementSystem::process(float delta)
 		}
 			
 		Vector3<float> position = positionComponent->getPos();
-		position += posDiff * 0.001f;
+		position += posDiff * 0.01f;
 		positionComponent->setPos(position);
 		goPtr->removeComponents<MovementRequestComponent>();
 	}

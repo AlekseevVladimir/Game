@@ -31,28 +31,13 @@ ShadowMapFramebuffer::~ShadowMapFramebuffer()
 	glDeleteFramebuffers(1, &_FBOID);
 }
 
-ShadowMapGenerationSystem::ShadowMapGenerationSystem()
-{
-	glGenFramebuffers(1, &m_depthMapFBO);
-	glBindFramebuffer(GL_FRAMEBUFFER, m_depthMapFBO);
-	glDrawBuffer(GL_NONE);
-	glReadBuffer(GL_NONE);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	glGenFramebuffers(1, &m_depthCubeMapFBO);
-	glBindFramebuffer(GL_FRAMEBUFFER, m_depthCubeMapFBO);
-	glDrawBuffer(GL_NONE);
-	glReadBuffer(GL_NONE);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
-
 void ShadowMapGenerationSystem::process(float delta)
 {
 	for (GameObject* goPtr :
 		GameObjectHolder::getInstance().getObjectsWithComponent<DirectionalShadowMapComponent>())
 	{
 		configureFramebuffer<ShadowMapShaderComponent, DirectionalShadowMapComponent>(
-			goPtr, m_depthMapFBO, goPtr);
+			goPtr, m_depthMapFBO._FBOID, goPtr);
 	}
 
 	for (GameObject* goPtr :
@@ -60,9 +45,8 @@ void ShadowMapGenerationSystem::process(float delta)
 	{
 	
 		configureFramebuffer<OmnidirShadowMapShaderComponent, OmnidirShadowMapComponent>(
-			goPtr, m_depthCubeMapFBO, goPtr);
+			goPtr, m_depthCubeMapFBO._FBOID, goPtr);
 	}
-		
 	
 	glActiveTexture(GL_TEXTURE0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -79,19 +63,8 @@ void configureFramebuffer(
 
 	glBindFramebuffer(GL_FRAMEBUFFER, FBOID);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	// TODO fix messy if statement here
-	/*
-	if (FBOID == 2)
-	{
-		glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
-			shadowMapID, 0);
-	}
-	else 
-	{
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, 
-			textureTargetType, shadowMapID, 0);
-	}
-	*/
+	// TODO Do some abstraction here
+	
 	omnidirShadow->_bindToCurrentFramebuffer();
 
 
