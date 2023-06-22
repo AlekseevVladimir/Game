@@ -14,9 +14,12 @@ GameCtrl::GameCtrl()
 	//createCube({ -3.0f, -2.0f, -3.0f }, { 1.0f, 1.0f, 1.0f }, { true, false, "solidObject" });
 	//createCube({ -3.0f, -9.0f, -3.0f }, { 1.0f, 1.0f, 1.0f }, { true, false, "solidObject" });
 	//createCube({ -3.0f, 9.0f, -3.0f }, { 1.0f, 1.0f, 1.0f }, { true, false, "solidObject" });
+	//TODO cube casts no shadow from dir light
 	createCube({ 1.0f, 1.0f, 3.0f }, { 1.0f, 1.0f, 1.0f }, { true, false, "solidObject" });
 	createCamera({ 0.0f, 0.0f, 0.0f }, 0.0f, 0.0f, 0.0f, { false, false, "" });
+
 	createPointLight({ 3.0f, 3.0f, 3.0f }, { 1.0f, 1.0f , 1.0f }, { true, false, "light" });
+
 	createFloor({0.0f, -1.0f, 0.0f}, {true, false, "solidObject"});
 	//createTroll({true, false, "solidObject"});
 	//createFloor({ 0.0f, -1.0f, 0.0f }, { true, false, "solidObject" });

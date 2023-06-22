@@ -70,8 +70,17 @@ vec3 calculateDirLight();
 vec3 calculatePointLight(PointLight light);
 vec3 calculateSpotLight();
 
-float calculateShadow(vec4 fragPosLightSpace);
+float calculateShadow(vec4 fragPosLightSpace, vec3 lightDir);
 float calculateOmnidirShadow(vec3 fragPos, vec3 lightPos);
+
+vec3 sampleOffsetDirections[20] = vec3[]
+(
+   vec3( 1,  1,  1), vec3( 1, -1,  1), vec3(-1, -1,  1), vec3(-1,  1,  1), 
+   vec3( 1,  1, -1), vec3( 1, -1, -1), vec3(-1, -1, -1), vec3(-1,  1, -1),
+   vec3( 1,  1,  0), vec3( 1, -1,  0), vec3(-1, -1,  0), vec3(-1,  1,  0),
+   vec3( 1,  0,  1), vec3(-1,  0,  1), vec3( 1,  0, -1), vec3(-1,  0, -1),
+   vec3( 0,  1,  1), vec3( 0, -1,  1), vec3( 0, -1, -1), vec3( 0,  1, -1)
+);   
 
 void main()
 {
@@ -105,7 +114,7 @@ vec3 calculateDirLight() {
     vec3 reflectDir = reflect(-lightDir, norm); 
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     vec3 specular = directionalLight.specular * spec; 
-    float shadow = calculateShadow(FragPosLightSpace);
+    float shadow = calculateShadow(FragPosLightSpace, lightDir);
     return (ambient + (1.0 - shadow) * (diffuse + specular)) * color;
 }
 
@@ -159,7 +168,7 @@ vec3 calculateSpotLight() {
     return (ambient + diffuse + specular) * attenuation * intensity;
 }
 
-float calculateShadow(vec4 fragPosLightSpace)
+float calculateShadow(vec4 fragPosLightSpace, vec3 lightDir)
 {
 	vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
 	projCoords = projCoords * 0.5 + 0.5;
@@ -167,13 +176,27 @@ float calculateShadow(vec4 fragPosLightSpace)
 	{
 		return 0.0;
 	}
-	float closestDepth = texture(shadowMap, projCoords.xy).r;
 	float currentDepth = projCoords.z;
-	float bias = 0.005;
-	float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
-	return shadow;
+	
+	// new bias or pcf broke cube's shadow
+	float bias = max(0.005, 0.1 * (1 - dot(Normal, lightDir)));
+	
+	float shadow = 0.0;
+	// TODO READ ABOUT TEXTURE SIZE, LOD, MIP MAPS
+	vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+	for (int x = -1; x <= 1; ++x)
+	{
+		for (int y = -1; y <= 1; ++y)
+		{
+			float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r;
+			shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;
+		}
+	}
+	
+	//float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
+	return shadow / 9.0;
 }
-
+/*
 float calculateOmnidirShadow(vec3 fragPos, vec3 lightPos)
 {
 	vec3 fragToLight = fragPos - lightPos;
@@ -183,4 +206,27 @@ float calculateOmnidirShadow(vec3 fragPos, vec3 lightPos)
 	float bias = 0.005f;
 	float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
 	return shadow;
+}
+*/
+
+float calculateOmnidirShadow(vec3 fragPos, vec3 lightPos)
+{
+	float shadow = 0.0;
+	float bias = 0.15;
+	int samples = 20;
+	vec3 fragToLight = fragPos - lightPos;
+	float currentDepth = length(fragToLight);
+	float viewDistance = length(viewPos - fragPos);
+	float diskRadius = (1.0 + (viewDistance / farPlane)) / 25.0;
+	for (int i = 0; i < samples; ++i)
+	{
+		float closestDepth = texture(
+			omnidirShadowMap, fragToLight + sampleOffsetDirections[i] * diskRadius).r;
+		closestDepth *= farPlane;
+		if (currentDepth - bias > closestDepth)
+		{
+			shadow += 1.0;
+		}
+	}
+	return shadow / float(samples);
 }
