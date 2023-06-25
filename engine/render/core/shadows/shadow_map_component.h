@@ -4,7 +4,7 @@
 class ShadowMapComponent : public Component
 {
 public:
-	ShadowMapComponent(std::string alias, unsigned int shadowMapWidth = 2048, unsigned int shadowMapHeight = 2048);
+	ShadowMapComponent(std::string alias, unsigned int shadowMapWidth = 4096, unsigned int shadowMapHeight = 4096);
 
 	virtual ~ShadowMapComponent();
 

@@ -23,19 +23,17 @@ out mat3 TBN;
 void main()
 {
 	vec3 T = normalize(vec3(model * vec4(aTangent, 0.0)));
-	// TODO check out why is this like this
-	Normal = mat3(transpose(inverse(model))) * aNormal;
 	vec3 N = normalize(vec3(model * vec4(aNormal, 0.0)));
 	//T = normalize(T - dot(T, N) * N);
 	vec3 B = normalize(vec3(model * vec4(aBiTangent, 0.0)));//cross(N, T);
 	
-	TBN = mat3(T, B, N);
+	TBN = transpose(mat3(T, B, N));
 
     gl_Position = projection * view * model * vec4(aPos, 1.0);
-    FragPos = vec3(model * vec4(aPos, 1.0));
+    FragPos = TBN * vec3(model * vec4(aPos, 1.0));
     Normal = mat3(transpose(inverse(model))) * aNormal;
 
 	FragPosLightSpace = lightSpaceMatrix * vec4(FragPos, 1.0);
     TexCoords = aTexCoords;
-	ViewPos = viewPos;
+	ViewPos = TBN * viewPos;
 } 

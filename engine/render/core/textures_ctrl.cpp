@@ -49,8 +49,19 @@ unsigned int TexturesCtrl::loadImage(std::string imageName, std::string director
 	std::string path = directory + "/" + std::string(imageName);
 	//stbi_set_flip_vertically_on_load(true);
 	unsigned char* data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
+	
 	if (data) 
 	{
+//		if (imageName == "Troll_Normals.jpg")
+//		{
+//			const int res = width * height;
+//			for (int i = 0; i < res; ++i)
+//			{
+//				const int n = i * nrChannels + 1;
+//				data[n] = 255 - data[n];
+//			}
+//
+//		}
 		GLenum format;
 		switch (nrChannels) 
 		{

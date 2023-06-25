@@ -41,10 +41,21 @@ ElementsMesh processMesh(aiMesh* mesh, const aiScene* scene)
 		vector.y = mesh->mVertices[i].y;
 		vector.z = mesh->mVertices[i].z;
 		vertex.Position = vector;
+
 		vector.x = mesh->mNormals[i].x;
 		vector.y = mesh->mNormals[i].y;
 		vector.z = mesh->mNormals[i].z;
 		vertex.Normal = vector;
+
+		vector.x = mesh->mTangents[i].x;
+		vector.y = mesh->mTangents[i].y;
+		vector.z = mesh->mTangents[i].z;
+		vertex.Tangent = vector;
+		
+		vector.x = mesh->mBitangents[i].x;
+		vector.y = mesh->mBitangents[i].y;
+		vector.z = mesh->mBitangents[i].z;
+		vertex.BiTangent = vector;
 		if (mesh->mTextureCoords[0]) // если меш содержит текстурные координаты
 		{
 			glm::vec2 vec;
@@ -75,12 +86,20 @@ ElementsMesh processMesh(aiMesh* mesh, const aiScene* scene)
 	if (mesh->mMaterialIndex >= 0)
 	{
 		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+
 		std::vector<Mesh::Texture> diffuseMaps = loadMaterialTextures(material,
 			aiTextureType_DIFFUSE, "texture_diffuse");
 		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+
 		std::vector<Mesh::Texture> specularMaps = loadMaterialTextures(material,
 			aiTextureType_SPECULAR, "texture_specular");
 		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+
+		
+		std::vector<Mesh::Texture> normalMaps = loadMaterialTextures(material,
+			aiTextureType_HEIGHT, "texture_normal");
+		textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+		
 	}
 
 	return ElementsMesh(vertices, textures, indices);
@@ -107,7 +126,8 @@ Model ModelLoader::loadModel(std::string name)
 	auto test1 = std::filesystem::current_path();
 	std::cout << test1;
 	const aiScene* scene = importer.ReadFile(
-		"../../resources/models/troll/troll.obj", aiProcess_Triangulate | aiProcess_FlipUVs);
+		"../../resources/models/troll/troll.obj", 
+		aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) 
 	{
