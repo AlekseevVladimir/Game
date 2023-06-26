@@ -16,6 +16,7 @@ struct Material {
 	sampler2D texture_normal;
     sampler2D emission;
     float shininess;
+	int texture_normal_set;
 }; 
 
 uniform float farPlane;
@@ -83,6 +84,8 @@ vec3 sampleOffsetDirections[20] = vec3[]
    vec3( 0,  1,  1), vec3( 0, -1,  1), vec3( 0, -1, -1), vec3( 0,  1, -1)
 );   
 
+vec3 getNormal();
+
 void main()
 {
     vec3 result = calculateDirLight();
@@ -93,8 +96,7 @@ void main()
         result += calculateSpotLight();
     }
 	
-    vec3 norm = texture(material.texture_normal, TexCoords).rgb;
-	norm = normalize(TBN * (norm * 2.0 - 1.0));
+    vec3 norm = getNormal();
     //FragColor = vec4(norm, 1.0);
 	FragColor = vec4(result, 1.0);
 	//FragColor = vec4(farPlane);
@@ -108,10 +110,7 @@ vec3 calculateDirLight() {
 	vec3 color = vec3(texture(material.texture_diffuse, TexCoords));
     vec3 ambient = directionalLight.ambient;
 
-    vec3 norm = texture(material.texture_normal, TexCoords).rgb;
-	norm = normalize(TBN * (norm * 2.0 - 1.0));
-	//norm = normalize(norm * 2.0 - 1.0);
-    //vec3 norm = normalize(Normal);
+    vec3 norm = getNormal();
     
 	vec3 lightDir = normalize(-directionalLight.direction);
 
@@ -131,10 +130,7 @@ vec3 calculatePointLight(PointLight light) {
 
     vec3 ambient = light.ambient * vec3(texture(material.texture_diffuse, TexCoords));
 
-    vec3 norm = texture(material.texture_normal, TexCoords).rgb;
-	norm = normalize(TBN * (norm * 2.0 - 1.0));
-	//norm = normalize(norm * 2.0 - 1.0);
-    //vec3 norm = normalize(Normal);
+    vec3 norm = getNormal();
 	
 	vec3 lightDir = normalize(light.position - FragPos);
 
@@ -158,10 +154,7 @@ vec3 calculateSpotLight() {
 
     vec3 ambient = spotLight.ambient * vec3(texture(material.texture_diffuse, TexCoords));
 
-    vec3 norm = texture(material.texture_normal, TexCoords).rgb;
-	norm = normalize(TBN * (norm * 2.0 - 1.0));
-	//norm = normalize(norm * 2.0 - 1.0);
-    //vec3 norm = normalize(Normal);
+    vec3 norm = getNormal();
     
 	vec3 lightDir = normalize(spotLight.position - FragPos);
 
@@ -187,7 +180,6 @@ vec3 calculateSpotLight() {
 
 float calculateShadow(vec4 fragPosLightSpace, vec3 lightDir)
 {
-	return 0.0;
 	vec3 projCoords = (fragPosLightSpace.xyz / fragPosLightSpace.w);
 	projCoords = projCoords * 0.5 + 0.5;
 	if (projCoords.z > 1.0)
@@ -197,8 +189,7 @@ float calculateShadow(vec4 fragPosLightSpace, vec3 lightDir)
 	float currentDepth = projCoords.z;
 	
 	
-    vec3 norm = texture(material.texture_normal, TexCoords).rgb;
-	norm = normalize(norm * 2.0 - 1.0);
+    vec3 norm = getNormal();
 	
 	// new bias or pcf broke cube's shadow
 	float bias = max(0.005, 0.1 * (1 - dot(norm, lightDir)));
@@ -255,3 +246,19 @@ float calculateOmnidirShadow(vec3 fragPos, vec3 lightPos)
 	return shadow / float(samples);
 }
 */
+
+vec3 getNormal()
+{
+	vec3 norm;
+	if(material.texture_normal_set > 0)
+	{
+		norm = texture(material.texture_normal, TexCoords).rgb;
+		//probably remove tbn from here
+		norm = normalize(TBN * (norm * 2.0 - 1.0));
+	}
+	else
+	{
+		norm = normalize(Normal);
+	}
+	return norm;
+}

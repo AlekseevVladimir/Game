@@ -79,13 +79,19 @@ void SolidObjectShader::setMatrices(GameObject* viewPointPtr)
 void SolidObjectShader::setTextureData(std::vector<Mesh::Texture>& textures) 
 {
 	TexturesCtrl& texCtrl = TexturesCtrl::getInstance();
+	bool hasNormalMap = false;
 	for (const Mesh::Texture& texture : textures)
+	{
+		std::string name = texture.type;
+		unsigned idx = texCtrl.bindTexture(texture.id);
+		setInt1(("material." + name).c_str(), idx);
+		if (name == "texture_normal")
 		{
-			std::string name = texture.type;
-			unsigned idx = texCtrl.bindTexture(texture.id);
-			setInt1(("material." + name).c_str(), idx);
+			hasNormalMap = true;
 		}
-		setFloat1("material.shininess", 32.0f);
-		glActiveTexture(GL_TEXTURE0);
+	}
+	setInt1("material.texture_normal_set", hasNormalMap ? 1 : 0);
+	setFloat1("material.shininess", 32.0f);
+	glActiveTexture(GL_TEXTURE0);
 }
 

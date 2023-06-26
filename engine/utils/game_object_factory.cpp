@@ -188,7 +188,9 @@ std::shared_ptr<Model> generateModel(
 	texturesCtrl.setWrapParams(GL_REPEAT, GL_REPEAT);
 	unsigned int specularMap = texturesCtrl.loadImage(specularName);
 	std::vector<Mesh::Vertex> vertices = cubeVertices;
-	std::vector<Mesh::Texture> textures{ {texture, "texture_diffuse", ""}, {specularMap, "texture_specular", ""} };
+	std::vector<Mesh::Texture> textures{ 
+		{texture, "texture_diffuse", ""}, {specularMap, "texture_specular", ""},
+	};
 	Mesh mesh{ vertices, textures };
 	std::shared_ptr<Model> model = std::make_shared<Model>();
 	// TODO FIX THIS
