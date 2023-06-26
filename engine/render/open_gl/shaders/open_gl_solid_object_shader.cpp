@@ -90,6 +90,7 @@ void SolidObjectShader::setTextureData(std::vector<Mesh::Texture>& textures)
 			hasNormalMap = true;
 		}
 	}
+	// TODO find better solution to determine if normal map or avg normal should be used in shader
 	setInt1("material.texture_normal_set", hasNormalMap ? 1 : 0);
 	setFloat1("material.shininess", 32.0f);
 	glActiveTexture(GL_TEXTURE0);
