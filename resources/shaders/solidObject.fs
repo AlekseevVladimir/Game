@@ -191,8 +191,8 @@ float calculateShadow(vec4 fragPosLightSpace, vec3 lightDir)
 	
     vec3 norm = getNormal();
 	
-	// new bias or pcf broke cube's shadow
-	float bias = max(0.005, 0.1 * (1 - dot(norm, lightDir)));
+	// TODO try using sollution from learnopengl as this creates shadow acne on the model
+	float bias = max(0.05, 0.1 * (1 - dot(norm, lightDir)));
 	
 	float shadow = 0.0;
 	// TODO READ ABOUT TEXTURE SIZE, LOD, MIP MAPS
