@@ -209,7 +209,7 @@ float calculateShadow(vec4 fragPosLightSpace, vec3 lightDir)
 	//float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
 	return shadow / 9.0;
 }
-
+/*
 float calculateOmnidirShadow(vec3 fragPos, vec3 lightPos)
 {
 	return 0.0;
@@ -221,8 +221,8 @@ float calculateOmnidirShadow(vec3 fragPos, vec3 lightPos)
 	float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
 	return shadow;
 }
+*/
 
-/*
 float calculateOmnidirShadow(vec3 fragPos, vec3 lightPos)
 {
 	float shadow = 0.0;
@@ -245,7 +245,7 @@ float calculateOmnidirShadow(vec3 fragPos, vec3 lightPos)
 	}
 	return shadow / float(samples);
 }
-*/
+
 
 vec3 getNormal()
 {
