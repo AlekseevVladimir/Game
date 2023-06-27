@@ -75,8 +75,11 @@ void configureFramebuffer(
 		throw(std::exception());
 	}
 		
-	glCullFace(GL_FRONT);
-	SystemsHolder::getInstance().getSystem<RenderSystem>()->
-		render<TShaderComponent>(lightObjectPtr);
-	glCullFace(GL_BACK);
+	//by default the culling is disabled TODO enable it. also there is some bright spot on troll's chest which should be in shadow
+	//glCullFace(GL_FRONT);
+	//glDisable(GL_CULL_FACE);
+	SystemsHolder::getInstance().getSystem<RenderSystem>()->render<TShaderComponent>(lightObjectPtr);
+
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_NONE);
 }
