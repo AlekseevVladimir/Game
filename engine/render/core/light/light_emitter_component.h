@@ -16,7 +16,7 @@ public:
 
 	LightEmitterComponent(std::string goID) : Component(goID) 
 	{
-		m_light = { {0.1f, 0.1f, 0.1f}, {1.0f, 1.0f, 1.0f}, {1.0, 1.0f, 1.0f} };
+		m_light = { {0.2f, 0.2f, 0.2f}, {1.0f, 1.0f, 1.0f}, {1.0, 1.0f, 1.0f} };
 	}
 
 	const Light getLightData() 

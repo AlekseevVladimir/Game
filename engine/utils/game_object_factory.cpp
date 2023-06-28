@@ -172,7 +172,7 @@ GameObject* createTroll(glm::vec3 pos, GameObject::RenderSettings renderSettings
 	goPtr->createComponent<OmnidirShadowMapShaderComponent>(omnidirShadowMapShader);
 	goPtr->createComponent<PositionComponent>(pos);
 	// TODO yaw is not working
-	goPtr->createComponent<RotationComponent>(90.f, 0.f, 0.f);
+	goPtr->createComponent<RotationComponent>(0.f, 0.f, 0.f);
 	//TransformComponent* transform = goPtr->createComponent<TransformComponent>();
 	//transform->setPos(pos);
 	//goPtr->createComponent<ModelComponent>("models/troll/troll.obj");
