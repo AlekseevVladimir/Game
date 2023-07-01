@@ -1,7 +1,16 @@
 #version 330 core
+in vec3 Normal;
+in vec3 FragPos;
+in vec2 TexCoords;
+in vec4 FragPosLightSpace;
+in vec3 ViewPos;
+in mat3 TBN;
 
+out vec4 FragColor;
+  
 #define MAX_POINT_LIGHTS 4
 
+uniform int texture_normal_set;
 struct Material {
     sampler2D texture_diffuse;
     sampler2D texture_specular;
@@ -10,6 +19,7 @@ struct Material {
     float shininess;
 };
 
+uniform float farPlane;
 struct PointLight {
     vec3 position;
   
@@ -22,6 +32,14 @@ struct PointLight {
     float quadratic;
 };
 
+struct DirectionalLight {
+    vec3 direction;
+  
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
+ 
 struct SpotLight {
     vec3 position;
     vec3 direction;
@@ -37,35 +55,12 @@ struct SpotLight {
     vec3 specular;
 };
 
-
-in vec3 Normal;
-in vec3 FragPos;
-in vec2 TexCoords;
-in vec4 FragPosLightSpace;
-in vec3 ViewPos;
-//in vec3 adjustedFragPosLightSpace;
-
-in mat3 TBN;
-in DirectionalLightVSOut 
-{
-    vec3 direction;
-  
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-} directionalLightVSOut;
-
-out vec4 FragColor;
-
-uniform int texture_normal_set;
-
-uniform float farPlane;
-
 uniform PointLight pointLights[MAX_POINT_LIGHTS];
 uniform int numPointLights;
 
 uniform int useSpotLight = 0;
 
+uniform DirectionalLight directionalLight;
 uniform SpotLight spotLight;
   
 uniform Material material;
@@ -113,20 +108,20 @@ void main()
 
 vec3 calculateDirLight() {
 	vec3 color = vec3(texture(material.texture_diffuse, TexCoords));
-    vec3 ambient = directionalLightVSOut.ambient;
+    vec3 ambient = directionalLight.ambient;
 
     vec3 norm = getNormal();
-
-	vec3 lightDir = directionalLightVSOut.direction;
+    
+	vec3 lightDir = normalize(-(TBN * directionalLight.direction));
 
     float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = directionalLightVSOut.diffuse * diff;
+    vec3 diffuse = directionalLight.diffuse * diff;
 
     float specularStrength = 0.5;
     vec3 viewDir = normalize(ViewPos-FragPos);
     vec3 reflectDir = reflect(-lightDir, norm); 
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-    vec3 specular = directionalLightVSOut.specular * spec; 
+    vec3 specular = directionalLight.specular * spec; 
     float shadow = calculateShadow(FragPosLightSpace, lightDir);
     return (ambient + (1.0 - shadow) * (diffuse + specular)) * color;
 }
@@ -185,8 +180,7 @@ vec3 calculateSpotLight() {
 
 float calculateShadow(vec4 fragPosLightSpace, vec3 lightDir)
 {
-	//probably should be calculated in vertex shader but leave as is for now is this is ortho projection
-	//could be some difference if has perspective
+	return 0.0;
 	vec3 projCoords = (fragPosLightSpace.xyz / fragPosLightSpace.w);
 	projCoords = projCoords * 0.5 + 0.5;
 	if (projCoords.z > 1.0)
@@ -260,11 +254,12 @@ vec3 getNormal()
 	if(texture_normal_set > 0)
 	{
 		norm = texture(material.texture_normal, TexCoords).rgb;
-		norm = normalize(norm * 2.0 - 1.0);
+		//probably remove tbn from here
+		norm = normalize( (norm * 2.0 - 1.0));
 	}
 	else
 	{
 		norm = normalize(Normal);
 	}
-	return norm;
+	return normalize(norm);
 }
