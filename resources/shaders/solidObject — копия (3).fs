@@ -1,16 +1,7 @@
 #version 330 core
-in vec3 Normal;
-in vec3 FragPos;
-in vec2 TexCoords;
-in vec4 FragPosLightSpace;
-in vec3 ViewPos;
-in mat3 TBN;
 
-out vec4 FragColor;
-  
 #define MAX_POINT_LIGHTS 4
 
-uniform int texture_normal_set;
 struct Material {
     sampler2D texture_diffuse;
     sampler2D texture_specular;
@@ -19,27 +10,6 @@ struct Material {
     float shininess;
 };
 
-uniform float farPlane;
-struct PointLight {
-    vec3 position;
-  
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-
-    float constant;
-    float linear;
-    float quadratic;
-};
-
-struct DirectionalLight {
-    vec3 direction;
-  
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-};
- 
 struct SpotLight {
     vec3 position;
     vec3 direction;
@@ -55,12 +25,47 @@ struct SpotLight {
     vec3 specular;
 };
 
-uniform PointLight pointLights[MAX_POINT_LIGHTS];
+
+in vec3 Normal;
+in vec3 FragPos;
+in vec2 TexCoords;
+in vec4 FragPosLightSpace;
+in vec3 ViewPos;
+//in vec3 adjustedFragPosLightSpace;
+
+in mat3 TBN;
+in DirectionalLightVSOut 
+{
+    vec3 direction;
+  
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+} directionalLightVSOut;
+
+in PointLightVSOut 
+{
+    vec3 position;
+  
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+
+    float constant;
+    float linear;
+    float quadratic;
+} pointLightsVSOut[MAX_POINT_LIGHTS];
+
+out vec4 FragColor;
+
+uniform int texture_normal_set;
+
+uniform float farPlane;
+
 uniform int numPointLights;
 
 uniform int useSpotLight = 0;
 
-uniform DirectionalLight directionalLight;
 uniform SpotLight spotLight;
   
 uniform Material material;
@@ -69,7 +74,7 @@ uniform sampler2D shadowMap;
 uniform samplerCube omnidirShadowMap;
  
 vec3 calculateDirLight();
-vec3 calculatePointLight(PointLight light);
+vec3 calculatePointLight(int lightIdx);
 vec3 calculateSpotLight();
 
 float calculateShadow(vec4 fragPosLightSpace, vec3 lightDir);
@@ -90,7 +95,7 @@ void main()
 {
     vec3 result = calculateDirLight();
     for (int i = 0; i < numPointLights; ++i) {
-        //result += calculatePointLight(pointLights[i]);
+        result += calculatePointLight(i);
     }
     if (useSpotLight > 0){
         result += calculateSpotLight();
@@ -108,60 +113,49 @@ void main()
 
 vec3 calculateDirLight() {
 	vec3 color = vec3(texture(material.texture_diffuse, TexCoords));
-    vec3 ambient = directionalLight.ambient;
+    vec3 ambient = directionalLightVSOut.ambient;
 
     vec3 norm = getNormal();
-	/*
-	// TODO this dependency on normal map should be resolved on CPU and direction should be precalculated!!!!
-	if (texture_normal_set > 0)
-	{
-		lightDir = normalize(-(TBN * directionalLight.direction));
-	}
-	else
-	{
-		lightDir = normalize(-(directionalLight.direction));
-	}
-	*/
-	vec3 lightDir = normalize(-(directionalLight.direction));
+
+	vec3 lightDir = directionalLightVSOut.direction;
+
     float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = directionalLight.diffuse * diff;
+    vec3 diffuse = directionalLightVSOut.diffuse * diff;
 
     float specularStrength = 0.5;
     vec3 viewDir = normalize(ViewPos-FragPos);
     vec3 reflectDir = reflect(-lightDir, norm); 
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-    vec3 specular = directionalLight.specular * spec; 
+    vec3 specular = directionalLightVSOut.specular * spec; 
     float shadow = calculateShadow(FragPosLightSpace, lightDir);
     return (ambient + (1.0 - shadow) * (diffuse + specular)) * color;
 }
 
-vec3 calculatePointLight(PointLight light) {
-
-    vec3 ambient = light.ambient * vec3(texture(material.texture_diffuse, TexCoords));
+vec3 calculatePointLight(int lightIdx) {
+	vec3 ambient = pointLightsVSOut[lightIdx].ambient * vec3(texture(material.texture_diffuse, TexCoords));
 
     vec3 norm = getNormal();
 	
-	//vec3 lightDir = normalize(TBN * light.position - FragPos);
-	
-	vec3 lightDir = normalize(light.position - FragPos);
+	vec3 lightDir = normalize(TBN * pointLightsVSOut[lightIdx].position - FragPos);
+
     float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = light.diffuse * diff * vec3(texture(material.texture_diffuse, TexCoords));
+    vec3 diffuse = pointLightsVSOut[lightIdx].diffuse * diff * vec3(texture(material.texture_diffuse, TexCoords));
 
     float specularStrength = 0.5;
     vec3 viewDir = normalize(ViewPos-FragPos);
     vec3 reflectDir = reflect(-lightDir, norm); 
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-    vec3 specular = light.specular * spec * vec3(texture(material.texture_specular, TexCoords)); 
+    vec3 specular = pointLightsVSOut[lightIdx].specular * spec * 
+		vec3(texture(material.texture_specular, TexCoords)); 
         
-    //float distance = length(TBN * light.position - FragPos);
-	
-	float distance = length(light.position - FragPos);
-    float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
-	
-	//float shadow = calculateOmnidirShadow(FragPos, TBN * light.position);
-    
-	float shadow = calculateOmnidirShadow(FragPos, light.position);
-	return (ambient  + (1.0 - shadow) * (diffuse + specular)) * attenuation;
+    float distance = length(TBN * pointLightsVSOut[lightIdx].position - FragPos);
+    float attenuation = 1.0 / (
+		pointLightsVSOut[lightIdx].constant + 
+		pointLightsVSOut[lightIdx].linear * distance + 
+		pointLightsVSOut[lightIdx].quadratic * (distance * distance)
+	);
+	float shadow = calculateOmnidirShadow(FragPos, TBN * pointLightsVSOut[lightIdx].position);
+    return (ambient  + (1.0 - shadow) * (diffuse + specular)) * attenuation;
 }
 
 vec3 calculateSpotLight() {
@@ -195,6 +189,8 @@ vec3 calculateSpotLight() {
 
 float calculateShadow(vec4 fragPosLightSpace, vec3 lightDir)
 {
+	//probably should be calculated in vertex shader but leave as is for now is this is ortho projection
+	//could be some difference if has perspective
 	vec3 projCoords = (fragPosLightSpace.xyz / fragPosLightSpace.w);
 	projCoords = projCoords * 0.5 + 0.5;
 	if (projCoords.z > 1.0)
@@ -268,11 +264,11 @@ vec3 getNormal()
 	if(texture_normal_set > 0)
 	{
 		norm = texture(material.texture_normal, TexCoords).rgb;
-		norm = TBN * (norm * 2.0 - 1.0);
+		norm = normalize(norm * 2.0 - 1.0);
 	}
 	else
 	{
-		norm = Normal;
+		norm = normalize(Normal);
 	}
-	return normalize(norm);
+	return norm;
 }
