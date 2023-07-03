@@ -11,6 +11,7 @@ map_Kd Troll_Albedo2.jpg
 map_Ns Troll_Roughness2.jpg
 map_Ke Troll_Emissive.jpg
 map_Bump -bm 1.000000 Troll_Normals.jpg
+disp Troll_Height.jpg
 
 newmtl TEX_pants
 Ka 1.000000 1.000000 1.000000

@@ -99,6 +99,10 @@ ElementsMesh processMesh(aiMesh* mesh, const aiScene* scene)
 		std::vector<Mesh::Texture> normalMaps = loadMaterialTextures(material,
 			aiTextureType_HEIGHT, "texture_normal");
 		textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+
+		std::vector<Mesh::Texture> heightMaps = loadMaterialTextures(material,
+			aiTextureType_DISPLACEMENT, "texture_height");
+		textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 		
 	}
 
