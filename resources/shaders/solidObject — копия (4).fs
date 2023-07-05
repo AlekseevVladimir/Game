@@ -90,7 +90,7 @@ void main()
 {
     vec3 result = calculateDirLight();
     for (int i = 0; i < numPointLights; ++i) {
-        result += calculatePointLight(pointLights[i]);
+        //result += calculatePointLight(pointLights[i]);
     }
     if (useSpotLight > 0){
         result += calculateSpotLight();
@@ -111,15 +111,18 @@ vec3 calculateDirLight() {
     vec3 ambient = directionalLight.ambient;
 
     vec3 norm = getNormal();
-	vec3 lightDir = directionalLight.direction;
+	/*
+	// TODO this dependency on normal map should be resolved on CPU and direction should be precalculated!!!!
 	if (texture_normal_set > 0)
 	{
-		lightDir = TBN * lightDir;
+		lightDir = normalize(-(TBN * directionalLight.direction));
 	}
-	lightDir = normalize(-lightDir);
-    
-	//vec3 lightDir = normalize(-(TBN * directionalLight.direction));
-
+	else
+	{
+		lightDir = normalize(-(directionalLight.direction));
+	}
+	*/
+	vec3 lightDir = normalize(-(directionalLight.direction));
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = directionalLight.diffuse * diff;
 
@@ -137,14 +140,10 @@ vec3 calculatePointLight(PointLight light) {
     vec3 ambient = light.ambient * vec3(texture(material.texture_diffuse, TexCoords));
 
     vec3 norm = getNormal();
-	vec3 lightPos = light.position;
-	if (texture_normal_set > 0)
-	{
-		lightPos = TBN * lightPos;
-	}
 	
-	vec3 lightDir = normalize(lightPos - FragPos);
-
+	//vec3 lightDir = normalize(TBN * light.position - FragPos);
+	
+	vec3 lightDir = normalize(light.position - FragPos);
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = light.diffuse * diff * vec3(texture(material.texture_diffuse, TexCoords));
 
@@ -154,10 +153,14 @@ vec3 calculatePointLight(PointLight light) {
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     vec3 specular = light.specular * spec * vec3(texture(material.texture_specular, TexCoords)); 
         
-    float distance = length(lightPos - FragPos);
+    //float distance = length(TBN * light.position - FragPos);
+	
+	float distance = length(light.position - FragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
-	float shadow = calculateOmnidirShadow(FragPos, lightPos);
-    //float shadow = calculateOmnidirShadow(FragPos, light.position);
+	
+	//float shadow = calculateOmnidirShadow(FragPos, TBN * light.position);
+    
+	float shadow = calculateOmnidirShadow(FragPos, light.position);
 	return (ambient  + (1.0 - shadow) * (diffuse + specular)) * attenuation;
 }
 
@@ -224,6 +227,7 @@ float calculateShadow(vec4 fragPosLightSpace, vec3 lightDir)
 /*
 float calculateOmnidirShadow(vec3 fragPos, vec3 lightPos)
 {
+	return 0.0;
 	vec3 fragToLight = fragPos - lightPos;
 	float closestDepth = texture(omnidirShadowMap, fragToLight).r;
 	closestDepth *= farPlane;
@@ -237,20 +241,12 @@ float calculateOmnidirShadow(vec3 fragPos, vec3 lightPos)
 float calculateOmnidirShadow(vec3 fragPos, vec3 lightPos)
 {
 	float shadow = 0.0;
+	return shadow;
 	float bias = 0.15;
 	int samples = 20;
-	vec3 viewPos = ViewPos;
-	
-	if (texture_normal_set > 0)
-	{
-		fragPos = transpose(TBN) * fragPos;
-		lightPos = transpose(TBN) * lightPos;
-		viewPos = transpose(TBN) * viewPos;
-	}
-	
 	vec3 fragToLight = fragPos - lightPos;
 	float currentDepth = length(fragToLight);
-	float viewDistance = length(viewPos - fragPos);
+	float viewDistance = length(ViewPos - fragPos);
 	float diskRadius = (1.0 + (viewDistance / farPlane)) / 25.0;
 	for (int i = 0; i < samples; ++i)
 	{
@@ -272,12 +268,11 @@ vec3 getNormal()
 	if(texture_normal_set > 0)
 	{
 		norm = texture(material.texture_normal, TexCoords).rgb;
-		//probably remove tbn from here
-		norm = normalize( (norm * 2.0 - 1.0));
+		norm = TBN * (norm * 2.0 - 1.0);
 	}
 	else
 	{
-		norm = normalize(Normal);
+		norm = Normal;
 	}
 	return normalize(norm);
 }
