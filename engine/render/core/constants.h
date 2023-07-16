@@ -57,13 +57,13 @@ const std::vector<Mesh::Vertex> cubeVertices =
 
 const std::vector<Mesh::Vertex> rectVertices = 
 {
-		{{0.0f, 1.0f, 0.0f}, {}, {}, {}, {0.0f, 1.0f}},
-		{{1.0f, 0.0f, 0.0f}, {}, {}, {}, {1.0f, 0.0f}},
-		{{0.0f, 0.0f, 0.0f}, {}, {}, {}, {0.0f, 0.0f}},
+		{{-1.0f, 1.0f, 0.0f}, {}, {}, {}, {0.0f, 1.0f}},
+		{{1.0f, -1.0f, 0.0f}, {}, {}, {}, {1.0f, 0.0f}},
+		{{-1.0f, -1.0f, 0.0f}, {}, {}, {}, {0.0f, 0.0f}},
 
-		{{0.0f, 1.0f, 0.0f}, {}, {}, {}, {0.0f, 1.0f}},
+		{{-1.0f, 1.0f, 0.0f}, {}, {}, {}, {0.0f, 1.0f}},
 		{{1.0f, 1.0f, 0.0f}, {}, {}, {}, {1.0f, 1.0f}},
-		{{1.0f, 0.0f, 0.0f}, {}, {}, {}, {1.0f, 0.0f}}
+		{{1.0f, -1.0f, 0.0f}, {}, {}, {}, {1.0f, 0.0f}}
 };
 
 const std::vector<Mesh::Vertex> plateVertices = 
@@ -126,6 +126,6 @@ const std::map<std::string, std::pair<std::vector<int>, int>> verticesLayout =
 	{"cube", {{3, 3, 2}, 8}}, {"light", {{3}, 8}}, {"rectangle", {{2, 2}, 4}}, {"plate", {{3, 3, 2}, 8}},
 };
 
-const float RES_WIDTH = 800.0f;
-const float RES_HEIGHT = 600.0f;
+constexpr float RES_WIDTH = 800.0f;
+constexpr float RES_HEIGHT = 600.0f;
 

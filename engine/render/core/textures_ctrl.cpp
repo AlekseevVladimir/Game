@@ -16,6 +16,8 @@ unsigned int TexturesCtrl::bindTexture(unsigned int textureID)
 	}
 	if (m_boundTextures.count(*found)) 
 	{
+		// TODO dirty hack to fix issue discribed in textures_ctrl.h comment 
+		glBindTexture(GL_TEXTURE_2D, m_boundTextures[*found]);
 		return m_boundTextures[*found];
 	}
 	glActiveTexture(GL_TEXTURE0 + m_currentTexIdx);

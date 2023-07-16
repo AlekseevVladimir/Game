@@ -2,8 +2,10 @@
 #include <engine/render/utils/render_utils.h>
 #include <engine/core/system.h>
 #include <engine/core/game_object.h>
+#include "engine/render/open_gl/model/model.h"
 
 class Shader;
+class OpenGLShader;
 
 class IRenderer
 {
@@ -16,6 +18,7 @@ public:
 class RenderSystem : public System 
 {
 public:
+	RenderSystem();
 	void process(float delta) override;
 
 	template<typename TShaderComponent>
@@ -25,4 +28,8 @@ public:
 	
 private:
 	std::unique_ptr<IRenderer> m_renderer;
+	unsigned int _HDRTexture;
+	unsigned int _HDRFBOID;
+	std::shared_ptr<OpenGLShader> _HDRShader;
+	std::unique_ptr<Mesh> _HDRMesh;
 };

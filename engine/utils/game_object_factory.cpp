@@ -29,7 +29,8 @@
 
 //controls are inverted
 
-std::shared_ptr<Model> generateModel(std::string, std::string);
+std::shared_ptr<Model> generateModel(std::string, std::string, std::string normalName = "",
+	std::string heightName = "");
 
 GameObject* createCube(
 		glm::vec3 pos, glm::vec3 scale, GameObject::RenderSettings renderSettings) 
@@ -136,16 +137,17 @@ GameObject* createFloor(glm::vec3 pos, GameObject::RenderSettings renderSettings
 	PositionComponent* posComponent = goPtr->createComponent<PositionComponent>();
 	posComponent->setPos(pos);
 	RotationComponent* rotComponent = goPtr->createComponent<RotationComponent>();
-	rotComponent->setYaw(90.0f);
+	//rotComponent->setYaw(90.0f);
 	ModelComponent* modelComponent = goPtr->createComponent<ModelComponent>();
-	modelComponent->model = generateModel("floor.png", "box_specular_map.png");
+	modelComponent->model = generateModel(
+		"floor.jpg", "box_specular_map.png", "floor_normal.jpg", "floor_height.jpg");
 	std::shared_ptr<Shader> shader = ShadersManager::getInstance().
 		createProgram<SolidObjectShader>("solidObject");;
 	goPtr->createComponent<ShaderComponent>(shader);
 	std::shared_ptr<Shader> shadowMapShader = ShadersManager::getInstance().
 		createProgram<ShadowMapShader>("shadow_map");
 	goPtr->createComponent<ShadowMapShaderComponent>(shadowMapShader);
-	goPtr->createComponent<ScaleComponent>(Vector3<float>(100.f, 1.f, 100.f));
+	goPtr->createComponent<ScaleComponent>(Vector3<float>(1.f, 1.f, 1.f));
 	//transform->setScale({10.0f, 1.0f, 10.0f});
 	//goPtr->createComponent<Generated3DVisualsComponent>("plate", "plate", "floor.png", "box_specular_map.png");
 	return goPtr;
@@ -181,7 +183,8 @@ GameObject* createTroll(glm::vec3 pos, GameObject::RenderSettings renderSettings
 }
 
 std::shared_ptr<Model> generateModel(
-		std::string diffuseName, std::string specularName) 
+	std::string diffuseName, std::string specularName, std::string normalName,
+	std::string heightName)
 {
 	TexturesCtrl& texturesCtrl = TexturesCtrl::getInstance();
 	texturesCtrl.setWrapParams(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
@@ -192,6 +195,21 @@ std::shared_ptr<Model> generateModel(
 	std::vector<Mesh::Texture> textures{ 
 		{texture, "texture_diffuse", ""}, {specularMap, "texture_specular", ""},
 	};
+/**/
+	if (!normalName.empty())
+	{
+		texture = texturesCtrl.loadImage(normalName);
+		texturesCtrl.setWrapParams(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+		textures.push_back({ texture, "texture_normal", "" });
+	}
+	
+	if (!heightName.empty())
+	{
+		texture = texturesCtrl.loadImage(heightName);
+		texturesCtrl.setWrapParams(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+		textures.push_back({ texture, "texture_height", "" });
+	}
+	
 	Mesh mesh{ vertices, textures };
 	std::shared_ptr<Model> model = std::make_shared<Model>();
 	// TODO FIX THIS
