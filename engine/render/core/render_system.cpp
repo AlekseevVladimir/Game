@@ -38,6 +38,7 @@ RenderSystem::RenderSystem() : System()
 
 void RenderSystem::process(float delta)
 {
+	_setCullingType(GL_BACK);
 	glBindFramebuffer(GL_FRAMEBUFFER, _HDRFBOID);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -52,6 +53,7 @@ void RenderSystem::process(float delta)
 	//glBindTexture(GL_TEXTURE_2D, _HDRTexture);
 	_HDRShader->setInt1("hdrBuffer", TexturesCtrl::getInstance().bindTexture(_HDRTexture));
 	_HDRShader->setFloat1("exposure", 1.f);
+	_setCullingType(GL_FRONT);
 	_HDRMesh->draw();
 	//glBindTexture(GL_TEXTURE_2D, 0);
 }

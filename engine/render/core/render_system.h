@@ -11,7 +11,7 @@ class IRenderer
 {
 public:
 	virtual void render(GameObject* goPtr, GameObject* viewPointPtr, Shader* shaderPtr) = 0;
-
+	virtual void _setCullingType(unsigned int cullingType) = 0;
 	virtual ~IRenderer() = default;
 };
 
@@ -26,6 +26,10 @@ public:
 
 	void setRenderer(std::unique_ptr<IRenderer>&& rendererPtr);
 	
+	inline void _setCullingType(unsigned int cullingType)
+	{
+		m_renderer->_setCullingType(cullingType);
+	}
 private:
 	std::unique_ptr<IRenderer> m_renderer;
 	unsigned int _HDRTexture;
