@@ -137,10 +137,13 @@ GameObject* createFloor(glm::vec3 pos, GameObject::RenderSettings renderSettings
 	PositionComponent* posComponent = goPtr->createComponent<PositionComponent>();
 	posComponent->setPos(pos);
 	RotationComponent* rotComponent = goPtr->createComponent<RotationComponent>();
+
+	ScaleComponent* scaleComponent = goPtr->createComponent<ScaleComponent>();
+	scaleComponent->setScale({10.0f, 1.0f, 10.0f});
 	//rotComponent->setYaw(90.0f);
 	ModelComponent* modelComponent = goPtr->createComponent<ModelComponent>();
 	modelComponent->model = generateModel(
-		"floor.jpg", "box_specular_map.png", "floor_normal.jpg", "floor_height.jpg");
+		"floor.png", "box_specular_map.png");
 	std::shared_ptr<Shader> shader = ShadersManager::getInstance().
 		createProgram<SolidObjectShader>("solidObject");;
 	goPtr->createComponent<ShaderComponent>(shader);

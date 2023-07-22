@@ -8,12 +8,14 @@
 #include "engine/render/core/shadows/shadow_map_shader_component.h"
 #include "engine/render/core/shadows/omnidir_shadow_map_shader_component.h"
 #include "engine/render/core/constants.h"
+#include "engine/render/core/textures_ctrl.h"
 #include <utility>
 
 RenderSystem::RenderSystem() : System()
 {
 	glGenTextures(1, &_HDRTexture);
-	glBindTexture(GL_TEXTURE_2D, _HDRTexture);
+	//glBindTexture(GL_TEXTURE_2D, _HDRTexture);
+	TexturesCtrl::getInstance().bindTexture(_HDRTexture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RES_WIDTH, RES_HEIGHT, 0, GL_RGBA, GL_FLOAT, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -29,7 +31,7 @@ RenderSystem::RenderSystem() : System()
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, tmpDepthBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	//glBindTexture(GL_TEXTURE_2D, 0);
 	_HDRShader = ShadersManager::getInstance().createProgram<OpenGLShader>("hdr");
 	_HDRMesh = std::make_unique<Mesh>(rectVertices, std::vector<Mesh::Texture>());
 }
@@ -45,11 +47,12 @@ void RenderSystem::process(float delta)
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	_HDRShader->use();
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, _HDRTexture);
-	_HDRShader->setInt1("hdrBuffer", 0);
+	//glActiveTexture(GL_TEXTURE0);
+	//TexturesCtrl::getInstance().bindTexture(_HDRTexture);
+	//glBindTexture(GL_TEXTURE_2D, _HDRTexture);
+	_HDRShader->setInt1("hdrBuffer", TexturesCtrl::getInstance().bindTexture(_HDRTexture));
 	_HDRMesh->draw();
-	glBindTexture(GL_TEXTURE_2D, 0);
+	//glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 

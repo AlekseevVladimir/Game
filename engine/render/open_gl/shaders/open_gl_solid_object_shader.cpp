@@ -62,10 +62,11 @@ void SolidObjectShader::configure() {
 		glm::mat4 lightSpaceMatrix = lightDirectionComponentPtr->_projectionMatrix * lightView;
 		setMatrix4Float("lightSpaceMatrix", GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 
-		glActiveTexture(GL_TEXTURE0 + 12);
-		glBindTexture(GL_TEXTURE_2D, shadowMapCmp->_shadowMapID);
-		setInt1("shadowMap", 12);
-		glActiveTexture(GL_TEXTURE0);
+		//glActiveTexture(GL_TEXTURE0 + 12);
+		//glBindTexture(GL_TEXTURE_2D, shadowMapCmp->_shadowMapID);
+//		TexturesCtrl::getInstance().bindTexture(shadowMapCmp->_shadowMapID);
+		setInt1("shadowMap", TexturesCtrl::getInstance().bindTexture(shadowMapCmp->_shadowMapID));
+	//	glActiveTexture(GL_TEXTURE0);
 	}
 }
 

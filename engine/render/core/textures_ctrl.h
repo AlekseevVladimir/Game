@@ -37,7 +37,7 @@ private:
 	// TODO problem with hdr textures if this is zero 
 	// hapens because the texture under hdr texture's id is not re-bounded because hdr texture is not bound using the textures_ctr singleton
 	// needs fix
-	unsigned int m_currentTexIdx = 0;
+	unsigned int m_currentTexIdx = 1;
 	std::vector<unsigned int> m_textureIDs;
 	std::pair<unsigned int, unsigned int> m_wrapParams;
 	std::map<unsigned int, unsigned int> m_boundTextures;

@@ -239,6 +239,7 @@ float calculateOmnidirShadow(vec3 fragPos, vec3 lightPos)
 
 float calculateOmnidirShadow(vec3 fragPos, vec3 lightPos)
 {
+	// TODO troll is wierdly dark with these shadows, need to check
 	float shadow = 0.0;
 	float bias = 0.15;
 	int samples = 20;

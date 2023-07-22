@@ -5,24 +5,30 @@
 
 unsigned int TexturesCtrl::bindTexture(unsigned int textureID) 
 {
-	auto found = std::find(m_textureIDs.begin(), m_textureIDs.end(), textureID);
-	if (found == m_textureIDs.end()) 
-	{
-		throw std::logic_error("Attemp to bind not exisiting texture");
-	}
+	
 	if (m_currentTexIdx > GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS) 
 	{
 		throw std::logic_error("Max number of units exceeded");
 	}
-	if (m_boundTextures.count(*found)) 
+
+	auto found = std::find(m_textureIDs.begin(), m_textureIDs.end(), textureID);
+	if (found == m_textureIDs.end()) 
+	{
+		m_textureIDs.push_back(textureID);
+	}
+
+	if (m_boundTextures.count(textureID)) 
 	{
 		// TODO dirty hack to fix issue discribed in textures_ctrl.h comment 
-		glBindTexture(GL_TEXTURE_2D, m_boundTextures[*found]);
-		return m_boundTextures[*found];
+		// directional shadow is drawn to texture but is not considered during render
+
+		glActiveTexture(GL_TEXTURE0 + m_boundTextures[textureID]);
+		glBindTexture(GL_TEXTURE_2D, textureID);
+		return m_boundTextures[textureID];
 	}
 	glActiveTexture(GL_TEXTURE0 + m_currentTexIdx);
-	glBindTexture(GL_TEXTURE_2D, *found);
-	m_boundTextures[*found] = m_currentTexIdx;
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	m_boundTextures[textureID] = m_currentTexIdx;
 	return m_currentTexIdx++;
 }
 
@@ -31,9 +37,10 @@ void TexturesCtrl::bindAllTextures()
 {
 	for (size_t i = 0; i < m_textureIDs.size(); i++) 
 	{
-		glActiveTexture(GL_TEXTURE0 + i);
-		glBindTexture(GL_TEXTURE_2D, m_textureIDs[i]);
-		m_boundTextures[m_textureIDs[i]] = i;
+		//glActiveTexture(GL_TEXTURE0 + i);
+		//glBindTexture(GL_TEXTURE_2D, m_textureIDs[i]);
+		//m_boundTextures[m_textureIDs[i]] = i;
+		bindTexture(m_textureIDs[i]);
 	}
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);

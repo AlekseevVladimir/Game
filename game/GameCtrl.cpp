@@ -10,7 +10,7 @@
 
 GameCtrl::GameCtrl() 
 {
-	//createDirectionalLight({ false, false, "" });
+	createDirectionalLight({ false, false, "" });
 	//createCube({ -3.0f, -2.0f, -3.0f }, { 1.0f, 1.0f, 1.0f }, { true, false, "solidObject" });
 	//createCube({ -3.0f, -9.0f, -3.0f }, { 1.0f, 1.0f, 1.0f }, { true, false, "solidObject" });
 	//createCube({ -3.0f, 9.0f, -3.0f }, { 1.0f, 1.0f, 1.0f }, { true, false, "solidObject" });
@@ -22,7 +22,7 @@ GameCtrl::GameCtrl()
 
 	createPointLight({ 3.0f, 2.0f, 4.0f }, { 1.0f, 1.0f , 1.0f }, { true, false, "light" });
 	//createFloor({5.0f, 2.0f, 4.0f}, {true, false, "solidObject"});
-	//createFloor({ 0.0f, -1.0f, 0.0f }, { true, false, "solidObject" });
+	createFloor({ 0.0f, -1.0f, 0.0f }, { true, false, "solidObject" });
 	createTroll({ 0.0f, 0.0f, 0.0f }, { true, false, "solidObject" });
 	SystemsHolder::getInstance().addSystem<InputControlSystem>();
 	SystemsHolder::getInstance().addSystem<MovementSystem>();
