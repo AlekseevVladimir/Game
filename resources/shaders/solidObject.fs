@@ -117,7 +117,7 @@ vec3 calculateDirLight() {
 	vec3 lightDir = directionalLight.direction;
 	if (texture_normal_set > 0)
 	{
-		lightDir = TBN * lightDir;
+		lightDir = -(TBN * lightDir);
 	}
 	lightDir = normalize(-lightDir);
     

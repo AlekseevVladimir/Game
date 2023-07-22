@@ -51,6 +51,7 @@ void RenderSystem::process(float delta)
 	//TexturesCtrl::getInstance().bindTexture(_HDRTexture);
 	//glBindTexture(GL_TEXTURE_2D, _HDRTexture);
 	_HDRShader->setInt1("hdrBuffer", TexturesCtrl::getInstance().bindTexture(_HDRTexture));
+	_HDRShader->setFloat1("exposure", 1.f);
 	_HDRMesh->draw();
 	//glBindTexture(GL_TEXTURE_2D, 0);
 }
