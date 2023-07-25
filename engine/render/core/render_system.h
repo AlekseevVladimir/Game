@@ -7,6 +7,17 @@
 class Shader;
 class OpenGLShader;
 
+namespace
+{
+	constexpr unsigned int COLOR_BUFFERS_NUM = 2;
+}
+
+enum ColorBuffers : uint8_t
+{
+	HDR = 0,
+	Brightness = 1,
+};
+
 class IRenderer
 {
 public:
@@ -32,8 +43,12 @@ public:
 	}
 private:
 	std::unique_ptr<IRenderer> m_renderer;
-	unsigned int _HDRTexture;
-	unsigned int _HDRFBOID;
+	unsigned int _postprocessFBOID;
 	std::shared_ptr<OpenGLShader> _HDRShader;
 	std::unique_ptr<Mesh> _HDRMesh;
+
+	std::shared_ptr<OpenGLShader> _bloomShader;
+	std::unique_ptr<Mesh> _bloomMesh;
+
+	unsigned int _colorBuffers[COLOR_BUFFERS_NUM];
 };
