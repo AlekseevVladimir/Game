@@ -104,7 +104,8 @@ void main()
     //vec3 norm = getNormal();
     //FragColor = vec4(norm, 1.0);
 	FragColor = vec4(result, 1.0);
-	// this is cheching some threshold
+	// the constants are conventional for transforming from RGB to grayscale 
+	//http://harmanani.github.io/classes/csc447/Notes/Lecture16.pdf
 	float brightness = dot(FragColor.rgb, vec3(0.2126, 0.7152, 0.0722));
 	BrightColor = vec4(0.0, 0.0, 0.0, 1.0);
 	if (brightness > 1.0)

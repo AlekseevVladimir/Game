@@ -51,4 +51,8 @@ private:
 	std::unique_ptr<Mesh> _bloomMesh;
 
 	unsigned int _colorBuffers[COLOR_BUFFERS_NUM];
+
+	//one for horizontal blurring, one for vertical
+	unsigned int _bloomGenerationBuffers[2];
+	unsigned int _bloomGenerationTextures[2];
 };
