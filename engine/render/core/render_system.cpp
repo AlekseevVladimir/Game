@@ -68,7 +68,8 @@ void RenderSystem::process(float delta)
 {
 	_setCullingType(GL_BACK);
 	glBindFramebuffer(GL_FRAMEBUFFER, _postprocessFBOID);
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+//	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	GameObject* viewPointPtr = GameObjectHolder::getInstance().
 		getObjectsWithComponent<ViewPointComponent>()[0];

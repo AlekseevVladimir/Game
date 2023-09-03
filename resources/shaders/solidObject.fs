@@ -137,7 +137,7 @@ vec3 calculateDirLight() {
     vec3 diffuse = directionalLight.diffuse * diff;
 
     float specularStrength = 0.5;
-    vec3 viewDir = normalize(ViewPos-FragPos);
+    vec3 viewDir = normalize(ViewPos - FragPos);
     vec3 reflectDir = reflect(-lightDir, norm); 
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     vec3 specular = directionalLight.specular * spec; 
