@@ -18,7 +18,7 @@ RenderSystem::RenderSystem() : System()
 	glGenTextures(COLOR_BUFFERS_NUM, _colorBuffers);
 	//glBindTexture(GL_TEXTURE_2D, _HDRTexture);
 	
-
+/*
 	unsigned int tmpDepthBuffer;
 	glGenRenderbuffers(1, &tmpDepthBuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, tmpDepthBuffer);
@@ -39,6 +39,7 @@ RenderSystem::RenderSystem() : System()
 	glDrawBuffers(COLOR_BUFFERS_NUM, attachmentTypes);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, tmpDepthBuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	*/
 
 	glGenFramebuffers(2, _bloomGenerationBuffers);
 	glGenTextures(2, _bloomGenerationTextures);
@@ -62,12 +63,29 @@ RenderSystem::RenderSystem() : System()
 	_HDRMesh = std::make_unique<Mesh>(rectVertices, std::vector<Mesh::Texture>());
 	_bloomShader = ShadersManager::getInstance().createProgram<OpenGLShader>("bloom");
 	_bloomMesh = std::make_unique<Mesh>(rectVertices, std::vector<Mesh::Texture>());
+
+/*
+	glGenFramebuffers(1, &_gBuffer);
+	glGenTextures(G_BUFFER_ITEMS_NUM, _gBufferItems);
+	
+	for (unsigned int i = 0; i < G_BUFFER_ITEMS_NUM; i++)
+	{
+		TexturesCtrl::getInstance().bindTexture(_gBufferItems[i]);
+		// add some precision altering here for different gbuffer textures
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RES_WIDTH, RES_HEIGHT, 0, GL_RGBA, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, _gBufferItems[i], 0);
+	}
+*/
+//	_gBuffer._setupFramebuffer();
+	_postprocessBuffer._setupFramebuffer();
 }
 
 void RenderSystem::process(float delta)
 {
 	_setCullingType(GL_BACK);
-	glBindFramebuffer(GL_FRAMEBUFFER, _postprocessFBOID);
+	glBindFramebuffer(GL_FRAMEBUFFER, _postprocessBuffer._id);
 //	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -88,7 +106,7 @@ void RenderSystem::process(float delta)
 		_bloomShader->setInt1("horizontal", horizontal);
 		_bloomShader->setInt1("image", 
 			TexturesCtrl::getInstance().bindTexture(
-				firstIter ? _colorBuffers[ColorBuffers::Brightness] : _bloomGenerationTextures[!horizontal]));
+				firstIter ? _postprocessBuffer._brightness : _bloomGenerationTextures[!horizontal]));
 		_bloomMesh->draw();
 		horizontal = !horizontal;
 		if (firstIter)
@@ -101,8 +119,7 @@ void RenderSystem::process(float delta)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	_HDRShader->use();
 	glActiveTexture(GL_TEXTURE0);
-	//glBindTexture(GL_TEXTURE_2D, _HDRTexture);
-	_HDRShader->setInt1("hdrBuffer", TexturesCtrl::getInstance().bindTexture(_colorBuffers[ColorBuffers::HDR]));
+	_HDRShader->setInt1("hdrBuffer", TexturesCtrl::getInstance().bindTexture(_postprocessBuffer._hdr));
 	_HDRShader->setInt1("bloomBuffer", TexturesCtrl::getInstance().bindTexture(_bloomGenerationTextures[!horizontal]));
 	_HDRShader->setFloat1("exposure", 1.f);
 	_HDRMesh->draw();

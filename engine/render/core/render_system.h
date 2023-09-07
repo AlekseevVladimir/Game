@@ -3,6 +3,7 @@
 #include <engine/core/system.h>
 #include <engine/core/game_object.h>
 #include "engine/render/open_gl/model/model.h"
+#include "engine/render/core/framebuffers.h"
 
 class Shader;
 class OpenGLShader;
@@ -10,12 +11,20 @@ class OpenGLShader;
 namespace
 {
 	constexpr unsigned int COLOR_BUFFERS_NUM = 2;
+	constexpr unsigned int G_BUFFER_ITEMS_NUM = 3;
 }
 
 enum ColorBuffers : uint8_t
 {
 	HDR = 0,
 	Brightness = 1,
+};
+
+enum GBufferItems : uint8_t
+{
+	Positions = 0,
+	Normals = 1,
+	AlbedoSpecular = 2,
 };
 
 class IRenderer
@@ -55,4 +64,13 @@ private:
 	//one for horizontal blurring, one for vertical
 	unsigned int _bloomGenerationBuffers[2];
 	unsigned int _bloomGenerationTextures[2];
+
+	GFramebuffer _gBuffer;
+
+	PostprocessFramebuffer _postprocessBuffer;
+
+	//unsigned int _gBuffer;
+	unsigned int _gBufferItems[G_BUFFER_ITEMS_NUM];
+	std::shared_ptr<OpenGLShader> _gBufferShader;
+
 };

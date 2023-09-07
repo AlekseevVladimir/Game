@@ -13,7 +13,8 @@ SET(CORE_SOURCES
 	"view_point_component.h" 
 	"textures_ctrl.cpp" 
 	"render_system.cpp" 
-)
+	"framebuffers.h"
+	"framebuffers.cpp")
 
 SET(LIGHT_SOURCES
 	"light/light_direction_component.h"

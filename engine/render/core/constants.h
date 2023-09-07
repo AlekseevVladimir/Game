@@ -126,6 +126,6 @@ const std::map<std::string, std::pair<std::vector<int>, int>> verticesLayout =
 	{"cube", {{3, 3, 2}, 8}}, {"light", {{3}, 8}}, {"rectangle", {{2, 2}, 4}}, {"plate", {{3, 3, 2}, 8}},
 };
 
-constexpr float RES_WIDTH = 800.0f;
-constexpr float RES_HEIGHT = 600.0f;
+constexpr int RES_WIDTH = 800;
+constexpr int RES_HEIGHT = 600;
 
