@@ -69,6 +69,10 @@ private:
 
 	PostprocessFramebuffer _postprocessBuffer;
 
+	std::vector<BlurFramebuffer> m_blurBuffers = { {false}, {true} };
+
+
+
 	//unsigned int _gBuffer;
 	unsigned int _gBufferItems[G_BUFFER_ITEMS_NUM];
 	std::shared_ptr<OpenGLShader> _gBufferShader;
