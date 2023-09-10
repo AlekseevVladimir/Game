@@ -6,47 +6,52 @@
 struct TextureParams
 {
 	TextureParams();
-	unsigned int _internalFormat;
-	unsigned int _width;
-	unsigned int _height;
-	unsigned int _format;
-	unsigned int _wrapS;
-	unsigned int _wrapT;
-	unsigned int _minFilter;
-	unsigned int _magFilter;
+	unsigned int m_internalFormat;
+	unsigned int m_width;
+	unsigned int m_height;
+	unsigned int m_format;
+	unsigned int m_wrapS;
+	unsigned int m_wrapT;
+	unsigned int m_minFilter;
+	unsigned int m_magFilter;
 };
 
 class Framebuffer
 {
 public:
 	Framebuffer();
-	virtual void _setupFramebuffer() = 0;
-	unsigned int _createTexture(const TextureParams& textureParams);
-	unsigned int _id;
+	virtual void m_setupFramebuffer() = 0;
+	unsigned int m_createTexture(const TextureParams& textureParams);
+	unsigned int m_id;
 
 };
 
 class GFramebuffer : public Framebuffer
 {
 public:
-	virtual void _setupFramebuffer() override;
+	virtual void m_setupFramebuffer() override;
 
-	unsigned int _positions;
-	unsigned int _normals;
-	unsigned int _albedoSpecular;
+	unsigned int m_positions;
+	unsigned int m_normals;
+	unsigned int m_albedoSpecular;
 };
 
 class PostprocessFramebuffer : public Framebuffer
 {
 public:
-	unsigned int _hdr;
-	unsigned int _brightness;
+	unsigned int m_hdr;
+	unsigned int m_brightness;
 
-	virtual void _setupFramebuffer() override;
+	virtual void m_setupFramebuffer() override;
 };
 
 class BlurFramebuffer : public Framebuffer
 {
 public:
+	BlurFramebuffer(bool horizontal);
 
+	virtual void m_setupFramebuffer() override;
+
+	unsigned int m_buffer;
+	bool m_horizontal;
 };
