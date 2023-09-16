@@ -39,6 +39,7 @@ void GFramebuffer::m_setupFramebuffer()
 {
 	TextureParams texParams;
 	glBindFramebuffer(GL_FRAMEBUFFER, m_id);
+	//m_CreateTexture breaks something CONFLICTING BINDINGS ACCORDING TO RENDERDOC
 	m_positions = m_createTexture(texParams);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_positions, 0);
 
@@ -47,6 +48,9 @@ void GFramebuffer::m_setupFramebuffer()
 	texParams.m_internalFormat = GL_RGBA;
 	m_albedoSpecular = m_createTexture(texParams);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, m_albedoSpecular, 0);
+	unsigned int attachmentTypes[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2};
+	glDrawBuffers(3, attachmentTypes);
+
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -82,10 +86,8 @@ void BlurFramebuffer::m_setupFramebuffer()
 {
 	TextureParams texParams;
 	m_buffer = m_createTexture(texParams);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_buffer, 0);
 	
 	glBindFramebuffer(GL_FRAMEBUFFER, m_id);
-	glBindFramebuffer(GL_FRAMEBUFFER, m_buffer);
 	TexturesCtrl::getInstance().bindTexture(m_buffer);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RES_WIDTH, RES_HEIGHT, 0, GL_RGBA, GL_FLOAT, NULL);
 	// TODO read about filters

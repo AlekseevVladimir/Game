@@ -17,6 +17,7 @@ RenderSystem::RenderSystem() : System()
 {
 	glGenTextures(COLOR_BUFFERS_NUM, _colorBuffers);
 
+	/*
 	glGenFramebuffers(2, _bloomGenerationBuffers);
 	glGenTextures(2, _bloomGenerationTextures);
 	for (int i = 0; i < 2; i++)
@@ -32,6 +33,7 @@ RenderSystem::RenderSystem() : System()
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _bloomGenerationTextures[i], 0);
 	}
+	*/
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	//glBindTexture(GL_TEXTURE_2D, 0);
@@ -54,13 +56,13 @@ RenderSystem::RenderSystem() : System()
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, _gBufferItems[i], 0);
 	}
 */
-//	_gBuffer._setupFramebuffer();
+	_gBuffer.m_setupFramebuffer();
 	_postprocessBuffer.m_setupFramebuffer();
+	
 	for (auto& blurBuffer : m_blurBuffers)
 	{
 		blurBuffer.m_setupFramebuffer();
 	}
-
 }
 
 void RenderSystem::process(float delta)
@@ -80,7 +82,7 @@ void RenderSystem::process(float delta)
 	int totalIterations = 10;
 	_bloomShader->use();
 
-	//this is kinda sheeeit and needs rework
+	//TODO this is kinda sheeeit and needs rework
 	for (int i = 0; i < totalIterations; i++)
 	{
 		BlurFramebuffer& blurFramebufferFrom = m_blurBuffers[!horizontal];
@@ -104,6 +106,7 @@ void RenderSystem::process(float delta)
 	glActiveTexture(GL_TEXTURE0);
 	_HDRShader->setInt1("hdrBuffer", TexturesCtrl::getInstance().bindTexture(_postprocessBuffer.m_hdr));
 	_HDRShader->setInt1("bloomBuffer", TexturesCtrl::getInstance().bindTexture(m_blurBuffers[!horizontal].m_buffer));
+	//_HDRShader->setInt1("bloomBuffer", TexturesCtrl::getInstance().bindTexture(_bloomGenerationTextures[!horizontal]));
 	_HDRShader->setFloat1("exposure", 1.f);
 	_HDRMesh->draw();
 	//glBindTexture(GL_TEXTURE_2D, 0);
