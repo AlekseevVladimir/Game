@@ -25,7 +25,7 @@ unsigned int Framebuffer::m_createTexture(const TextureParams& textureParams)
 {
 	unsigned int textureId;
 	glGenTextures(1, &textureId);
-	TexturesCtrl::getInstance().bindTexture(textureId);
+	TexturesCtrl::getInstance().bindTexture(textureId, GL_TEXTURE_2D);
 	glTexImage2D(GL_TEXTURE_2D, 0, textureParams.m_internalFormat, textureParams.m_width,
 		textureParams.m_height, 0, textureParams.m_format, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, textureParams.m_wrapS);
@@ -88,7 +88,7 @@ void BlurFramebuffer::m_setupFramebuffer()
 	m_buffer = m_createTexture(texParams);
 	
 	glBindFramebuffer(GL_FRAMEBUFFER, m_id);
-	TexturesCtrl::getInstance().bindTexture(m_buffer);
+	TexturesCtrl::getInstance().bindTexture(m_buffer, GL_TEXTURE_2D);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RES_WIDTH, RES_HEIGHT, 0, GL_RGBA, GL_FLOAT, NULL);
 	// TODO read about filters
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

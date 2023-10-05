@@ -21,7 +21,7 @@ public:
 		std::string imageName, std::string directory = "../../resources/textures");
 	void bindAllTextures();
 
-	unsigned int bindTexture(unsigned int textureID);
+	unsigned int bindTexture(unsigned int textureID, unsigned int texturerType);
 
 	unsigned int getTexturePos(unsigned int texId) const 
 	{

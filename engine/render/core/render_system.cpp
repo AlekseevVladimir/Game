@@ -65,6 +65,20 @@ RenderSystem::RenderSystem() : System()
 	}
 }
 
+/*
+void RenderSystem::process(float delta)
+{
+	_setCullingType(GL_BACK);
+	glBindFramebuffer(GL_FRAMEBUFFER, _gBuffer.m_id);
+	glClearColor(0.f, 0.f, 0.f, 1.f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	GameObject* viewPointPtr = GameObjectHolder::getInstance().
+		getObjectsWithComponent<ViewPointComponent>()[0];
+	render<ShaderComponent>(viewPointPtr);
+	_setCullingType(GL_FRONT);
+}
+*/
+
 void RenderSystem::process(float delta)
 {
 	_setCullingType(GL_BACK);
@@ -91,7 +105,8 @@ void RenderSystem::process(float delta)
 		_bloomShader->setInt1("horizontal", horizontal);
 		_bloomShader->setInt1("image", 
 			TexturesCtrl::getInstance().bindTexture(
-				firstIter ? _postprocessBuffer.m_brightness : blurFramebufferFrom.m_buffer));
+				firstIter ? _postprocessBuffer.m_brightness : blurFramebufferFrom.m_buffer,
+				GL_TEXTURE_2D));
 		_bloomMesh->draw();
 		horizontal = !horizontal;
 		if (firstIter)
@@ -104,13 +119,16 @@ void RenderSystem::process(float delta)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	_HDRShader->use();
 	glActiveTexture(GL_TEXTURE0);
-	_HDRShader->setInt1("hdrBuffer", TexturesCtrl::getInstance().bindTexture(_postprocessBuffer.m_hdr));
-	_HDRShader->setInt1("bloomBuffer", TexturesCtrl::getInstance().bindTexture(m_blurBuffers[!horizontal].m_buffer));
+	_HDRShader->setInt1("hdrBuffer", TexturesCtrl::getInstance().bindTexture(
+		_postprocessBuffer.m_hdr, GL_TEXTURE_2D));
+	_HDRShader->setInt1("bloomBuffer", TexturesCtrl::getInstance().bindTexture(
+		m_blurBuffers[!horizontal].m_buffer, GL_TEXTURE_2D));
 	//_HDRShader->setInt1("bloomBuffer", TexturesCtrl::getInstance().bindTexture(_bloomGenerationTextures[!horizontal]));
 	_HDRShader->setFloat1("exposure", 1.f);
 	_HDRMesh->draw();
 	//glBindTexture(GL_TEXTURE_2D, 0);
 }
+
 
 
 template<typename TShaderComponent>

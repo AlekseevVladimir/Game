@@ -5,7 +5,7 @@
 DirectionalShadowMapComponent::DirectionalShadowMapComponent(std::string goID) : ShadowMapComponent(goID)
 {
 	//glActiveTexture(GL_TEXTURE1);
-	TexturesCtrl::getInstance().bindTexture(_shadowMapID);
+	TexturesCtrl::getInstance().bindTexture(_shadowMapID, GL_TEXTURE_2D);
 	//glBindTexture(GL_TEXTURE_2D, _shadowMapID);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, _shadowMapWidth, _shadowMapHeight,
 		0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);

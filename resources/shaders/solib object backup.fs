@@ -93,7 +93,6 @@ vec2 ParallaxMapping();
 
 void main()
 {
-	// TODO some strange lighting sstuff is ggoing on here: there is a lighted area on trolls chest with dir light behind with TBN
     vec3 result = calculateDirLight();
     for (int i = 0; i < numPointLights; ++i) {
         result += calculatePointLight(pointLights[i]);
@@ -128,7 +127,7 @@ vec3 calculateDirLight() {
 	vec3 lightDir = directionalLight.direction;
 	if (texture_normal_set > 0)
 	{
-		lightDir = TBN * lightDir;
+		lightDir = -(TBN * lightDir);
 	}
 	lightDir = normalize(-lightDir);
     
@@ -218,7 +217,7 @@ float calculateShadow(vec4 fragPosLightSpace, vec3 lightDir)
     vec3 norm = getNormal();
 	
 	// TODO try using sollution from learnopengl as this creates shadow acne on the model
-	float bias = 0;//max(0.003, 0.003 * (1 - dot(norm, lightDir)));
+	float bias = max(0.003, 0.003 * (1 - dot(norm, lightDir)));
 	
 	float shadow = 0.0;
 	// TODO READ ABOUT TEXTURE SIZE, LOD, MIP MAPS
@@ -242,7 +241,7 @@ float calculateOmnidirShadow(vec3 fragPos, vec3 lightPos)
 	float closestDepth = texture(omnidirShadowMap, fragToLight).r;
 	closestDepth *= farPlane;
 	float currentDepth = length(fragToLight);
-	float bias = 0;//0.005f;
+	float bias = 0.005f;
 	float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
 	return shadow;
 }
@@ -252,7 +251,7 @@ float calculateOmnidirShadow(vec3 fragPos, vec3 lightPos)
 {
 	// TODO troll is wierdly dark with these shadows, need to check
 	float shadow = 0.0;
-	float bias = 0;//0.15;
+	float bias = 0.15;
 	int samples = 20;
 	vec3 viewPos = ViewPos;
 	

@@ -24,11 +24,15 @@ void SolidObjectShader::configure() {
 		//assert(i < MAX_POINT_LIGHTS);
 		LightEmitterComponent* lightCompPtr = goPtr->getComponent<LightEmitterComponent>();
 		std::string baseStr = "pointLights[" + std::to_string(i);
-		setFloat3((baseStr + std::string("].ambient")).c_str(), lightCompPtr->getLightData().ambient.data());
-		setFloat3((baseStr + std::string("].diffuse")).c_str(), lightCompPtr->getLightData().diffuse.data());
-		setFloat3((baseStr + std::string("].specular")).c_str(), lightCompPtr->getLightData().specular.data());
+		setFloat3((baseStr + std::string("].ambient")).c_str(), 
+			lightCompPtr->getLightData().ambient.data());
+		setFloat3((baseStr + std::string("].diffuse")).c_str(), 
+			lightCompPtr->getLightData().diffuse.data());
+		setFloat3((baseStr + std::string("].specular")).c_str(), 
+			lightCompPtr->getLightData().specular.data());
 
-		setFloat3((baseStr + std::string("].position")).c_str(), &goPtr->getComponent<PositionComponent>()->getPos()[0]);
+		setFloat3((baseStr + std::string("].position")).c_str(), 
+			&goPtr->getComponent<PositionComponent>()->getPos()[0]);
 
 		setFloat1((baseStr + std::string("].constant")).c_str(), 1.f);
 		setFloat1((baseStr + std::string("].linear")).c_str(), 0.09f); 
@@ -36,10 +40,8 @@ void SolidObjectShader::configure() {
 
 		OmnidirShadowMapComponent* shadowMap = goPtr->getComponent<OmnidirShadowMapComponent>();
 		setFloat1("farPlane", shadowMap->_farPlane);
-		
-		glActiveTexture(GL_TEXTURE0 + 13);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, shadowMap->_shadowMapID);
-		setInt1("omnidirShadowMap", 13);
+		setInt1("omnidirShadowMap", 
+			texCtrl.bindTexture(shadowMap->_shadowMapID, GL_TEXTURE_CUBE_MAP));
 		glActiveTexture(GL_TEXTURE0);
 	}
 
@@ -65,7 +67,8 @@ void SolidObjectShader::configure() {
 		//glActiveTexture(GL_TEXTURE0 + 12);
 		//glBindTexture(GL_TEXTURE_2D, shadowMapCmp->_shadowMapID);
 //		TexturesCtrl::getInstance().bindTexture(shadowMapCmp->_shadowMapID);
-		setInt1("shadowMap", TexturesCtrl::getInstance().bindTexture(shadowMapCmp->_shadowMapID));
+		setInt1("shadowMap", TexturesCtrl::getInstance().bindTexture(
+			shadowMapCmp->_shadowMapID, GL_TEXTURE_2D));
 	//	glActiveTexture(GL_TEXTURE0);
 	}
 }
@@ -85,7 +88,7 @@ void SolidObjectShader::setTextureData(std::vector<Mesh::Texture>& textures)
 	for (const Mesh::Texture& texture : textures)
 	{
 		std::string name = texture.type;
-		unsigned idx = texCtrl.bindTexture(texture.id);
+		unsigned idx = texCtrl.bindTexture(texture.id, GL_TEXTURE_2D);
 		setInt1(("material." + name).c_str(), idx);
 		if (name == "texture_normal")
 		{

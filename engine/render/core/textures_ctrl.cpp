@@ -3,8 +3,9 @@
 #include "glad/glad.h"
 
 
-unsigned int TexturesCtrl::bindTexture(unsigned int textureID) 
+unsigned int TexturesCtrl::bindTexture(unsigned int textureID, unsigned int textureType) 
 {
+	// TODO consider making texture a class
 	
 	if (m_currentTexIdx > GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS) 
 	{
@@ -19,15 +20,12 @@ unsigned int TexturesCtrl::bindTexture(unsigned int textureID)
 
 	if (m_boundTextures.count(textureID)) 
 	{
-		// TODO dirty hack to fix issue discribed in textures_ctrl.h comment 
-		// directional shadow is drawn to texture but is not considered during render
-
 		glActiveTexture(GL_TEXTURE0 + m_boundTextures[textureID]);
-		glBindTexture(GL_TEXTURE_2D, textureID);
+		glBindTexture(textureType, textureID);
 		return m_boundTextures[textureID];
 	}
 	glActiveTexture(GL_TEXTURE0 + m_currentTexIdx);
-	glBindTexture(GL_TEXTURE_2D, textureID);
+	glBindTexture(textureType, textureID);
 	m_boundTextures[textureID] = m_currentTexIdx;
 	return m_currentTexIdx++;
 }
@@ -35,12 +33,13 @@ unsigned int TexturesCtrl::bindTexture(unsigned int textureID)
 
 void TexturesCtrl::bindAllTextures() 
 {
+	// DEPRECATED
 	for (size_t i = 0; i < m_textureIDs.size(); i++) 
 	{
 		//glActiveTexture(GL_TEXTURE0 + i);
 		//glBindTexture(GL_TEXTURE_2D, m_textureIDs[i]);
 		//m_boundTextures[m_textureIDs[i]] = i;
-		bindTexture(m_textureIDs[i]);
+		bindTexture(m_textureIDs[i], GL_TEXTURE_2D);
 	}
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);

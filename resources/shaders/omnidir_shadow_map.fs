@@ -1,4 +1,7 @@
 #version 330 core
+
+#define BIAS 0.05
+
 in vec4 FragPos;
 
 uniform vec3 lightPos;
@@ -13,4 +16,6 @@ void main()
 	lightDistance = lightDistance / farPlane;
 	
 	gl_FragDepth = lightDistance;
+	
+    gl_FragDepth += gl_FrontFacing ? BIAS : 0.0; //  float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005); 
 }

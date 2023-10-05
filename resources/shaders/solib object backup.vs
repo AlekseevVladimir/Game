@@ -32,12 +32,12 @@ void main()
 	//T = normalize(T - dot(T, N) * N);
 	vec3 B = normalize(vec3(model * vec4(aBiTangent, 0.0)));//cross(N, T);
 	
-	TBN = transpose(mat3(T, B, N));
-    //TBN = mat3(
-	//vec3(1, 0, 0),
-	//vec3(0, 1, 0),
-	//vec3(0, 0, 1)
-	//);
+	//TBN = transpose(mat3(T, B, N));
+    TBN = mat3(
+	vec3(1, 0, 0),
+	vec3(0, 1, 0),
+	vec3(0, 0, 1)
+	);
 	gl_Position = projection * view * model * vec4(aPos, 1.0);
 	FragPos = vec3(model * vec4(aPos, 1.0));
 	ViewPos = viewPos;

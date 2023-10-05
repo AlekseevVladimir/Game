@@ -78,9 +78,10 @@ void configureFramebuffer(
 	//by default the culling is disabled TODO enable it. also there is some bright spot on troll's chest which should be in shadow
 	auto* renderSystem = SystemsHolder::getInstance().getSystem<RenderSystem>();
 	renderSystem->_setCullingType(GL_FRONT);
-	//glDisable(GL_CULL_FACE);
+	// TODO IF WE DISABLE CULL FACE IT WORKS
+	glDisable(GL_CULL_FACE);
 	renderSystem->render<TShaderComponent>(lightObjectPtr);
 
-	//glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 	//glCullFace(GL_BACK);
 }
