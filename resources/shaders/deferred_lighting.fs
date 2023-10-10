@@ -78,6 +78,7 @@ vec3 sampleOffsetDirections[20] = vec3[]
 vec3 calculateDirLight();
 float calculateShadow(vec4 fragPosLightSpace, vec3 lightDir);
 vec3 calculatePointLight(PointLight light);
+float calculateOmnidirShadow(vec3 fragPos, vec3 lightPos);
 
 void main()
 {
@@ -173,7 +174,36 @@ vec3 calculatePointLight(PointLight light)
         
     float distance = length(lightPos - FragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
-	float shadow = 0.0;//calculateOmnidirShadow(FragPos, lightPos);
+	float shadow = calculateOmnidirShadow(FragPos, lightPos);
     //float shadow = calculateOmnidirShadow(FragPos, light.position);
 	return (ambient  + (1.0 - shadow) * (diffuse + specular)) * attenuation;
+}
+
+
+float calculateOmnidirShadow(vec3 fragPos, vec3 lightPos)
+{
+	// TODO troll is wierdly dark with these shadows, need to check
+	float shadow = 0.0;
+	float bias = 0;//0.15;
+	int samples = 20;
+	
+	vec3 fragToLight = fragPos - lightPos;
+	float currentDepth = length(fragToLight);
+
+	
+	fragToLight = fragPos - lightPos;
+	//float currentDepth = length(fragToLight);
+	float viewDistance = length(viewPos - fragPos);
+	float diskRadius = (1.0 + (viewDistance / farPlane)) / 25.0;
+	for (int i = 0; i < samples; ++i)
+	{
+		float closestDepth = texture(
+			omnidirShadowMap, fragToLight + sampleOffsetDirections[i] * diskRadius).r;
+		closestDepth *= farPlane;
+		if (currentDepth - bias > closestDepth)
+		{
+			shadow += 1.0;
+		}
+	}
+	return shadow / float(samples);
 }
