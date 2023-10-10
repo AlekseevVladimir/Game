@@ -52,7 +52,10 @@ public:
 	}
 private:
 	std::unique_ptr<IRenderer> m_renderer;
-	unsigned int _postprocessFBOID;
+
+	std::shared_ptr<OpenGLShader> _GShader;
+	std::unique_ptr<Mesh> _GMesh;
+
 	std::shared_ptr<OpenGLShader> _HDRShader;
 	std::unique_ptr<Mesh> _HDRMesh;
 

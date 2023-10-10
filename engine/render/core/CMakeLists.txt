@@ -14,7 +14,12 @@ SET(CORE_SOURCES
 	"textures_ctrl.cpp" 
 	"render_system.cpp" 
 	"framebuffers.h"
-	"framebuffers.cpp")
+	"framebuffers.cpp"
+	"g_buffer_shader_component.h"
+	"g_buffer_shader_component.cpp"
+	"lighting_shader_component.h"
+	"lighting_shader_component.cpp"
+)
 
 SET(LIGHT_SOURCES
 	"light/light_direction_component.h"

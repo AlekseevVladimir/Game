@@ -1,4 +1,4 @@
-#include "open_gl_solid_object_shader.h"
+#include "deffered_lighting_shader.h"
 #include "engine/transform/position_component.h"
 #include "engine/transform/rotation_component.h"
 #include "engine/transform/scale_component.h"
@@ -15,7 +15,6 @@
 
 
 void SolidObjectShader::configure() {
-	/*
 	TexturesCtrl& texCtrl = TexturesCtrl::getInstance();
 
 	auto ptrsVector = GameObjectHolder::getInstance().getObjectsOfType("pointLight");
@@ -72,7 +71,6 @@ void SolidObjectShader::configure() {
 			shadowMapCmp->_shadowMapID, GL_TEXTURE_2D));
 	//	glActiveTexture(GL_TEXTURE0);
 	}
-	*/
 }
 
 void SolidObjectShader::setMatrices(GameObject* viewPointPtr)

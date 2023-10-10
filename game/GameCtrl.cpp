@@ -23,7 +23,7 @@ GameCtrl::GameCtrl()
 	createPointLight({ 3.0f, 2.0f, 4.0f }, { 1.0f, 1.0f , 1.0f }, { true, false, "light" });
 	//createFloor({5.0f, 2.0f, 4.0f}, {true, false, "solidObject"});
 	createFloor({ 0.0f, -1.0f, 0.0f }, { true, false, "solidObject" });
-	createTroll({ 0.0f, 0.0f, 0.0f }, { true, false, "solidObject" });
+	createTroll({ 0.0f, -0.5f, 0.0f }, { true, false, "solidObject" });
 	SystemsHolder::getInstance().addSystem<InputControlSystem>();
 	SystemsHolder::getInstance().addSystem<MovementSystem>();
 	SystemsHolder::getInstance().addSystem<RotationSystem>();

@@ -33,7 +33,8 @@ public:
 
 	unsigned int m_positions;
 	unsigned int m_normals;
-	unsigned int m_albedoSpecular;
+	unsigned int m_albedo;
+	unsigned int m_specShine;
 };
 
 class PostprocessFramebuffer : public Framebuffer

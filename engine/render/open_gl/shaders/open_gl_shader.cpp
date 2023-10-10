@@ -58,6 +58,7 @@ void OpenGLShader::use()
 
 void OpenGLShader::setInt1(const char* name, int value)
 {
+	int test = glGetUniformLocation(m_programID, name);
 	glUniform1i(glGetUniformLocation(m_programID, name), value);
 }
 

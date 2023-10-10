@@ -1,5 +1,8 @@
 #include "game_object_factory.h"
 
+#include "engine/render/core/g_buffer_shader_component.h"
+#include "engine/render/core/lighting_shader_component.h"
+
 #include <engine/render/core/light/light_direction_component.h>
 #include <engine/render/core/light/light_emitter_component.h>
 #include <engine/render/core/light/spot_light_component.h>
@@ -144,12 +147,12 @@ GameObject* createFloor(glm::vec3 pos, GameObject::RenderSettings renderSettings
 	ModelComponent* modelComponent = goPtr->createComponent<ModelComponent>();
 	modelComponent->model = generateModel(
 		"floor.png", "box_specular_map.png");
-	std::shared_ptr<Shader> shader = ShadersManager::getInstance().
-		createProgram<SolidObjectShader>("solidObject");;
-	goPtr->createComponent<ShaderComponent>(shader);
+	std::shared_ptr<Shader> gBufferShader = ShadersManager::getInstance().
+		createProgram<SolidObjectShader>("g_buffer_solid");;
 	std::shared_ptr<Shader> shadowMapShader = ShadersManager::getInstance().
 		createProgram<ShadowMapShader>("shadow_map");
 	goPtr->createComponent<ShadowMapShaderComponent>(shadowMapShader);
+	goPtr->createComponent<GBufferShaderComponent>(gBufferShader);
 	goPtr->createComponent<ScaleComponent>(Vector3<float>(1.f, 1.f, 1.f));
 	//transform->setScale({10.0f, 1.0f, 10.0f});
 	//goPtr->createComponent<Generated3DVisualsComponent>("plate", "plate", "floor.png", "box_specular_map.png");
@@ -164,8 +167,12 @@ GameObject* createTroll(glm::vec3 pos, GameObject::RenderSettings renderSettings
 	std::shared_ptr<Model> modelPtr = ModelLoader::getInstance().getModel("test");
 	modelCompPtr->model = modelPtr;
 	//modelPtr->setupModel();
-	std::shared_ptr<Shader> shader = ShadersManager::getInstance().
-		createProgram<SolidObjectShader>("solidObject");;
+	//std::shared_ptr<Shader> shader = ShadersManager::getInstance().
+	//	createProgram<SolidObjectShader>("solidObject");;
+
+	std::shared_ptr<Shader> gBufferShader = ShadersManager::getInstance().
+		createProgram<SolidObjectShader>("g_buffer_solid");
+
 	std::shared_ptr<Shader> shadowMapShader = ShadersManager::getInstance().
 		createProgram<ShadowMapShader>("shadow_map");
 
@@ -173,7 +180,7 @@ GameObject* createTroll(glm::vec3 pos, GameObject::RenderSettings renderSettings
 		createProgram<OmnidirShadowMapShader>("omnidir_shadow_map");
 
 	goPtr->createComponent<ShadowMapShaderComponent>(shadowMapShader);
-	goPtr->createComponent<ShaderComponent>(shader);
+	goPtr->createComponent<GBufferShaderComponent>(gBufferShader);
 	goPtr->createComponent<OmnidirShadowMapShaderComponent>(omnidirShadowMapShader);
 	goPtr->createComponent<PositionComponent>(pos);
 	// TODO yaw is not working

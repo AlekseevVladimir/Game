@@ -45,11 +45,24 @@ void GFramebuffer::m_setupFramebuffer()
 
 	m_normals = m_createTexture(texParams);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_normals, 0);
+	m_albedo = m_createTexture(texParams);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, m_albedo, 0);
+
 	texParams.m_internalFormat = GL_RGBA;
-	m_albedoSpecular = m_createTexture(texParams);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, m_albedoSpecular, 0);
-	unsigned int attachmentTypes[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2};
-	glDrawBuffers(3, attachmentTypes);
+	m_specShine = m_createTexture(texParams);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, m_specShine, 0);
+	unsigned int attachmentTypes[4] = { 
+		GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3
+	};
+	glDrawBuffers(4, attachmentTypes);
+
+
+	unsigned int tmpDepthBuffer;
+	glGenRenderbuffers(1, &tmpDepthBuffer);
+	glBindRenderbuffer(GL_RENDERBUFFER, tmpDepthBuffer);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, RES_WIDTH, RES_HEIGHT);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, tmpDepthBuffer);
+
 
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

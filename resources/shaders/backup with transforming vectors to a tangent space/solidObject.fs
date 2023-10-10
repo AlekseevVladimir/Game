@@ -93,7 +93,8 @@ vec2 ParallaxMapping();
 
 void main()
 {
-	vec3 result = calculateDirLight();
+	// TODO some strange lighting sstuff is ggoing on here: there is a lighted area on trolls chest with dir light behind with TBN
+    vec3 result = calculateDirLight();
     for (int i = 0; i < numPointLights; ++i) {
         result += calculatePointLight(pointLights[i]);
     }
@@ -125,10 +126,13 @@ vec3 calculateDirLight() {
 
     vec3 norm = getNormal();
 	vec3 lightDir = directionalLight.direction;
-
+	if (texture_normal_set > 0)
+	{
+		lightDir = TBN * lightDir;
+	}
 	lightDir = normalize(-lightDir);
     
-	//vec3 lightDir = normalize(-(directionalLight.direction));
+	//vec3 lightDir = normalize(-(TBN * directionalLight.direction));
 
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = directionalLight.diffuse * diff;
@@ -148,7 +152,10 @@ vec3 calculatePointLight(PointLight light) {
 
     vec3 norm = getNormal();
 	vec3 lightPos = light.position;
-
+	if (texture_normal_set > 0)
+	{
+		lightPos = TBN * lightPos;
+	}
 	
 	vec3 lightDir = normalize(lightPos - FragPos);
 
@@ -251,7 +258,12 @@ float calculateOmnidirShadow(vec3 fragPos, vec3 lightPos)
 	
 	vec3 fragToLight = fragPos - lightPos;
 	float currentDepth = length(fragToLight);
-
+	if (texture_normal_set > 0)
+	{
+		fragPos = transpose(TBN) * fragPos;
+		lightPos = transpose(TBN) * lightPos;
+		viewPos = transpose(TBN) * viewPos;
+	}
 	
 	fragToLight = fragPos - lightPos;
 	//float currentDepth = length(fragToLight);
@@ -327,7 +339,7 @@ vec3 getNormal()
 	{
 		norm = texture(material.texture_normal, ParallaxMapping()).rgb;
 		//probably remove tbn from here
-		norm = normalize( TBN * (norm * 2.0 - 1.0));
+		norm = normalize( (norm * 2.0 - 1.0));
 	}
 	else
 	{

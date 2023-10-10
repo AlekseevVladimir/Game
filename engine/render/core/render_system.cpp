@@ -1,5 +1,7 @@
 #include "render_system.h"
-#include "engine/render/core/shader_component.h"
+#include "engine/render/core/g_buffer_shader_component.h"
+#include "engine/render/core/lighting_shader_component.h"
+#include "engine/render/open_gl/shaders/deferred_lighting_shader.h"
 #include "engine/render/core/view_point_component.h"
 #include "glad/glad.h"
 #include "engine/render/open_gl/shaders/open_gl_shader.h"
@@ -41,6 +43,9 @@ RenderSystem::RenderSystem() : System()
 	_HDRMesh = std::make_unique<Mesh>(rectVertices, std::vector<Mesh::Texture>());
 	_bloomShader = ShadersManager::getInstance().createProgram<OpenGLShader>("bloom");
 	_bloomMesh = std::make_unique<Mesh>(rectVertices, std::vector<Mesh::Texture>());
+	_GShader = ShadersManager::getInstance().createProgram<DeferredLightingShader>(
+		"deferred_lighting");
+	_GMesh = std::make_unique<Mesh>(rectVertices, std::vector<Mesh::Texture>());
 
 /*
 	glGenFramebuffers(1, &_gBuffer);
@@ -82,15 +87,39 @@ void RenderSystem::process(float delta)
 void RenderSystem::process(float delta)
 {
 	_setCullingType(GL_BACK);
-	glBindFramebuffer(GL_FRAMEBUFFER, _postprocessBuffer.m_id);
+	glBindFramebuffer(GL_FRAMEBUFFER, _gBuffer.m_id);
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	GameObject* viewPointPtr = GameObjectHolder::getInstance().
 		getObjectsWithComponent<ViewPointComponent>()[0];
-	render<ShaderComponent>(viewPointPtr);
+	render<GBufferShaderComponent>(viewPointPtr);
 	
-	_setCullingType(GL_FRONT);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glBindFramebuffer(GL_FRAMEBUFFER, _postprocessBuffer.m_id);
+	// made kinda stupid mistake as per-object render was relevant only for filling g buffer
+	// there is no need to render every object again as we already have all the data in 4 textures 
+	// and only need to calculate light for them
+	// (probably need to store fragment depths too)
+
+	//_setCullingType(GL_FRONT);
+	glDisable(GL_CULL_FACE);
+	
+	_GShader->use();
+	glActiveTexture(GL_TEXTURE0);
+
+	TexturesCtrl& texCtrl = TexturesCtrl::getInstance();
+	_GShader->setInt1("gPosition", texCtrl.bindTexture(_gBuffer.m_positions, GL_TEXTURE_2D));
+	_GShader->setInt1("gNormal", texCtrl.bindTexture(_gBuffer.m_normals, GL_TEXTURE_2D));
+	_GShader->setInt1("gAlbedo", texCtrl.bindTexture(_gBuffer.m_albedo, GL_TEXTURE_2D));
+	_GShader->setInt1("gSpecShine", texCtrl.bindTexture(_gBuffer.m_specShine, GL_TEXTURE_2D));
+	// uniforms are optimized away as they are not used
+	_GShader->setInt1("test", texCtrl.bindTexture(_gBuffer.m_specShine, GL_TEXTURE_2D));
+	_GShader->configure();
+	_GShader->setMatrices(viewPointPtr);
+	_GMesh->draw();
+/*
 	bool firstIter = true;
 	bool horizontal = true;
 	int totalIterations = 10;
@@ -127,6 +156,7 @@ void RenderSystem::process(float delta)
 	_HDRShader->setFloat1("exposure", 1.f);
 	_HDRMesh->draw();
 	//glBindTexture(GL_TEXTURE_2D, 0);
+	*/
 }
 
 

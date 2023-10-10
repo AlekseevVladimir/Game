@@ -1,4 +1,4 @@
-#include "open_gl_solid_object_shader.h"
+#include "deferred_lighting_shader.h"
 #include "engine/transform/position_component.h"
 #include "engine/transform/rotation_component.h"
 #include "engine/transform/scale_component.h"
@@ -14,8 +14,7 @@
 #include "glad/glad.h"
 
 
-void SolidObjectShader::configure() {
-	/*
+void DeferredLightingShader::configure() {
 	TexturesCtrl& texCtrl = TexturesCtrl::getInstance();
 
 	auto ptrsVector = GameObjectHolder::getInstance().getObjectsOfType("pointLight");
@@ -72,17 +71,16 @@ void SolidObjectShader::configure() {
 			shadowMapCmp->_shadowMapID, GL_TEXTURE_2D));
 	//	glActiveTexture(GL_TEXTURE0);
 	}
-	*/
 }
 
-void SolidObjectShader::setMatrices(GameObject* viewPointPtr)
+void DeferredLightingShader::setMatrices(GameObject* viewPointPtr)
 {
 	setFloat3("viewPos", &viewPointPtr->getComponent<PositionComponent>()->getPos()[0]);
 	setMatrix4Float("view", GL_FALSE, glm::value_ptr(getView(viewPointPtr)));
 	setMatrix4Float("projection", GL_FALSE, glm::value_ptr(getProjection()));
 }
 
-void SolidObjectShader::setTextureData(std::vector<Mesh::Texture>& textures) 
+void DeferredLightingShader::setTextureData(std::vector<Mesh::Texture>& textures) 
 {
 	TexturesCtrl& texCtrl = TexturesCtrl::getInstance();
 	bool hasNormalMap = false;
