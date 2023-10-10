@@ -61,8 +61,8 @@ GameObject* createCube(
 	modelComponent->model = 
 		generateModel("box.png", "box_specular_map.png");
 	std::shared_ptr<Shader> shader = ShadersManager::getInstance().
-		createProgram<SolidObjectShader>("solidObject");
-	goPtr->createComponent<ShaderComponent>(shader);
+		createProgram<SolidObjectShader>("g_buffer_solid");
+	goPtr->createComponent<GBufferShaderComponent>(shader);
 	std::shared_ptr<Shader> shadowMapShader = ShadersManager::getInstance().
 		createProgram<ShadowMapShader>("shadow_map");
 	std::shared_ptr<Shader> omnidirShadowMapShader = ShadersManager::getInstance().
@@ -95,8 +95,8 @@ GameObject* createPointLight(
 	modelComponent->model = 
 		generateModel("box.png", "box_specular_map.png");
 	std::shared_ptr<Shader> shader = ShadersManager::getInstance().
-		createProgram<SolidObjectShader>("solidObject");
-	goPtr->createComponent<ShaderComponent>(shader);
+		createProgram<SolidObjectShader>("g_buffer_solid");
+	goPtr->createComponent<GBufferShaderComponent>(shader);
 //	std::shared_ptr<Shader> shadowMapShader = ShadersManager::getInstance().
 //		createProgram<ShadowMapShader>("shadow_map");
 //	goPtr->createComponent<OmnidirShadowMapShaderComponent>(shadowMapShader);

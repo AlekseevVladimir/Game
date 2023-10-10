@@ -66,12 +66,26 @@ uniform samplerCube omnidirShadowMap;
 
 uniform vec3 viewPos;
 
+vec3 sampleOffsetDirections[20] = vec3[]
+(
+   vec3( 1,  1,  1), vec3( 1, -1,  1), vec3(-1, -1,  1), vec3(-1,  1,  1), 
+   vec3( 1,  1, -1), vec3( 1, -1, -1), vec3(-1, -1, -1), vec3(-1,  1, -1),
+   vec3( 1,  1,  0), vec3( 1, -1,  0), vec3(-1, -1,  0), vec3(-1,  1,  0),
+   vec3( 1,  0,  1), vec3(-1,  0,  1), vec3( 1,  0, -1), vec3(-1,  0, -1),
+   vec3( 0,  1,  1), vec3( 0, -1,  1), vec3( 0, -1, -1), vec3( 0,  1, -1)
+);
+
 vec3 calculateDirLight();
 float calculateShadow(vec4 fragPosLightSpace, vec3 lightDir);
+vec3 calculatePointLight(PointLight light);
 
 void main()
 {
 	vec3 result = calculateDirLight();
+	for (int i = 0; i < numPointLights; ++i) 
+	{
+        result += calculatePointLight(pointLights[i]);
+    }
 	//FragColor = vec4(vec3(texture(gPosition, TexCoords)), 1.0);
 	FragColor = vec4(result, 1.0);
 	//FragColor = vec4(1.0, 1.0, 1.0, 1.0);
@@ -134,4 +148,32 @@ float calculateShadow(vec4 fragPosLightSpace, vec3 lightDir)
 	}
 
 	return shadow / 9.0;
+}
+
+vec3 calculatePointLight(PointLight light) 
+{
+
+    vec3 ambient = light.ambient * vec3(texture(gAlbedo, TexCoords).rgb);
+
+    vec3 norm = texture(gNormal, TexCoords).rgb;
+	vec3 lightPos = light.position;
+
+	vec3 FragPos = texture(gPosition, TexCoords).rgb;
+	
+	vec3 lightDir = normalize(lightPos - FragPos);
+
+    float diff = max(dot(norm, lightDir), 0.0);
+    vec3 diffuse = light.diffuse * diff * vec3(texture(gAlbedo, TexCoords).rgb);
+
+    float specularStrength = 0.5;
+    vec3 viewDir = normalize(viewPos-FragPos);
+    vec3 reflectDir = reflect(-lightDir, norm); 
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), texture(gSpecShine, TexCoords).a);
+    vec3 specular = light.specular * spec * vec3(texture(gSpecShine, TexCoords).rgb); 
+        
+    float distance = length(lightPos - FragPos);
+    float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
+	float shadow = 0.0;//calculateOmnidirShadow(FragPos, lightPos);
+    //float shadow = calculateOmnidirShadow(FragPos, light.position);
+	return (ambient  + (1.0 - shadow) * (diffuse + specular)) * attenuation;
 }
