@@ -94,10 +94,9 @@ void RenderSystem::process(float delta)
 		getObjectsWithComponent<ViewPointComponent>()[0];
 	render<GBufferShaderComponent>(viewPointPtr);
 	
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, _postprocessBuffer.m_id);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glBindFramebuffer(GL_FRAMEBUFFER, _postprocessBuffer.m_id);
 	// made kinda stupid mistake as per-object render was relevant only for filling g buffer
 	// there is no need to render every object again as we already have all the data in 4 textures 
 	// and only need to calculate light for them
@@ -119,7 +118,7 @@ void RenderSystem::process(float delta)
 	_GShader->configure();
 	_GShader->setMatrices(viewPointPtr);
 	_GMesh->draw();
-/*
+
 	bool firstIter = true;
 	bool horizontal = true;
 	int totalIterations = 10;
@@ -156,7 +155,7 @@ void RenderSystem::process(float delta)
 	_HDRShader->setFloat1("exposure", 1.f);
 	_HDRMesh->draw();
 	//glBindTexture(GL_TEXTURE_2D, 0);
-	*/
+	
 }
 
 

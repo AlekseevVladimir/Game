@@ -1,10 +1,9 @@
 #version 330 core
 
-//in vec3 FragPos;
 in vec2 TexCoords;
-//in vec4 FragPosLightSpace;
 
-out vec4 FragColor;
+layout (location = 0) out vec4 FragColor;
+layout (location = 1) out vec4 BrightColor;
 
   
 #define MAX_POINT_LIGHTS 4
@@ -87,9 +86,14 @@ void main()
 	{
         result += calculatePointLight(pointLights[i]);
     }
-	//FragColor = vec4(vec3(texture(gPosition, TexCoords)), 1.0);
+	
 	FragColor = vec4(result, 1.0);
-	//FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+	float brightness = dot(FragColor.rgb, vec3(0.2126, 0.7152, 0.0722));
+	BrightColor = vec4(0.0, 0.0, 0.0, 1.0);
+	if (brightness > 1.0)
+	{
+		BrightColor = vec4(FragColor.rgb, 1.0);
+	}
 }  
 
 
@@ -112,7 +116,7 @@ vec3 calculateDirLight() {
     vec3 viewDir = normalize(viewPos - FragPos);
     vec3 reflectDir = reflect(-lightDir, norm); 
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), texture(gSpecShine, TexCoords).a);
-    vec3 specular = directionalLight.specular * spec; 
+    vec3 specular = directionalLight.specular * spec * vec3(texture(gSpecShine, TexCoords).rgb); 
 	vec4 FragPosLightSpace = lightSpaceMatrix * vec4(FragPos, 1.0);
     float shadow = calculateShadow(FragPosLightSpace, lightDir);
     return (ambient + (1.0 - shadow) * (diffuse + specular)) * color;
