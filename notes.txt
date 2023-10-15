@@ -1,0 +1,1 @@
+to implelemnt ssao i should probably move all the calculations to view space, or use another approach for ambient occlusion. leaving it for now
