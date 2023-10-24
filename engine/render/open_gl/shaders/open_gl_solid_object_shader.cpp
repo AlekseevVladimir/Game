@@ -78,8 +78,8 @@ void SolidObjectShader::configure() {
 void SolidObjectShader::setMatrices(GameObject* viewPointPtr)
 {
 	setFloat3("viewPos", &viewPointPtr->getComponent<PositionComponent>()->getPos()[0]);
-	setMatrix4Float("view", GL_FALSE, glm::value_ptr(getView(viewPointPtr)));
-	setMatrix4Float("projection", GL_FALSE, glm::value_ptr(getProjection()));
+	setMatrix4Float("view", GL_FALSE, glm::value_ptr(RenderUtils::getView(viewPointPtr)));
+	setMatrix4Float("projection", GL_FALSE, glm::value_ptr(RenderUtils::getProjection()));
 }
 
 void SolidObjectShader::setTextureData(std::vector<Mesh::Texture>& textures) 

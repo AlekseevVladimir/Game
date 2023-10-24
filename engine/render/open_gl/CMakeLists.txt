@@ -11,7 +11,10 @@ SET(SHADER_SOURCES
 	"shaders/open_gl_solid_object_shader.h"
 	"shaders/open_gl_solid_object_shader.cpp"
 	"shaders/omnidir_shadow_map_shader.h"
- "shaders/deferred_lighting_shader.h" "shaders/deferred_lighting_shader.cpp")
+	"shaders/deferred_lighting_shader.h" 
+	"shaders/deferred_lighting_shader.cpp" 
+	"shaders/pbr_shader.h" 
+	"shaders/pbr_shader.cpp")
 SET(MODEL_SOURCES
 	"model/model_loader.h" 
 	"model/model_loader.cpp" 

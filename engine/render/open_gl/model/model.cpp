@@ -88,6 +88,6 @@ void Mesh::draw()
 void ElementsMesh::draw()
 {
 	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, getIndices().size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLE_STRIP, getIndices().size(), GL_UNSIGNED_INT, 0);
 }
 

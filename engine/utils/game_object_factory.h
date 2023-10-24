@@ -26,3 +26,4 @@ GameObject* createFloor(glm::vec3 pos, GameObject::RenderSettings renderSettings
 
 GameObject* createTroll(glm::vec3 pos, GameObject::RenderSettings renderSettings = {});
 
+GameObject* createPBRBall(glm::vec3 pos);

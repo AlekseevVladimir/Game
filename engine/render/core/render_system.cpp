@@ -2,6 +2,7 @@
 #include "engine/render/core/g_buffer_shader_component.h"
 #include "engine/render/core/lighting_shader_component.h"
 #include "engine/render/open_gl/shaders/deferred_lighting_shader.h"
+#include "engine/render/core/shader_component.h"
 #include "engine/render/core/view_point_component.h"
 #include "glad/glad.h"
 #include "engine/render/open_gl/shaders/open_gl_shader.h"
@@ -86,14 +87,22 @@ void RenderSystem::process(float delta)
 
 void RenderSystem::process(float delta)
 {
+	/*
+	// TODO probably need to implement this and pbr as different renderers and shadow generation too
 	_setCullingType(GL_BACK);
 	glBindFramebuffer(GL_FRAMEBUFFER, _gBuffer.m_id);
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	*/
+	_setCullingType(GL_BACK);
+	glClearColor(0.f, 0.f, 0.f, 1.f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
 	GameObject* viewPointPtr = GameObjectHolder::getInstance().
 		getObjectsWithComponent<ViewPointComponent>()[0];
-	render<GBufferShaderComponent>(viewPointPtr);
+	render<ShaderComponent>(viewPointPtr);
 	
+	/*
 	glBindFramebuffer(GL_FRAMEBUFFER, _postprocessBuffer.m_id);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -155,6 +164,7 @@ void RenderSystem::process(float delta)
 	_HDRShader->setFloat1("exposure", 1.f);
 	_HDRMesh->draw();
 	//glBindTexture(GL_TEXTURE_2D, 0);
+	*/
 	
 }
 

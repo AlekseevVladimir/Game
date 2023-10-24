@@ -4,6 +4,9 @@
 #include <glm/glm.hpp>
 #include <engine/core/game_object.h>
 
-glm::mat4 getProjection();
+namespace RenderUtils
+{
+	glm::mat4 getProjection();
 
-glm::mat4 getView(GameObject* goPtr);
+	glm::mat4 getView(GameObject* goPtr);
+}

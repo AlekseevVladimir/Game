@@ -6,7 +6,7 @@
 #include <glfw3.h>
 
 
-glm::mat4 getView(GameObject* goPtr) 
+glm::mat4 RenderUtils::getView(GameObject* goPtr) 
 {
 	const float radius = 10.0f;
 	Vector3<float> position = goPtr->getComponent<PositionComponent>()->getPos();
@@ -16,7 +16,7 @@ glm::mat4 getView(GameObject* goPtr)
 	return view;
 }
 
-glm::mat4 getProjection() 
+glm::mat4 RenderUtils::getProjection() 
 {
 	glm::mat4 projection = glm::mat4(1.0f);
 	projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);

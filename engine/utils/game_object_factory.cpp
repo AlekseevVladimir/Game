@@ -25,6 +25,7 @@
 #include "engine/render/open_gl/shaders/open_gl_solid_object_shader.h"
 #include "engine/render/open_gl/shaders/open_gl_shadow_map_shader.h"
 #include "engine/render/open_gl/shaders/omnidir_shadow_map_shader.h"
+#include "engine/render/open_gl/shaders/pbr_shader.h"
 #include <engine/render/core/shader_component.h>
 #include <engine/render/core/shadows/shadow_map_shader_component.h>
 #include "engine/render/core/shadows/omnidir_shadow_map_component.h"
@@ -34,6 +35,10 @@
 
 std::shared_ptr<Model> generateModel(std::string, std::string, std::string normalName = "",
 	std::string heightName = "");
+
+std::shared_ptr<Model> generatePBRModel(std::string, std::string, std::string, std::string, std::string);
+
+std::pair<std::vector<Mesh::Vertex>, std::vector<unsigned int>> generateSphere();
 
 GameObject* createCube(
 		glm::vec3 pos, glm::vec3 scale, GameObject::RenderSettings renderSettings) 
@@ -95,8 +100,8 @@ GameObject* createPointLight(
 	modelComponent->model = 
 		generateModel("box.png", "box_specular_map.png");
 	std::shared_ptr<Shader> shader = ShadersManager::getInstance().
-		createProgram<SolidObjectShader>("g_buffer_solid");
-	goPtr->createComponent<GBufferShaderComponent>(shader);
+		createProgram<PBRShader>("light");
+	goPtr->createComponent<ShaderComponent>(shader);
 //	std::shared_ptr<Shader> shadowMapShader = ShadersManager::getInstance().
 //		createProgram<ShadowMapShader>("shadow_map");
 //	goPtr->createComponent<OmnidirShadowMapShaderComponent>(shadowMapShader);
@@ -190,6 +195,109 @@ GameObject* createTroll(glm::vec3 pos, GameObject::RenderSettings renderSettings
 	//goPtr->createComponent<ModelComponent>("models/troll/troll.obj");
 	return goPtr;
 
+}
+
+GameObject* createPBRBall(glm::vec3 pos)
+{
+	GameObject* goPtr = GameObjectHolder::getInstance().createGO("PBRBall", {});
+	ModelComponent* modelCompPtr = goPtr->createComponent<ModelComponent>();
+	modelCompPtr->model = generatePBRModel(
+		"texture_albedo.png", "texture_metallic.png", "texture_roughness.png", "texture_ao.png", "texture_normal.png");
+	std::shared_ptr<Shader> shader = ShadersManager::getInstance().createProgram<PBRShader>("pbr");
+	goPtr->createComponent<ShaderComponent>(shader);
+	PositionComponent* posComponent = goPtr->createComponent<PositionComponent>();
+	posComponent->setPos(pos);
+	RotationComponent* rotComponent = goPtr->createComponent<RotationComponent>();
+
+
+	return goPtr;
+}
+
+std::shared_ptr<Model> generatePBRModel(
+	std::string albedoName, std::string metallicName, std::string roughnessName, 
+	std::string ambientOcclusionName, std::string normalName
+)
+{
+	TexturesCtrl& texCtrl = TexturesCtrl::getInstance();
+	texCtrl.setWrapParams(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+	unsigned int albedoID = texCtrl.loadImage(albedoName);
+	unsigned int metallicID = texCtrl.loadImage(metallicName);
+	unsigned int roughnessID = texCtrl.loadImage(roughnessName);
+	unsigned int AOID = texCtrl.loadImage(ambientOcclusionName);
+	unsigned int normalID = texCtrl.loadImage(normalName);
+
+	std::vector<Mesh::Texture> textures = 
+	{
+		{albedoID, "texture_albedo", ""},
+		{metallicID, "texture_metallic", ""},
+		{roughnessID, "texture_roughness", ""},
+		{AOID, "texture_ao", ""},
+		{normalID, "texture_normal", ""}
+	};
+	
+	auto [vertices, indices] = generateSphere();
+	ElementsMesh mesh(vertices, textures, indices);
+	
+	//Mesh mesh(cubeVertices, textures);
+	std::shared_ptr<Model> model = std::make_shared<Model>();
+	model->m_meshes = { mesh };
+	return model;
+}
+
+std::pair<std::vector<Mesh::Vertex>, std::vector<unsigned int>> generateSphere()
+{
+//	std::vector<glm::vec3> positions;
+//	std::vector<glm::vec2> uv; //TexCoords
+//	std::vector<glm::vec3> normals;
+//	std::vector<unsigned int> indices;
+	std::vector<Mesh::Vertex> vertices;
+	std::vector<unsigned int> indices;
+
+	const unsigned int X_SEGMENTS = 64;
+	const unsigned int Y_SEGMENTS = 64;
+	const float PI = 3.14159265359f;
+	for (unsigned int x = 0; x <= X_SEGMENTS; ++x)
+	{
+		for (unsigned int y = 0; y <= Y_SEGMENTS; ++y)
+		{
+			float xSegment = (float)x / (float)X_SEGMENTS;
+			float ySegment = (float)y / (float)Y_SEGMENTS;
+			float xPos = std::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+			float yPos = std::cos(ySegment * PI);
+			float zPos = std::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+			
+			vertices.emplace_back(
+				glm::vec3(xPos, yPos, zPos),
+				glm::vec3(xPos, yPos, zPos),
+				glm::vec3(),
+				glm::vec3(),
+				glm::vec2(xSegment, ySegment)
+			);
+		}
+	}
+
+	bool oddRow = false;
+	for (unsigned int y = 0; y < Y_SEGMENTS; ++y)
+	{
+		if (!oddRow) // even rows: y == 0, y == 2; and so on
+		{
+			for (unsigned int x = 0; x <= X_SEGMENTS; ++x)
+			{
+				indices.push_back(y * (X_SEGMENTS + 1) + x);
+				indices.push_back((y + 1) * (X_SEGMENTS + 1) + x);
+			}
+		}
+		else
+		{
+			for (int x = X_SEGMENTS; x >= 0; --x)
+			{
+				indices.push_back((y + 1) * (X_SEGMENTS + 1) + x);
+				indices.push_back(y * (X_SEGMENTS + 1) + x);
+			}
+		}
+		oddRow = !oddRow;
+	}
+	return { vertices, indices };
 }
 
 std::shared_ptr<Model> generateModel(
