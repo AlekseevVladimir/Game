@@ -62,6 +62,15 @@ private:
 	std::shared_ptr<OpenGLShader> _bloomShader;
 	std::unique_ptr<Mesh> _bloomMesh;
 
+	std::shared_ptr<OpenGLShader> _EquirectToCubeShader;
+	std::unique_ptr<Mesh> _EquirectToCubeMesh;
+
+	std::shared_ptr<OpenGLShader> _BackgroundShader;
+	std::unique_ptr<Mesh> _BackgroundMesh;
+
+
+	unsigned int envCubemap;
+
 	unsigned int _colorBuffers[COLOR_BUFFERS_NUM];
 
 	//one for horizontal blurring, one for vertical

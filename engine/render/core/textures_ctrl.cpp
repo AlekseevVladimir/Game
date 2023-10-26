@@ -48,7 +48,6 @@ void TexturesCtrl::bindAllTextures()
 
 unsigned int TexturesCtrl::loadImage(std::string imageName, std::string directory) 
 {
-	int width, height, nrChannels;
 	const auto found = m_loadedTextures.find(imageName);
 	if (found != m_loadedTextures.end()) 
 	{
@@ -56,57 +55,71 @@ unsigned int TexturesCtrl::loadImage(std::string imageName, std::string director
 	}
 	std::string path = directory + "/" + std::string(imageName);
 	//stbi_set_flip_vertically_on_load(true);
-	unsigned char* data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
-	
-	if (data) 
+	std::string extension = imageName.substr(imageName.find("."), imageName.size());
+
+	m_textureIDs.emplace_back();
+	glGenTextures(1, &m_textureIDs.back());
+	glBindTexture(GL_TEXTURE_2D, m_textureIDs.back());
+
+	if (extension == ".hdr")
 	{
-//		if (imageName == "Troll_Normals.jpg")
-//		{
-//			const int res = width * height;
-//			for (int i = 0; i < res; ++i)
-//			{
-//				const int n = i * nrChannels + 1;
-//				data[n] = 255 - data[n];
-//			}
-//
-//		}
-		GLenum format;
-		switch (nrChannels) 
-		{
-			case 1:
-				format = GL_RED;
-				break;
-			case 3:
-				format = GL_RGB;
-				break;
-			case 4:
-				format = GL_RGBA;
-				break;
-			default:
-				throw(std::logic_error("Unexpected number of channels"));
-				break;
-		}
-		m_textureIDs.emplace_back();
-		glGenTextures(1, &m_textureIDs.back());
-		glBindTexture(GL_TEXTURE_2D, m_textureIDs.back());
-
-		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_wrapParams.first);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_wrapParams.second);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		stbi_image_free(data);
-		m_loadedTextures[imageName] = m_textureIDs.back();
-		glBindTexture(GL_TEXTURE_2D, 0);
-		return m_textureIDs.back();
+		loadEquirectMap(path);
 	}
 	else 
+	{
+		loadTexture(path);
+	}
+
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_wrapParams.first);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_wrapParams.second);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	m_loadedTextures[imageName] = m_textureIDs.back();
+	glBindTexture(GL_TEXTURE_2D, 0);
+	return m_textureIDs.back();
+	/*
 	{
 		stbi_image_free(data);
 		throw(std::logic_error("Failed to load texture" + imageName));
 	}
+	*/
+}
+
+void TexturesCtrl::loadTexture(std::string path)
+{
+	int width, height, nrChannels;
+	unsigned char* data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
+		
+	GLenum format;
+	GLenum internalFormat;
+	switch (nrChannels) 
+	{
+		case 1:
+			format = GL_RED;
+			break;
+		case 3:
+			format = GL_RGB;
+			break;
+		case 4:
+			format = GL_RGBA;
+			break;
+		default:
+			throw(std::logic_error("Unexpected number of channels"));
+			break;
+	}
+	internalFormat = format;
+
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+}
+
+void TexturesCtrl::loadEquirectMap(std::string path)
+{
+	int width, height, nrChannels;
+	float* data = stbi_loadf(path.c_str(), &width, &height, &nrChannels, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data);
+	stbi_image_free(data);
 }
 

@@ -24,7 +24,7 @@ GameCtrl::GameCtrl()
 	//createFloor({5.0f, 2.0f, 4.0f}, {true, false, "solidObject"});
 	//createFloor({ 0.0f, -1.0f, 0.0f }, { true, false, "solidObject" });
 	//createTroll({ 0.0f, -0.5f, 0.0f }, { true, false, "solidObject" });
-	createPBRBall({0.f, 0.f, 0.f});
+	//createPBRBall({0.f, 0.f, 0.f});
 	SystemsHolder::getInstance().addSystem<InputControlSystem>();
 	SystemsHolder::getInstance().addSystem<MovementSystem>();
 	SystemsHolder::getInstance().addSystem<RotationSystem>();

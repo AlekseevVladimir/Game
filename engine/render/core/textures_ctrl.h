@@ -42,4 +42,7 @@ private:
 	std::pair<unsigned int, unsigned int> m_wrapParams;
 	std::map<unsigned int, unsigned int> m_boundTextures;
 	std::map<std::string, unsigned int, std::less<>> m_loadedTextures;
+
+	void loadTexture(std::string path);
+	void loadEquirectMap(std::string path);
 };
